@@ -1,0 +1,56 @@
+- name: "Display lsb_release informations"
+  debug:
+    var: hostvars[inventory_hostname].ansible_lsb
+
+- name: "Display architecture"
+  debug:
+    var: hostvars[inventory_hostname].ansible_architecture
+
+- name: "Import secret variables from vault file ({{ BACKUP_DST }})"
+  include_vars: "vault_{{ BACKUP_DST }}.yml"
+  no_log: true
+  when: ("vault" in FEATURES)
+
+- name: "Get repository information (url)"
+  shell: "git remote get-url origin"
+  register: git_url
+  delegate_to: 127.0.0.1
+
+- name: "Get repository information (branch)"
+  shell: "git rev-parse --abbrev-ref HEAD"
+  register: git_branch
+  delegate_to: 127.0.0.1
+
+- name: "Get repository information (commit)"
+  shell: "git rev-parse HEAD"
+  register: git_commit
+  delegate_to: 127.0.0.1
+
+# Will be skipped if a QEMU disk is detected
+- name: "Detect QEMU"
+  shell: "export IS_QEMU=true"
+  register: is_qemu
+  when: (ansible_devices.sda | default("")) and
+        (ansible_devices.sda.model | default("") == "QEMU HARDDISK")
+
+- name: "Add playbook run information on the guest"
+  copy:
+    content: "Ansible informations about the last run\n\n"
+    dest: "/root/ansible.info"
+
+- name: "Add playbook information on the guest file"
+  lineinfile:
+    dest: "/root/ansible.info"
+    line: "{{ item }}"
+  with_items:
+    - "* BACKUP: {{ BACKUP }}"
+    - "* FTP_URL: {{ FTP_URL }}"
+    - "* BACKUP_DST: {{ BACKUP_DST }}"
+    - "* DATACORE: {{ DATACORE }}"
+    - "* USER_NAME: {{ USER_NAME }}"
+    - "* FTP_USER: {{ FTP_USER }}"
+    - "* DOMAIN_NAME: {{ DOMAIN_NAME }}"
+    - "* FEATURES: {{ FEATURES }}"
+    - "* git url: {{ git_url.stdout }}"
+    - "* git branch: {{ git_branch.stdout }}"
+    - "* git commit: {{ git_commit.stdout }}"

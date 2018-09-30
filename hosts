@@ -1,0 +1,24 @@
+[qemu]
+localhost
+
+[test]
+192.168.0.29
+
+[prod_arm]
+192.168.0.1
+
+[prod_x64]
+192.168.0.2
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=root
+
+# Require a started qemu instance with a raspbian image in Qemu mode
+[qemu:vars]
+ansible_port=2222
+
+# To test on each test mode at the same time (verification purpose)
+[test_all:children]
+test
+qemu

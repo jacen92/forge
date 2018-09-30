@@ -1,0 +1,16 @@
+- name: "Install python and python-pip"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  with_items:
+    - python2.7
+    - python3-pip
+
+- name: "Install pip packages"
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - docker-py
+    - passlib

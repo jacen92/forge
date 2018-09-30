@@ -1,0 +1,64 @@
+- name: "Launch gogs container for ARM {{ GOGS_VERSION }}"
+  docker_container:
+    name: "gogs"
+    image: "gogs/gogs-rpi:{{ GOGS_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ GOGS_SSH_PORT }}:22"
+      - "{{ GOGS_FRONT_PORT }}:3000"
+    labels:
+      traefik.enable: "true"
+      traefik.port: "3000"
+      traefik.frontend.rule: "Host:git.{{ DOMAIN_NAME }}"
+    volumes:
+      - "/{{ DATACORE }}/gogs:/data"
+  when: ansible_architecture == "armv7l" or ansible_architecture == "armv6l"
+
+- name: "Launch gogs container x64 {{ GOGS_VERSION }}"
+  docker_container:
+    name: "gogs"
+    image: "gogs/gogs:{{ GOGS_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ GOGS_SSH_PORT }}:22"
+      - "{{ GOGS_FRONT_PORT }}:3000"
+    labels:
+      traefik.enable: "true"
+      traefik.port: "3000"
+      traefik.frontend.rule: "Host:git.{{ DOMAIN_NAME }}"
+    volumes:
+      - "/{{ DATACORE }}/gogs:/data"
+  when: ansible_architecture == "amd64" or ansible_architecture == "x86_64"
+
+- name: "Check for gogs configuration file"
+  stat:
+    path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
+  register: stat_gogs_config
+
+- name: "Ensure DOMAIN is correct (first configuration is required before)"
+  ini_file:
+    path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
+    section: server
+    option: DOMAIN
+    value: "git.{{ DOMAIN_NAME }}"
+  when: stat_gogs_config.stat.exists == true
+
+- name: "Ensure ROOT_URL is correct (first configuration is required before)"
+  ini_file:
+    path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
+    section: server
+    option: ROOT_URL
+    value: "https://git.{{ DOMAIN_NAME }}"
+  when: stat_gogs_config.stat.exists == true
+
+- name: "Ensure SSH_PORT is correct (first configuration is required before)"
+  ini_file:
+    path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
+    section: server
+    option: SSH_PORT
+    value: "{{ GOGS_SSH_PORT }}"
+  when: stat_gogs_config.stat.exists == true

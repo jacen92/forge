@@ -1,0 +1,21 @@
+- name: "Create regular user"
+  user:
+    name: "{{ USER_NAME }}"
+    password: "{{ USER_PASS | password_hash('sha512') }}"
+    shell: /bin/bash
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+- name: "Adding existing user '{{ USER_NAME }}' to group sudo and docker"
+  user:
+    name: '{{ USER_NAME }}'
+    groups: sudo,docker
+    append: yes
+
+- name: "Setup datacore directory"
+  file:
+    path: "/{{ DATACORE }}"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory

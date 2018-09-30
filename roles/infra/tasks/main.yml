@@ -1,0 +1,8 @@
+- import_tasks: setup_backup.yml
+  when: (BACKUP == "create") or (BACKUP == "restore")
+
+- import_tasks: setup_https.yml
+  when: ("https" in FEATURES) and ("vault" in FEATURES)
+
+- import_tasks: setup_gogs.yml
+  when: ("gogs" in FEATURES)

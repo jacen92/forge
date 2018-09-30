@@ -1,0 +1,9 @@
+- hosts: prod_x64
+  vars:
+  - DOMAIN_NAME: ""
+  - DATACORE: "home/{{ USER_NAME }}/data"
+  - USER_NAME: "forge"
+  - FEATURES: []
+  roles:
+    - common
+    - infra

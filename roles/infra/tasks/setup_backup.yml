@@ -1,0 +1,45 @@
+- name: "Install duplicity"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - lftp
+    - duplicity
+
+- name: "Create local backup before update"
+  shell: "tar cvpzf /home/{{ USER_NAME }}/data_{{ BACKUP_DST }}_ansible_backup.tar.gz /{{ DATACORE }}"
+
+- name: "Copy backup task template in cron.d"
+  copy:
+    src: files/backup/backup_cron_base.sh
+    dest: /etc/cron.d/duplicity.full
+    owner: root
+    group: root
+    mode: 0500
+
+- name: "Add full backup line in cron.d"
+  lineinfile:
+    path: /etc/cron.d/duplicity.full
+    line: "PASSPHRASE='{{ BACKUP_PASS }}' duplicity full -v 9 --rsync-options='-p' /{{ DATACORE }} 'ftp://{{ FTP_USER }}:{{ FTP_PASS }}@{{ FTP_URL }}/{{ FTP_PATH }}/{{ BACKUP_DST }}'"
+
+- name: "Add clean backup line in cron.d"
+  lineinfile:
+    path: /etc/cron.d/duplicity.full
+    line: "PASSPHRASE='{{ BACKUP_PASS }}' duplicity remove-all-but-n-full 3 --force 'ftp://{{ FTP_USER }}:{{ FTP_PASS }}@{{ FTP_URL }}/{{ FTP_PATH }}/{{ BACKUP_DST }}'"
+
+- name: "Add full backup task in crontab"
+  cron:
+    name: full duplicity
+    minute: "0"
+    hour: "5"
+    user: root
+    job: /etc/cron.d/duplicity.full
+
+- name: "Create initial remote backup before update"
+  shell: "/etc/cron.d/duplicity.full"
+  when: BACKUP == "create"
+
+- name: "Restore last remote backup before recontruction"
+  shell: "rm -rf /{{ DATACORE }} && PASSPHRASE='{{ BACKUP_PASS }}' duplicity restore --rsync-options='-p' 'ftp://{{ FTP_USER }}:{{ FTP_PASS }}@{{ FTP_URL }}/{{ FTP_PATH }}/{{ BACKUP_DST }}' /{{ DATACORE }}"
+  when: BACKUP == "restore"

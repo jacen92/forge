@@ -1,0 +1,9 @@
+- hosts: test
+  vars:
+  - DOMAIN_NAME: ""
+  - DATACORE: "home/{{ USER_NAME }}/data"
+  - USER_NAME: "pi"
+  - FEATURES: []
+  roles:
+    - common
+    - infra

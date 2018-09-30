@@ -1,0 +1,42 @@
+defaultEntryPoints = ["http", "https"]
+
+################################################################
+# Web configuration backend
+################################################################
+[api]
+address = ":8000"
+[api.auth.basic]
+# User: toto | Password: password
+users = ["toto:$2y$05$zNs3wc5UPB4su8vbFugVPuKEaLJXMf5Z.9hAI1ulJpBbhbBprfppO"]
+
+################################################################
+# Entry-points configuration
+################################################################
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+    [entryPoints.http.redirect]
+      entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+
+################################################################
+# Docker configuration backend
+################################################################
+[docker]
+domain = "example"
+watch = true
+exposedbydefault = false
+
+################################################################
+# Let's encrypt
+################################################################
+[acme]
+email = "FILLME"
+storage = "/etc/traefik/acme.json"
+onDemand = false
+onHostRule = true
+entryPoint = "https"
+  [acme.httpChallenge]
+  entryPoint = "http"

@@ -1,0 +1,15 @@
+- name: "Copy authorized_keys for root"
+  copy:
+    src: "files/authorized_keys"
+    dest: "/root/.ssh/authorized_keys"
+    owner: "root"
+    group: "root"
+    mode: u=rw,g=r,o=r
+
+- name: "Copy authorized_keys for regular user"
+  copy:
+    src: "files/authorized_keys"
+    dest: "/home/{{ USER_NAME }}/.ssh/authorized_keys"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    mode: u=rw,g=r,o=r

@@ -1,0 +1,8 @@
+- import_tasks: prepare_info.yml
+- import_tasks: install_dependencies.yml
+
+- import_tasks: setup_access.yml
+  when: ("vault" in FEATURES)
+
+- import_tasks: update_access.yml
+  when: ("vault" in FEATURES)
