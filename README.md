@@ -11,8 +11,8 @@ Services
 ========
 
 * backup: configuration of the DATACORE for incremental ciphered backups on remote FTP (freebox).
-* gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
+* gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
 
 
 Used port
