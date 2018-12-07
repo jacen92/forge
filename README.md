@@ -34,6 +34,7 @@ Playbooks parameters
 | ------------------- |:-------:|:----------------------:| ------------------------------------------------------------------------- |
 | FEATURES            |  common |          All           | List of features to use                                                   |
 | USER_NAME           |  common |          pi            | Default user name                                                         |
+| USER_MAIL           |  common |          pi            | Default user email for certificate                                        |
 | DATACORE            |  common |      $HOME/data        | Infrastructure data directory, will be backuped if enabled                |
 | BACKUP              |  infra  |  no\|create\|restore   | Define the backup mode when you run the playbook                          |
 | BACKUP_DST          |  infra  |      test\|forge       | Define the backup source directory (where backups are stored on the FTP)  |
@@ -47,7 +48,7 @@ Features description
 
 | Name          |  Arch  | Description                                                            |
 | ------------- |:------:| ---------------------------------------------------------------------- |
-| vault         |  All   | Add or update user ans services passwords                              |
+| vault         |  All   | Unlock user and services passwords                                     |
 | https         |  All   | Add or update traefik configuration (vault must be set)                |
 | gogs          |  All   | Add or update gogs docker instance                                     |
 

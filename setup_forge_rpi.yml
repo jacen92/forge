@@ -1,9 +1,10 @@
 - hosts: test
   vars:
   - DOMAIN_NAME: ""
-  - DATACORE: "home/{{ USER_NAME }}/data"
+  - FEATURES: ["https"]
   - USER_NAME: "pi"
-  - FEATURES: []
+  - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
+  - DATACORE: "home/{{ USER_NAME }}/data"
   roles:
     - common
     - infra

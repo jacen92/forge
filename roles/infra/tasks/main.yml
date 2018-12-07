@@ -2,7 +2,7 @@
   when: (BACKUP == "create") or (BACKUP == "restore")
 
 - import_tasks: setup_https.yml
-  when: ("https" in FEATURES) and ("vault" in FEATURES)
+  when: ("https" in FEATURES) and (DOMAIN_NAME != "")
 
 - import_tasks: setup_gogs.yml
   when: ("gogs" in FEATURES)

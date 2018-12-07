@@ -5,9 +5,9 @@ defaultEntryPoints = ["http", "https"]
 ################################################################
 [api]
 address = ":8000"
-[api.auth.basic]
+# [api.auth.basic]
 # User: toto | Password: password
-users = ["toto:$2y$05$zNs3wc5UPB4su8vbFugVPuKEaLJXMf5Z.9hAI1ulJpBbhbBprfppO"]
+# users = ["toto:$2y$05$zNs3wc5UPB4su8vbFugVPuKEaLJXMf5Z.9hAI1ulJpBbhbBprfppO"]
 
 ################################################################
 # Entry-points configuration
@@ -33,9 +33,9 @@ exposedbydefault = false
 # Let's encrypt
 ################################################################
 [acme]
-email = "FILLME"
+email = "{{ USER_NAME }}"
 storage = "/etc/traefik/acme.json"
-onDemand = false
+onDemand = true
 onHostRule = true
 entryPoint = "https"
   [acme.httpChallenge]

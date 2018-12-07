@@ -11,7 +11,7 @@
     labels:
       traefik.enable: "true"
       traefik.port: "3000"
-      traefik.frontend.rule: "Host:git.{{ DOMAIN_NAME }}"
+      traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
   when: ansible_architecture == "armv7l" or ansible_architecture == "armv6l"
@@ -29,7 +29,7 @@
     labels:
       traefik.enable: "true"
       traefik.port: "3000"
-      traefik.frontend.rule: "Host:git.{{ DOMAIN_NAME }}"
+      traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
   when: ansible_architecture == "amd64" or ansible_architecture == "x86_64"
@@ -44,7 +44,7 @@
     path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
     section: server
     option: DOMAIN
-    value: "git.{{ DOMAIN_NAME }}"
+    value: "{{ GOGS_EXTERNAL_URL }}"
   when: stat_gogs_config.stat.exists == true
 
 - name: "Ensure ROOT_URL is correct (first configuration is required before)"
@@ -52,7 +52,7 @@
     path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
     section: server
     option: ROOT_URL
-    value: "https://git.{{ DOMAIN_NAME }}"
+    value: "https://{{ GOGS_EXTERNAL_URL }}"
   when: stat_gogs_config.stat.exists == true
 
 - name: "Ensure SSH_PORT is correct (first configuration is required before)"
