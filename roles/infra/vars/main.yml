@@ -1,8 +1,3 @@
-BACKUP: "no"
-BACKUP_DST: "test"
-FTP_USER: "freebox"
-FTP_URL: "mafreebox.free.fr"
-FTP_PATH: "Disque dur/backups"
 GOGS_VERSION: "0.11.66"
 GOGS_SSH_PORT: 8022
 GOGS_FRONT_PORT: 3000

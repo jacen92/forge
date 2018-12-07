@@ -10,7 +10,6 @@ All roles are also available for x86_64.
 Services
 ========
 
-* backup: configuration of the DATACORE for incremental ciphered backups on remote FTP (freebox).
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
 * gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
 
@@ -32,14 +31,11 @@ Playbooks parameters
 
 | Parameter           | Role    | Values                 | Description                                                               |
 | ------------------- |:-------:|:----------------------:| ------------------------------------------------------------------------- |
+| FORGE_MODE          |  common |      test|forge        | Installation mode                                                         |
 | FEATURES            |  common |          All           | List of features to use                                                   |
 | USER_NAME           |  common |          pi            | Default user name                                                         |
-| USER_MAIL           |  common |          pi            | Default user email for certificate                                        |
+| USER_MAIL           |  common |    username@domain     | Default user email for certificate                                        |
 | DATACORE            |  common |      $HOME/data        | Infrastructure data directory, will be backuped if enabled                |
-| BACKUP              |  infra  |  no\|create\|restore   | Define the backup mode when you run the playbook                          |
-| BACKUP_DST          |  infra  |      test\|forge       | Define the backup source directory (where backups are stored on the FTP)  |
-| FTP_URL             |  infra  |  "mafreebox.free.fr"   | Backup FTP url, here we send the backup to the freebox                    |
-| FTP_USER            |  infra  |      "freebox"         | Backup FTP user, use default freebox user by default                      |
 | DOMAIN_NAME         |  infra  |         ""             | HTTPS and reverse proxy domain name                                       |
 
 
@@ -58,9 +54,7 @@ Vault file parameters
 
 | Parameter     | Role     | Description                                          |
 | ------------- |:--------:| ---------------------------------------------------- |
-| FTP_PASS      |  infra   | Backup FTP password                                  |
 | USER_PASS     |  common  | Default user password                                |
-| BACKUP_PASS   |  infra   | Duplicity backup on create or restore mode           |
 
 
 Notes:

@@ -6,8 +6,8 @@
   debug:
     var: hostvars[inventory_hostname].ansible_architecture
 
-- name: "Import secret variables from vault file ({{ BACKUP_DST }})"
-  include_vars: "vault_{{ BACKUP_DST }}.yml"
+- name: "Import secret variables from vault file ({{ FORGE_MODE }})"
+  include_vars: "vault_{{ FORGE_MODE }}.yml"
   no_log: true
   when: ("vault" in FEATURES)
 
@@ -43,12 +43,9 @@
     dest: "/root/ansible.info"
     line: "{{ item }}"
   with_items:
-    - "* BACKUP: {{ BACKUP }}"
-    - "* FTP_URL: {{ FTP_URL }}"
-    - "* BACKUP_DST: {{ BACKUP_DST }}"
+    - "* FORGE_MODE: {{ FORGE_MODE }}"
     - "* DATACORE: {{ DATACORE }}"
     - "* USER_NAME: {{ USER_NAME }}"
-    - "* FTP_USER: {{ FTP_USER }}"
     - "* DOMAIN_NAME: {{ DOMAIN_NAME }}"
     - "* FEATURES: {{ FEATURES }}"
     - "* git url: {{ git_url.stdout }}"
