@@ -1,9 +1,11 @@
 - hosts: prod_x64
   vars:
+  - FORGE_MODE: "test"
   - DOMAIN_NAME: ""
-  - DATACORE: "home/{{ USER_NAME }}/data"
-  - USER_NAME: "forge"
   - FEATURES: []
+  - USER_NAME: "forge"
+  - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
+  - DATACORE: "home/{{ USER_NAME }}/data"
   roles:
     - common
     - infra

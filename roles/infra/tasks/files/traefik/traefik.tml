@@ -33,7 +33,7 @@ exposedbydefault = false
 # Let's encrypt
 ################################################################
 [acme]
-email = "{{ USER_NAME }}"
+email = "{{ USER_MAIL }}"
 storage = "/etc/traefik/acme.json"
 onDemand = true
 onHostRule = true

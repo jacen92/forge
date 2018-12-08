@@ -9,8 +9,8 @@
       - "{{ GOGS_SSH_PORT }}:22"
       - "{{ GOGS_FRONT_PORT }}:3000"
     labels:
-      traefik.enable: "true"
       traefik.port: "3000"
+      traefik.enable: "{{ GOGS_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
@@ -27,8 +27,8 @@
       - "{{ GOGS_SSH_PORT }}:22"
       - "{{ GOGS_FRONT_PORT }}:3000"
     labels:
-      traefik.enable: "true"
       traefik.port: "3000"
+      traefik.enable: "{{ GOGS_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
