@@ -21,3 +21,4 @@
 
 - name: "Install docker"
   shell: curl -sSL https://get.docker.com | sh
+  when: '"docker-ce" not in ansible_facts.packages'

@@ -33,6 +33,10 @@
   when: (ansible_devices.sda | default("")) and
         (ansible_devices.sda.model | default("") == "QEMU HARDDISK")
 
+- name: "get the apt package facts"
+  package_facts:
+    manager: "auto"
+
 - name: "Add playbook run information on the guest"
   copy:
     content: "Ansible informations about the last run\n\n"
