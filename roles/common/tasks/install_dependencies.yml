@@ -22,3 +22,23 @@
 - name: "Install docker"
   shell: curl -sSL https://get.docker.com | sh
   when: '"docker-ce" not in ansible_facts.packages'
+
+- name: "Ensure docker service exec command is correct"
+  ini_file:
+    path: "/lib/systemd/system/docker.service"
+    section: Service
+    option: ExecStart
+    value: "/usr/bin/dockerd --icc -H unix://"
+  register: docker_config_update
+
+- name: Reload service docker, in all cases
+  service:
+    name: docker
+    state: reloaded
+  when: docker_config_update.changed
+
+- name: Restart service docker, in all cases
+  service:
+    name: docker
+    state: restarted
+  when: docker_config_update.changed

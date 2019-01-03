@@ -1,0 +1,113 @@
+- name: "Install security dependencies"
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  with_items:
+    - fail2ban
+    - ufw
+
+# NOTE: Used to make sure the ban list is working after a reboot
+- name: "Ensure fail2ban start after docker"
+  lineinfile:
+    path: /lib/systemd/system/fail2ban.service
+    regexp: '^After='
+    line: 'After=network.target iptables.service firewalld.service docker.service'
+
+- name: "Enable UFW and close all ports"
+  ufw:
+    state: enabled
+    policy: deny
+
+# NOTE: allow ssh port for ansible in the case something went wront
+- name: "Allow all access to tcp port SSH port"
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+    - 22
+
+# fail2ban configuration
+# https://www.the-lazy-dev.com/en/install-fail2ban-with-docker/
+- name: "Copy fail2ban actions"
+  template:
+    src: files/fail2ban/actions/{{ item }}
+    dest: /etc/fail2ban/action.d/{{ item }}
+  with_items:
+    - docker-action.conf
+  register: fail2ban_action_update
+
+- name: "Copy fail2ban filters"
+  template:
+    src: files/fail2ban/filters/{{ item }}
+    dest: /etc/fail2ban/filter.d/{{ item }}
+  with_items:
+    - gogs-sshd.conf
+    - gogs-sshd-scan.conf
+  register: fail2ban_filter_update
+
+- name: "Copy basic jail configuration for custom edition"
+  copy:
+    src: /etc/fail2ban/jail.conf
+    dest: /etc/fail2ban/jail.d/jail.conf
+    remote_src: yes
+
+- name: "Add scanner filter in custom jail configuration"
+  ini_file:
+    path: "/etc/fail2ban/jail.d/jail.local"
+    section: "gogs_ssh_scan"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - { option: "enabled", value: "true"}
+    - { option: "port", value: "{{ GOGS_SSH_PORT }},80,443,22"}
+    - { option: "backend", value: "systemd"}
+    - { option: "filter", value: "gogs-sshd-scan"}
+    - { option: "action", value: "docker-action"}
+    - { option: "maxretry", value: "2"}
+    - { option: "findtime", value: "1220"}
+    - { option: "bantime", value: "1864000"}
+  register: fail2ban_scanner_config_update
+
+- name: "Add gogs_ssh filter in custom jail configuration"
+  ini_file:
+    path: "/etc/fail2ban/jail.d/jail.local"
+    section: "gogs_ssh"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  loop:
+    - { option: "enabled", value: "true"}
+    - { option: "port", value: "{{ GOGS_SSH_PORT }},80,443,22"}
+    - { option: "backend", value: "systemd"}
+    - { option: "filter", value: "gogs-sshd"}
+    - { option: "action", value: "docker-action"}
+    - { option: "maxretry", value: "3"}
+    - { option: "findtime", value: "1220"}
+    - { option: "bantime", value: "1864000"}
+  register: fail2ban_config_update
+
+## TODO: restart at the end of the playbook
+- name: "Reload service fail2ban"
+  service:
+    name: fail2ban
+    state: reloaded
+  when: fail2ban_config_update.changed or fail2ban_scanner_config_update.changed or fail2ban_filter_update.changed or fail2ban_action_update.changed
+
+- name: "Restart service fail2ban"
+  service:
+    name: fail2ban
+    state: restarted
+  when: fail2ban_config_update.changed or fail2ban_scanner_config_update.changed or fail2ban_filter_update.changed or fail2ban_action_update.changed
+
+# NOTE: reopen forge other ports only when security is configured and running
+- name: "Allow all access to tcp port SSH port git, 80 and 443"
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+    - 80
+    - 443
+    - "{{ GOGS_SSH_PORT }}"

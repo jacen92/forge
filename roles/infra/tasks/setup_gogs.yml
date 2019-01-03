@@ -5,6 +5,9 @@
     state: started
     restart_policy: always
     recreate: yes
+    log_driver: journald
+    log_options:
+      tag: gogs
     ports:
       - "{{ GOGS_SSH_PORT }}:22"
       - "{{ GOGS_FRONT_PORT }}:3000"
@@ -23,6 +26,9 @@
     state: started
     restart_policy: always
     recreate: yes
+    log_driver: journald
+    log_options:
+      tag: gogs
     ports:
       - "{{ GOGS_SSH_PORT }}:22"
       - "{{ GOGS_FRONT_PORT }}:3000"
