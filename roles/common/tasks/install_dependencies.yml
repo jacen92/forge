@@ -1,23 +1,13 @@
 - name: "Install python and python-pip"
   apt:
-    pkg: "{{ item }}"
+    pkg: [python2.7, python3-pip, apt-transport-https, ca-certificates, curl, software-properties-common]
     state: present
     update_cache: true
     cache_valid_time: 3600
-  with_items:
-    - python2.7
-    - python3-pip
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - software-properties-common
 
 - name: "Install pip packages"
   pip:
-    name: "{{ item }}"
-  with_items:
-    - docker-py
-    - passlib
+    name: [docker-py, passlib]
 
 - name: "Install docker"
   shell: curl -sSL https://get.docker.com | sh

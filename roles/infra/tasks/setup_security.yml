@@ -1,12 +1,9 @@
 - name: "Install security dependencies"
   apt:
-    pkg: "{{ item }}"
+    pkg: [fail2ban, ufw, iptables]
     state: present
     update_cache: true
     cache_valid_time: 3600
-  with_items:
-    - fail2ban
-    - ufw
 
 # NOTE: Used to make sure the ban list is working after a reboot
 - name: "Ensure fail2ban start after docker"
