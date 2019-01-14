@@ -26,13 +26,6 @@
   register: git_commit
   delegate_to: 127.0.0.1
 
-# Will be skipped if a QEMU disk is detected
-- name: "Detect QEMU"
-  shell: "export IS_QEMU=true"
-  register: is_qemu
-  when: (ansible_devices.sda | default("")) and
-        (ansible_devices.sda.model | default("") == "QEMU HARDDISK")
-
 - name: "get the apt package facts"
   package_facts:
     manager: "auto"
