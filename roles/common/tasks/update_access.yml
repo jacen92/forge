@@ -13,3 +13,10 @@
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     mode: u=rw,g=r,o=r
+
+- name: "Reset root password"
+  user:
+    name: "root"
+    password: "{{ ROOT_PASS | password_hash('sha512') }}"
+    shell: /bin/bash
+    update_password: always

@@ -2,7 +2,7 @@
   vars:
   - FORGE_MODE: "test"
   - DOMAIN_NAME: ""
-  - FEATURES: ["https"]
+  - FEATURES: ["vault"]
   - USER_NAME: "pi"
   - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
   - DATACORE: "home/{{ USER_NAME }}/data"
