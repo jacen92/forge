@@ -63,7 +63,7 @@
     - { option: "backend", value: "systemd"}
     - { option: "filter", value: "gogs-sshd-scan"}
     - { option: "action", value: "docker-action"}
-    - { option: "maxretry", value: "2"}
+    - { option: "maxretry", value: "1"}
     - { option: "findtime", value: "1220"}
     - { option: "bantime", value: "1864000"}
   register: fail2ban_scanner_config_update
@@ -80,7 +80,7 @@
     - { option: "backend", value: "systemd"}
     - { option: "filter", value: "gogs-sshd"}
     - { option: "action", value: "docker-action"}
-    - { option: "maxretry", value: "3"}
+    - { option: "maxretry", value: "2"}
     - { option: "findtime", value: "1220"}
     - { option: "bantime", value: "1864000"}
   register: fail2ban_config_update
