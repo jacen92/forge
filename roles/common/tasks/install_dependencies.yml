@@ -21,14 +21,9 @@
     value: "/usr/bin/dockerd --icc -H unix://"
   register: docker_config_update
 
-- name: Reload service docker, in all cases
-  service:
-    name: docker
-    state: reloaded
-  when: docker_config_update.changed
-
-- name: Restart service docker, in all cases
+- name: Reload and restart service docker
   service:
     name: docker
     state: restarted
+    daemon_reload : yes
   when: docker_config_update.changed

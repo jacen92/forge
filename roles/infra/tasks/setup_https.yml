@@ -34,7 +34,7 @@
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
       - "/{{ DATACORE }}/traefik:/etc/traefik"
-  when: ansible_architecture == "armv7l" or ansible_architecture == "armv6l"
+  when: ansible_architecture == "armv7l" or ansible_architecture == "aarch64" or ansible_architecture == "armv6l"
 
 - name: "Launch traefik container for x64 {{ TRAEFIK_VERSION }}"
   docker_container:

@@ -1,6 +1,6 @@
 - name: "Install security dependencies"
   apt:
-    pkg: [fail2ban, ufw, iptables]
+    pkg: [fail2ban, ufw, iptables, python-systemd, python3-systemd]
     state: present
     update_cache: true
     cache_valid_time: 3600
@@ -86,16 +86,11 @@
   register: fail2ban_config_update
 
 ## TODO: restart at the end of the playbook
-- name: "Reload service fail2ban"
-  service:
-    name: fail2ban
-    state: reloaded
-  when: fail2ban_config_update.changed or fail2ban_scanner_config_update.changed or fail2ban_filter_update.changed or fail2ban_action_update.changed
-
-- name: "Restart service fail2ban"
+- name: "Reload and restart service fail2ban"
   service:
     name: fail2ban
     state: restarted
+    daemon_reload : yes
   when: fail2ban_config_update.changed or fail2ban_scanner_config_update.changed or fail2ban_filter_update.changed or fail2ban_action_update.changed
 
 # NOTE: reopen forge other ports only when security is configured and running

@@ -1,11 +1,27 @@
-Ansible roles to setup infrastructure on the pi-gen image right after generation and the first boot.
+Ansible roles to setup infrastructure on the Raspberry Pi, the rock64 or any x86_64 computer running Debian or Ubuntu.
 
 Preparation
 ===========
 
+Installation on Raspberry pi
+----------------------------
+
 Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.  
-This image contains my public key for accessing root user directly.  
+This image contains my public key for accessing root user directly.
+
+
+Installation on Rock64
+----------------------
+
+Flash Ubuntu 1804 minimal Arm64 bits. And after boot log in with rock64 user.
+The default image will not authorize access to root from ssh so we need to update the sshd_config.
+Uncomment the section about authorized_keys and add your inside /root/.ssh/authorized_keys.
+
+Installation on x86_64
+----------------------
+
 All roles are also available for x86_64.
+
 
 Services
 ========
