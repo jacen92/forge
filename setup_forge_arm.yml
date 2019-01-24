@@ -9,3 +9,4 @@
   roles:
     - common
     - infra
+    - infra_hard

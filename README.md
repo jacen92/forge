@@ -28,7 +28,9 @@ Services
 
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
 * gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
-
+* insolante: gerber to gcode converter (wrapper to pcb2gcode) [https://hub.docker.com/r/ngargaud/insolante].
+* nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/ngargaud/insolante].
+* octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 
 Used port
 =========
@@ -40,6 +42,9 @@ Used port
 | traefik       | 8000 |   https  |       yes       |        no        |           |
 | gogs          | 3000 |   http   |       yes       |        yes       |    git.   |
 | gogs          | 8022 |   ssh    |       yes       |        yes       |           |
+| insolante     | 8023 |   http   |       yes       |        no        |   pcb.    |
+| nodered       | 8024 |   http   |       yes       |        no        |  flows.   |
+| octoprint     | 8025 |   http   |       yes       |        no        | printers. |
 
 
 Playbooks parameters
@@ -63,6 +68,10 @@ Features description
 | vault         |  All   | Unlock user and services passwords                                     |
 | https         |  All   | Add or update traefik configuration (vault must be set)                |
 | gogs          |  All   | Add or update gogs docker instance                                     |
+| insolante     |  All   | Add or update insolante docker instance                                |
+| nodered       |  All   | Add or update nodered docker instance                                  |
+| octoprint     |  All   | Add or update octoprint docker instance                                |
+
 
 
 Vault file parameters

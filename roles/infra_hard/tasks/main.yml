@@ -1,0 +1,8 @@
+- import_tasks: setup_insolante.yml
+  when: ("insolante" in FEATURES)
+
+- import_tasks: setup_octoprint.yml
+  when: ("octoprint" in FEATURES)
+
+- import_tasks: setup_nodered.yml
+  when: ("nodered" in FEATURES)

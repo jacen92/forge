@@ -1,0 +1,41 @@
+- name: "Setup datacore directory"
+  file:
+    path: "/{{ DATACORE }}/octoprint"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+# TODO: share the /dev/ACM... to connect the printer
+- name: "Launch octoprint container {{ OCTOPRINT_VERSION }}-arm32v7"
+  docker_container:
+    name: "octoprint"
+    image: "nunofgs/octoprint:{{ OCTOPRINT_VERSION }}-arm32v7"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ OCTOPRINT_PORT }}:80"
+    labels:
+      traefik.port: "80"
+      traefik.enable: "{{ OCTOPRINT_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ OCTOPRINT_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/octoprint:/data"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Launch octoprint container {{ OCTOPRINT_VERSION }}"
+  docker_container:
+    name: "octoprint"
+    image: "octoprint/octoprint:{{ OCTOPRINT_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ OCTOPRINT_PORT }}:80"
+    labels:
+      traefik.port: "80"
+      traefik.enable: "{{ OCTOPRINT_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ OCTOPRINT_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/octoprint:/data"
+  when: ansible_architecture in ["amd64", "x86_64"]

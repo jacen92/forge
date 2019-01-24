@@ -1,0 +1,46 @@
+- name: "Setup insolante directory"
+  file:
+    path: "/{{ DATACORE }}/insolante"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Launch insolante container for ARM {{ INSOLANTE_VERSION }}"
+  docker_container:
+    name: "insolante"
+    image: "ngargaud/insolante:arm-{{ INSOLANTE_VERSION }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ INSOLANTE_PORT }}:5000"
+    env:
+      URL: "{{ INSOLANTE_URL }}"
+      RPORT: "{{ INSOLANTE_PORT }}"
+      DEBUG: "false"
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ INSOLANTE_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ INSOLANTE_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/insolante:/opt/core/data"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Launch insolante container for x86_64 {{ INSOLANTE_VERSION }}"
+  docker_container:
+    name: "insolante"
+    image: "ngargaud/insolante:{{ INSOLANTE_VERSION }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ INSOLANTE_PORT }}:5000"
+    env:
+      URL: "{{ INSOLANTE_URL }}"
+      RPORT: "{{ INSOLANTE_PORT }}"
+      DEBUG: "false"
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ INSOLANTE_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ INSOLANTE_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/insolante:/opt/core/data"
+  when: ansible_architecture in ["amd64", "x86_64"]

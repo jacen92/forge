@@ -1,0 +1,50 @@
+- name: "Setup nodered directory"
+  file:
+    path: "/{{ DATACORE }}/nodered"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Get user ID"
+  shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Launch nodered container for ARM {{ NODERED_VERSION }}-rpi-v8"
+  docker_container:
+    name: "nodered"
+    image: "nodered/node-red-docker:{{ NODERED_VERSION }}-rpi-v8"
+    state: started
+    restart_policy: always
+    recreate: yes
+    user: "{{ user_id.stdout }}"
+    ports:
+      - "{{ NODERED_FRONT_PORT }}:1880"
+    labels:
+      traefik.port: "1880"
+      traefik.enable: "{{ NODERED_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ NODERED_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/nodered:/data"
+  become: true
+  become_user: "{{ USER_NAME }}"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Launch nodered container for x86_64 {{ NODERED_VERSION }}-v8"
+  docker_container:
+    name: "nodered"
+    image: "nodered/node-red-docker:{{ NODERED_VERSION }}-v8"
+    state: started
+    restart_policy: always
+    recreate: yes
+    user: "{{ user_id.stdout }}"
+    ports:
+      - "{{ NODERED_FRONT_PORT }}:1880"
+    labels:
+      traefik.port: "1880"
+      traefik.enable: "{{ NODERED_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ NODERED_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/nodered:/data"
+  become: true
+  become_user: "{{ USER_NAME }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
