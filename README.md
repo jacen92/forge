@@ -80,7 +80,7 @@ Vault file parameters
 | Parameter     | Role     | Description                                          |
 | ------------- |:--------:| ---------------------------------------------------- |
 | USER_PASS     |  common  | Default user password                                |
-
+| ROOT_PASS     |  common  | Default root password                                |
 
 Notes:
 ======
