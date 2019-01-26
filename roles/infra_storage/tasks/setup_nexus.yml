@@ -49,3 +49,91 @@
       traefik.frontend.rule: "Host:{{ NEXUS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/nexus:/nexus-data"
+
+- name: "Wait for Nexus to start up"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT }}"
+    status_code: "200,403"
+    timeout: 40
+  register: nexus_service_status
+  # Keep trying for 5 mins in 5 sec intervals
+  retries: "{{ NEXUS_RESTART_DELAY }}"
+  delay: 30
+  until: nexus_service_status['status'] == 200 or nexus_service_status['status'] == 403
+
+- name: "Read nexus admin password file content"
+  shell: cat /{{ DATACORE }}/nexus/admin.password
+  register: admin_password_file_content
+  ignore_errors: yes
+  no_log: true
+
+- name: "Use default password if by default"
+  set_fact:
+    current_nexus_admin_password: "{{ admin_password_file_content.stdout }}"
+  no_log: true
+  when: admin_password_file_content.failed == false
+
+- name: "Check nexus connection with status API and defaut password"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/status"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    method: GET
+    force_basic_auth: yes
+    status_code: 200
+  register: nexus_api_status
+  ignore_errors: yes
+
+- name: "Use new password if needed if default one doesn't works"
+  set_fact:
+    current_nexus_admin_password: "{{ NEXUS_ADMIN_PASS }}"
+  no_log: true
+  when: nexus_api_status.failed == true
+
+- name: "Removing (potential) previously declared Groovy scripts"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/script/{{ item }}"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    method: DELETE
+    force_basic_auth: yes
+    status_code: 204,404,405
+  with_items:
+    - bypass_wizard
+
+- name: "Declaring up-to-date Groovy scripts"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/script"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 204
+    body:
+      name: "{{ item }}"
+      type: 'groovy'
+      content: "{{ lookup('file', 'files/nexus/' + item + '.groovy') }}"
+  with_items:
+    - bypass_wizard
+
+- name: "Execute Groovy scripts"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/script/{{ item }}/run"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 200,204
+    body:
+      admin_password: "{{ NEXUS_ADMIN_PASS }}"
+  with_items:
+    - bypass_wizard
+
+# Voir avec:
+# https://blog.mimacom.com/automate-nexus/
+# https://blog.savoirfairelinux.com/en-ca/2017/ansible-nexus-repository-manager/
+# https://blog.savoirfairelinux.com/fr-ca/2017/ansible-nexus-repository-manager/
+# https://github.com/savoirfairelinux/ansible-nexus3-oss/tree/master/tasks
+# https://github.com/ansible-ThoTeam/nexus3-oss/blob/master/tasks/declare_script_each.yml

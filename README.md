@@ -142,6 +142,7 @@ Vault file parameters
 | MQTT_RW_PASS            |   hard     | Default password for user with write acl |
 | JENKINS_PASS            |   ci       | Default jenkins admin user password      |
 | NEXTCLOUD_PASS          |   storage  | Default nextcloud admin user password    |
+| NEXUS_ADMIN_PASS        |   storage  | Default nexus admin user password        |
 
 Notes:
 ======
