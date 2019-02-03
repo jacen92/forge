@@ -1,0 +1,72 @@
+- name: "Setup datacore directory"
+  file:
+    path: "/{{ DATACORE }}/fdroid"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Setup fdroid apk directory"
+  file:
+    path: "/{{ DATACORE }}/fdroid/apk"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Setup fdroid config directory"
+  file:
+    path: "/{{ DATACORE }}/fdroid/config"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Copy authorized_keys for root"
+  copy:
+    src: "files/fdroid/authorized_keys"
+    dest: "/{{ DATACORE }}/fdroid/config/authorized_keys"
+    owner: "root"
+    group: "root"
+    mode: u=rw,g=r,o=r
+
+- name: "Copy basic configuration for admin credentials"
+  template:
+    src: "files/fdroid/config.in.py"
+    dest: "/{{ DATACORE }}/fdroid/config/config.in.py"
+    mode: u=rw,g=r,o=r
+
+- name: "Launch fdroid container for ARM {{ FDROID_VERSION }}"
+  docker_container:
+    name: "fdroid"
+    image: "ngargaud/fdroid-server:arm-{{ FDROID_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ FDROID_PORT }}:80"
+      - "{{ FDROID_SSH_PORT }}:22"
+    volumes:
+      - "/{{ DATACORE }}/fdroid/apk:/opt/apk"
+      - "/{{ DATACORE }}/fdroid/config:/opt/config"
+    labels:
+      traefik.port: "80"
+      traefik.enable: "{{ FDROID_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ FDROID_EXTERNAL_URL }}"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Launch fdroid container for x86_64 {{ FDROID_VERSION }}"
+  docker_container:
+    name: "fdroid"
+    image: "ngargaud/fdroid-server:{{ FDROID_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ FDROID_PORT }}:80"
+      - "{{ FDROID_SSH_PORT }}:22"
+    volumes:
+      - "/{{ DATACORE }}/fdroid/apk:/opt/apk"
+      - "/{{ DATACORE }}/fdroid/config:/opt/config"
+    labels:
+      traefik.port: "80"
+      traefik.enable: "{{ FDROID_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ FDROID_EXTERNAL_URL }}"
+  when: ansible_architecture in ["amd64", "x86_64"]

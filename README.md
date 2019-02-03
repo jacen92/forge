@@ -36,6 +36,8 @@ Services
 * registry-ui: Registry front-end and authentication proxy [https://hub.docker.com/r/joxit/docker-registry-ui/].
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
+* fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
+
 
 Used port
 =========
@@ -57,7 +59,8 @@ Used port
 | nexus         | 8030 |   http   |       yes       |        no        |  nexus.   |
 | nexus pull    | 8027 |   http   |       yes       |        no        |           |
 | nexus push    | 8028 |   http   |       yes       |        no        |           |
-
+| fdroid server | 8031 |   http   |       yes       |        no        |  fdroid.  |
+| fdroid scp    | 8032 |   ssh    |       yes       |        no        |           |
 
 
 
@@ -90,16 +93,18 @@ Features description
 | registry-ui   |   ARM   | Add or update docker registry-ui node                                  |
 | portainer     |   All   | Add or update portainer docker instance                                |
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
+| fdroid        |   All   | Add or update fdroid docker instance                                   |
 
 
 Vault file parameters
 =====================
 
-| Parameter     | Role        | Description                                          |
-| ------------- |:-----------:| ---------------------------------------------------- |
-| USER_PASS     |    common   | Default user password                                |
-| ROOT_PASS     |    common   | Default root password                                |
-| JENKINS_PASS  |   jenkins   | Default jenkins admin user password                  |
+| Parameter     | Role       | Description                                          |
+| ------------- |:----------:| ---------------------------------------------------- |
+| USER_PASS     |   common   | Default user password                                |
+| ROOT_PASS     |   common   | Default root password                                |
+| JENKINS_PASS  |   jenkins  | Default jenkins admin user password                  |
+
 
 Notes:
 ======
@@ -129,3 +134,9 @@ Restart docker daemon:
 ```
   sudo service docker restart
 ```
+
+About fdroid
+------------
+
+Even if fdroid-server image allows to set a password for fdroid user we will use authorized_keys system.
+So update the file in `roles/infra_storage/tasks/files/fdroid/authorized_keys` with your public keys.
