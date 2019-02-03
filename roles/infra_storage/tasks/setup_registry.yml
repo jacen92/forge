@@ -1,0 +1,31 @@
+- name: "Setup datacore directory"
+  file:
+    path: "/{{ DATACORE }}/registry"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Setup registry data directory"
+  file:
+    path: "/{{ DATACORE }}/registry/data"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Launch registry container"
+  docker_container:
+    name: "registry"
+    image: "registry:{{ REGISTRY_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ REGISTRY_PORT }}:5000"
+    env:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - "/{{ DATACORE }}/registry/data:/data"
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ REGISTRY_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ REGISTRY_EXTERNAL_URL }}"

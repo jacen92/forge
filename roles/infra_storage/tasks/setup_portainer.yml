@@ -1,0 +1,63 @@
+- name: "Setup portainer directory"
+  file:
+    path: "/{{ DATACORE }}/portainer"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Launch portainer container with registry link"
+  docker_container:
+    name: "portainer"
+    image: "portainer/portainer:linux-arm-{{ PORTAINER_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ PORTAINER_PORT }}:9000"
+    links:
+      - registry:registry
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/{{ DATACORE }}/portainer:/data"
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ PORTAINER_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ PORTAINER_EXTERNAL_URL }}"
+  when: ansible_architecture in ["armv6l", "armv7l"] and ("registry" in FEATURES)
+
+- name: "Launch portainer container without registry link"
+  docker_container:
+    name: "portainer"
+    image: "portainer/portainer:linux-arm-{{ PORTAINER_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ PORTAINER_PORT }}:9000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/{{ DATACORE }}/portainer:/data"
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ PORTAINER_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ PORTAINER_EXTERNAL_URL }}"
+  when: ansible_architecture in ["aarch64", "armv6l", "armv7l"] and ("registry" not in FEATURES)
+
+
+- name: "Launch portainer container without registry link"
+  docker_container:
+    name: "portainer"
+    image: "portainer/portainer:{{ PORTAINER_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ PORTAINER_PORT }}:9000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/{{ DATACORE }}/portainer:/data"
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ PORTAINER_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ PORTAINER_EXTERNAL_URL }}"
+  when: ansible_architecture in ["amd64", "x86_64"]

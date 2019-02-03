@@ -32,7 +32,10 @@ Services
 * nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/ngargaud/insolante].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 * jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
-
+* registry: Official docker registry [https://hub.docker.com/r/registry/].
+* registry-ui: Registry front-end and authentication proxy [https://hub.docker.com/r/joxit/docker-registry-ui/].
+* portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
+* nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 
 Used port
 =========
@@ -48,6 +51,14 @@ Used port
 | nodered       | 8024 |   http   |       yes       |        no        |  flows.   |
 | octoprint     | 8025 |   http   |       yes       |        no        | printers. |
 | jenkins       | 8026 |   http   |       yes       |        no        |    ci.    |
+| registry      | 8027 |   http   |       no        |        no        |           |
+| registry-ui   | 8028 |   http   |       yes       |        no        |           |
+| portainer     | 8029 |   http   |       yes       |        no        |           |
+| nexus         | 8030 |   http   |       yes       |        no        |  nexus.   |
+| nexus pull    | 8027 |   http   |       yes       |        no        |           |
+| nexus push    | 8028 |   http   |       yes       |        no        |           |
+
+
 
 
 Playbooks parameters
@@ -66,25 +77,29 @@ Playbooks parameters
 Features description
 ====================
 
-| Name          |  Arch  | Description                                                            |
-| ------------- |:------:| ---------------------------------------------------------------------- |
-| vault         |  All   | Unlock user and services passwords                                     |
-| https         |  All   | Add or update traefik configuration (vault must be set)                |
-| gogs          |  All   | Add or update gogs docker instance                                     |
-| insolante     |  All   | Add or update insolante docker instance                                |
-| nodered       |  All   | Add or update nodered docker instance                                  |
-| octoprint     |  All   | Add or update octoprint docker instance                                |
-| jenkins       |  All   | Add or update jenkins docker instance                                  |
+| Name          |   Arch  | Description                                                            |
+| ------------- |:-------:| ---------------------------------------------------------------------- |
+| vault         |   All   | Unlock user and services passwords                                     |
+| https         |   All   | Add or update traefik configuration (vault must be set)                |
+| gogs          |   All   | Add or update gogs docker instance                                     |
+| insolante     |   All   | Add or update insolante docker instance                                |
+| nodered       |   All   | Add or update nodered docker instance                                  |
+| octoprint     |   All   | Add or update octoprint docker instance                                |
+| jenkins       | not RPI | Add or update jenkins docker instance                                  |
+| registry      |   ARM   | Add or update docker registry node                                     |
+| registry-ui   |   ARM   | Add or update docker registry-ui node                                  |
+| portainer     |   All   | Add or update portainer docker instance                                |
+| nexus         | not RPI | Add or update jenkins docker instance                                  |
 
 
 Vault file parameters
 =====================
 
-| Parameter     | Role     | Description                                          |
-| ------------- |:--------:| ---------------------------------------------------- |
-| USER_PASS     |  common  | Default user password                                |
-| ROOT_PASS     |  common  | Default root password                                |
-| JENKINS_PASS  | jenkins  | Default jenkins admin user password                  |
+| Parameter     | Role        | Description                                          |
+| ------------- |:-----------:| ---------------------------------------------------- |
+| USER_PASS     |    common   | Default user password                                |
+| ROOT_PASS     |    common   | Default root password                                |
+| JENKINS_PASS  |   jenkins   | Default jenkins admin user password                  |
 
 Notes:
 ======
@@ -98,3 +113,19 @@ When a certificate is valid then it will be in acme.json with chmod=600 and must
 
 If a bad gateway error occurs then wait a few moments to get the certificate renewal complete.  
 The certificate is ciphered with the vault password.
+
+
+About docker registry
+---------------------
+To login to the docker registry if there is no https (https://github.com/docker/distribution/issues/1874)  
+Edit /etc/docker/daemon.json on your host and write:
+```
+{
+  "insecure-registries":["registry.ip:8027"]
+}
+```
+
+Restart docker daemon:
+```
+  sudo service docker restart
+```

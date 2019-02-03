@@ -1,0 +1,56 @@
+- name: "Set correct owner of full nexus data directory"
+  file:
+    path: "/{{DATACORE}}/nexus"
+    owner: 200
+    group: 200
+    recurse: yes
+
+- name: "Remove previous nexus tmp directory"
+  file:
+     path: "/tmp/nexus"
+     state: absent
+
+- name: "Clone jenkinsci"
+  git:
+    repo: "https://github.com/sonatype/docker-nexus3.git"
+    dest: "/tmp/nexus"
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+# Waiting for: https://github.com/sonatype/docker-nexus3/pull/105/files
+- name: "Fix the dockerfile to install java from yum repository"
+  lineinfile:
+    path: /tmp/nexus/Dockerfile
+    insertbefore: "(.*)VOLUME(.*)"
+    line: "RUN yum install -y java-1.8.0-openjdk"
+
+- name: "Build nexus image and with buildargs"
+  docker_image:
+     path: "/tmp/nexus"
+     name: "nexus"
+     tag: "{{ NEXUS_VERSION }}"
+     dockerfile: "Dockerfile"
+     buildargs:
+       NEXUS_VERSION: "{{ NEXUS_VERSION }}"
+       NEXUS_DOWNLOAD_SHA256_HASH: "{{ NEXUS_SHA }}"
+
+- name: "Launch nexus container {{ NEXUS_VERSION }}"
+  docker_container:
+    name: "nexus"
+    image: "nexus:{{ NEXUS_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ NEXUS_PORT }}:8081"
+      - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
+      - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
+    labels:
+      traefik.port: "8081"
+      traefik.enable: "{{ NEXUS_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ NEXUS_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/nexus:/nexus-data"

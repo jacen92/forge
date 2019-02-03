@@ -2,7 +2,7 @@
   vars:
   - FORGE_MODE: "test"
   - DOMAIN_NAME: ""
-  - FEATURES: ["vault"]
+  - FEATURES: []
   - USER_NAME: "pi"
   - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
   - DATACORE: "home/{{ USER_NAME }}/data"
@@ -11,3 +11,4 @@
     - infra
     - infra_hard
     - infra_ci
+    - infra_storage

@@ -1,0 +1,21 @@
+# http://joxit.github.io/docker-registry-ui/
+# it should handle the authentication (a la place de nginx)
+- name: "Launch docker-registry-ui container"
+  docker_container:
+    name: "registry-ui"
+    image: "joxit/docker-registry-ui:{{ REGISTRY_UI_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ REGISTRY_UI_PORT }}:80"
+    links:
+      - registry:registry
+    env:
+      REGISTRY_TITLE: "Docker registry"
+      REGISTRY_URL: "http://registry:5000"
+      DELETE_IMAGES: true
+    labels:
+      traefik.port: "5000"
+      traefik.enable: "{{ REGISTRY_UI_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ REGISTRY_UI_EXTERNAL_URL }}"
