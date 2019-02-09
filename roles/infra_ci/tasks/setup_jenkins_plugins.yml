@@ -1,0 +1,159 @@
+# get the list of default plugins since this step is bypassed
+# ll /{{ DATACORE }}/jenkins/plugins | grep jpi | tr -s ' ' | cut -d ' ' -f 9
+- name: "Get user ID"
+  shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Use python2 to avoid codec issues"
+  set_fact:
+    ansible_python_interpreter: /usr/bin/python2
+
+- name: "Make sure the default plugins are always installed and up-to-date"
+  jenkins_plugin:
+    name: "{{ item }}"
+    state: latest
+    url_username: "{{ JENKINS_USER }}"
+    url_password: "{{ JENKINS_PASS }}"
+    url: "{{ JENKINS_URL }}"
+    jenkins_home: "/{{ DATACORE }}/jenkins"
+    force_basic_auth: True
+    owner: "{{ user_id.stdout }}"
+    group: "{{ user_id.stdout }}"
+    timeout: 600
+    validate_certs: "{{ JENKINS_VALIDATE_PLUGIN_CERTS }}"
+  with_items:
+    - ace-editor
+    - antisamy-markup-formatter
+    - ant
+    - apache-httpcomponents-client-4-api
+    - authentication-tokens
+    - bouncycastle-api
+    - branch-api
+    - build-timeout
+    - cloudbees-folder
+    - command-launcher
+    - credentials-binding
+    - credentials
+    - display-url-api
+    - docker-commons
+    - docker-workflow
+    - durable-task
+    - email-ext
+    - git-client
+    - github-api
+    - github-branch-source
+    - github
+    - git
+    - git-server
+    - gradle
+    - handlebars
+    - jackson2-api
+    - jquery-detached
+    - jsch
+    - junit
+    - ldap
+    - lockable-resources
+    - mailer
+    - mapdb-api
+    - matrix-auth
+    - matrix-project
+    - momentjs
+    - pam-auth
+    - pipeline-build-step
+    - pipeline-github-lib
+    - pipeline-graph-analysis
+    - pipeline-input-step
+    - pipeline-milestone-step
+    - pipeline-model-api
+    - pipeline-model-declarative-agent
+    - pipeline-model-definition
+    - pipeline-model-extensions
+    - pipeline-rest-api
+    - pipeline-stage-step
+    - pipeline-stage-tags-metadata
+    - pipeline-stage-view
+    - plain-credentials
+    - resource-disposer
+    - scm-api
+    - script-security
+    - ssh-credentials
+    - ssh-slaves
+    - structs
+    - subversion
+    - timestamper
+    - token-macro
+    - workflow-aggregator
+    - workflow-api
+    - workflow-basic-steps
+    - workflow-cps-global-lib
+    - workflow-cps
+    - workflow-durable-task-step
+    - workflow-job
+    - workflow-multibranch
+    - workflow-scm-step
+    - workflow-step-api
+    - workflow-support
+    - ws-cleanup
+
+- name: "Make sure the forge plugins are always installed and up-to-date"
+  jenkins_plugin:
+    name: "{{ item }}"
+    state: latest
+    url_username: "{{ JENKINS_USER }}"
+    url_password: "{{ JENKINS_PASS }}"
+    url: "{{ JENKINS_URL }}"
+    jenkins_home: "/{{ DATACORE }}/jenkins"
+    force_basic_auth: True
+    owner: "{{ user_id.stdout }}"
+    group: "{{ user_id.stdout }}"
+    timeout: 600
+    validate_certs: "{{ JENKINS_VALIDATE_PLUGIN_CERTS }}"
+  with_items:
+    - python
+    - rebuild
+    - global-build-stats
+    - parameterized-trigger
+    - conditional-buildstep
+    - maven-plugin
+    - javadoc
+    - run-condition
+    - tool-labels-plugin
+    - progress-bar-column-plugin
+    - simple-theme-plugin
+    - purge-job-history
+    - windows-slaves
+
+- name: "Use python3"
+  set_fact:
+    ansible_python_interpreter: /usr/bin/python3
+
+- name: "Copy theme configuration"
+  template:
+    src: files/jenkins/config/theme-config.xml
+    dest: /{{ DATACORE }}/jenkins/org.codefirst.SimpleThemeDecorator.xml
+
+- name: "Set correct owner of full jenkins data directory"
+  file:
+    path: "/{{DATACORE}}/jenkins"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ user_id.stdout }}"
+    recurse: yes
+
+- name: "Restart jenkins container"
+  docker_container:
+    name: jenkins
+    state: started
+    restart: yes
+
+- name: "Wait for Jenkins to start up"
+  uri:
+    url: "http://localhost:{{ JENKINS_PORT }}"
+    status_code: "200,403"
+    timeout: 40
+  register: jenkins_service_status
+  # Keep trying for 5 mins in 5 sec intervals
+  retries: "{{ JENKINS_RESTART_DELAY }}"
+  delay: 30
+  until: >
+     'status' in jenkins_service_status and
+     jenkins_service_status['status'] == 200 or jenkins_service_status['status'] == 403

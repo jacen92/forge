@@ -31,6 +31,8 @@ Services
 * insolante: gerber to gcode converter (wrapper to pcb2gcode) [https://hub.docker.com/r/ngargaud/insolante].
 * nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/ngargaud/insolante].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
+* jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
+
 
 Used port
 =========
@@ -45,6 +47,7 @@ Used port
 | insolante     | 8023 |   http   |       yes       |        no        |   pcb.    |
 | nodered       | 8024 |   http   |       yes       |        no        |  flows.   |
 | octoprint     | 8025 |   http   |       yes       |        no        | printers. |
+| jenkins       | 8026 |   http   |       yes       |        no        |    ci.    |
 
 
 Playbooks parameters
@@ -71,7 +74,7 @@ Features description
 | insolante     |  All   | Add or update insolante docker instance                                |
 | nodered       |  All   | Add or update nodered docker instance                                  |
 | octoprint     |  All   | Add or update octoprint docker instance                                |
-
+| jenkins       |  All   | Add or update jenkins docker instance                                  |
 
 
 Vault file parameters
@@ -81,6 +84,7 @@ Vault file parameters
 | ------------- |:--------:| ---------------------------------------------------- |
 | USER_PASS     |  common  | Default user password                                |
 | ROOT_PASS     |  common  | Default root password                                |
+| JENKINS_PASS  | jenkins  | Default jenkins admin user password                  |
 
 Notes:
 ======

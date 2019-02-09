@@ -7,7 +7,7 @@
 
 - name: "Install pip packages"
   pip:
-    name: [docker-py, passlib]
+    name: [docker-py, passlib, setuptools]
 
 - name: "Install docker"
   shell: curl -sSL https://get.docker.com | sh
