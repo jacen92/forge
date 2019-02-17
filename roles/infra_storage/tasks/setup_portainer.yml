@@ -41,8 +41,7 @@
       traefik.port: "5000"
       traefik.enable: "{{ PORTAINER_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ PORTAINER_EXTERNAL_URL }}"
-  when: ansible_architecture in ["aarch64", "armv6l", "armv7l"] and ("registry" not in FEATURES)
-
+  when: ansible_architecture in ["armv6l", "armv7l"] and ("registry" not in FEATURES)
 
 - name: "Launch portainer container without registry link"
   docker_container:
@@ -60,4 +59,4 @@
       traefik.port: "5000"
       traefik.enable: "{{ PORTAINER_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ PORTAINER_EXTERNAL_URL }}"
-  when: ansible_architecture in ["amd64", "x86_64"]
+  when: ansible_architecture in ["aarch64", "amd64", "x86_64"]
