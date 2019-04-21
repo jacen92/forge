@@ -6,7 +6,7 @@ Preparation
 Installation on Raspberry pi
 ----------------------------
 
-Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.  
+Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.
 This image contains my public key for accessing root user directly.
 
 
@@ -99,11 +99,13 @@ Features description
 Vault file parameters
 =====================
 
-| Parameter     | Role       | Description                                          |
-| ------------- |:----------:| ---------------------------------------------------- |
-| USER_PASS     |   common   | Default user password                                |
-| ROOT_PASS     |   common   | Default root password                                |
-| JENKINS_PASS  |   jenkins  | Default jenkins admin user password                  |
+| Parameter          | Role       | Description                                |
+| ------------------ |:----------:| ------------------------------------------ |
+| USER_PASS          |   common   | Default user password                      |
+| ROOT_PASS          |   common   | Default root password                      |
+| JENKINS_PASS       |   jenkins  | Default jenkins admin user password        |
+| BACKUP_PASS        |   common   | Default backup password                    |
+| BACKUP_REMOTE_PASS |   common   | Default FTP password for backup            |
 
 
 Notes:
@@ -112,17 +114,22 @@ Notes:
 About SSL and traefik
 ---------------------
 
-Let's Encrypt have a limit of registrable certificate per week.  
-To get a new certificate onDemand should be set to true in traefik.tml.  
+Let's Encrypt have a limit of registrable certificate per week.
+To get a new certificate onDemand should be set to true in traefik.tml.
 When a certificate is valid then it will be in acme.json with chmod=600 and must be saved.
 
-If a bad gateway error occurs then wait a few moments to get the certificate renewal complete.  
+If a bad gateway error occurs then wait a few moments to get the certificate renewal complete.
 The certificate is ciphered with the vault password.
 
+About backup
+------------
+
+This system will create an archive and upload it to the specified FTP server in a directory under `FTP_ROOT/FORGE_MODE/`.
+By default it will keep the 3 latest backups.
 
 About docker registry
 ---------------------
-To login to the docker registry if there is no https (https://github.com/docker/distribution/issues/1874)  
+To login to the docker registry if there is no https (https://github.com/docker/distribution/issues/1874)
 Edit /etc/docker/daemon.json on your host and write:
 ```
 {

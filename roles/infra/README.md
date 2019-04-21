@@ -4,6 +4,7 @@ Content
 =======
 
 * firewall and fail2ban: protect from DOS and bruteforce attacks.
+* backup: install stuff to do backup of the datacore on a remote FTP server.
 * HTTPS: reverse-proxy with HTTPS.
 * Gogs: version control system and project manager.
 
