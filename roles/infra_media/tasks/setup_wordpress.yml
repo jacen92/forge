@@ -1,0 +1,51 @@
+- name: "Setup wordpress database directory"
+  file:
+    path: "/{{ DATACORE }}/wordpress_db"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Setup wordpress directory"
+  file:
+    path: "/{{ DATACORE }}/wordpress"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Launch mysql container for wordpress"
+  docker_container:
+    name: "wordpress_db"
+    image: "mysql/mysql-server:{{ WORDPRESS_DB_VERSION }}-aarch64"
+    state: started
+    restart_policy: always
+    recreate: yes
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql:rw,delegated"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "wait"
+  pause:
+    minutes: 5
+
+- name: "Launch wordpress container"
+  docker_container:
+    name: "wordpress"
+    image: "arm32v7/wordpress:{{ WORDPRESS_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    links:
+      - wordpress_db:wordpress_db
+    ports:
+      - "{{ WORDPRESS_FRONT_PORT }}:80"
+    env:
+      WORDPRESS_DB_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
+      WORDPRESS_DB_HOST: wordpress_db:3306
+    labels:
+      traefik.port: "80"
+      traefik.enable: "{{ WORDPRESS_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ WORDPRESS_EXTERNAL_URL }}"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]

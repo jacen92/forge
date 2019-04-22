@@ -3,3 +3,6 @@
 
 - import_tasks: setup_peertube.yml
   when: ("peertube" in FEATURES)
+
+- import_tasks: setup_wordpress.yml
+  when: ("vault" in FEATURES) and ("blog" in FEATURES)

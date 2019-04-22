@@ -65,6 +65,7 @@ Used port
 | fdroid scp    | 8032 |   ssh    |       yes       |        no        |           |
 | mStream       | 8033 |   http   |       yes       |        no        |   music.  |
 | Peertube      | 8034 |   http   |       yes       |        no        |   video.  |
+| wordpress     | 8035 |   http   |       yes       |        no        |   blog.   |
 
 
 Playbooks parameters
@@ -99,20 +100,22 @@ Features description
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
 | mstream       |   All   | Add or update mStream docker instance                                  |
 | peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
+| wordpress     |   All   | Add or update wordpress and database docker instances                  |
 
 
 Vault file parameters
 =====================
 
-| Parameter          | Role       | Description                                |
-| ------------------ |:----------:| ------------------------------------------ |
-| USER_PASS          |   common   | Default user password                      |
-| ROOT_PASS          |   common   | Default root password                      |
-| BACKUP_PASS        |   common   | Default backup password                    |
-| BACKUP_REMOTE_PASS |   common   | Default FTP password for backup            |
-| JENKINS_PASS       |   jenkins  | Default jenkins admin user password        |
-| MSTREAM_PASS       |   media    | Default mStream admin user password        |
-| PEERTUBE_DB_PASS   |   media    | Default peertube database admin password   |
+| Parameter               | Role       | Description                              |
+| ----------------------- |:----------:| ---------------------------------------- |
+| USER_PASS               |   common   | Default user password                    |
+| ROOT_PASS               |   common   | Default root password                    |
+| BACKUP_PASS             |   common   | Default backup password                  |
+| BACKUP_REMOTE_PASS      |   common   | Default FTP password for backup          |
+| JENKINS_PASS            |   jenkins  | Default jenkins admin user password        |
+| MSTREAM_PASS            |   media    | Default mStream admin user password        |
+| PEERTUBE_DB_PASS        |   media    | Default peertube database admin password   |
+| WORDPRESS_DB_PASS       |   infra    | Default database password for wordpress    |
 
 
 Notes:
