@@ -1,0 +1,5 @@
+MSTREAM_VERSION: "v4.2.1-ls3"
+MSTREAM_PORT: 8033
+MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
+MSTREAM_EXPOSITION: "false"

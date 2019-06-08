@@ -37,6 +37,7 @@ Services
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
+* mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
 
 
 Used port
@@ -61,7 +62,7 @@ Used port
 | nexus push    | 8028 |   http   |       yes       |        no        |           |
 | fdroid server | 8031 |   http   |       yes       |        no        |  fdroid.  |
 | fdroid scp    | 8032 |   ssh    |       yes       |        no        |           |
-
+| mStream       | 8033 |   http   |       yes       |        no        |   music.  |
 
 
 Playbooks parameters
@@ -94,6 +95,7 @@ Features description
 | portainer     |   All   | Add or update portainer docker instance                                |
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
+| mstream       |   All   | Add or update mStream docker instance                                  |
 
 
 Vault file parameters
@@ -103,9 +105,10 @@ Vault file parameters
 | ------------------ |:----------:| ------------------------------------------ |
 | USER_PASS          |   common   | Default user password                      |
 | ROOT_PASS          |   common   | Default root password                      |
-| JENKINS_PASS       |   jenkins  | Default jenkins admin user password        |
 | BACKUP_PASS        |   common   | Default backup password                    |
 | BACKUP_REMOTE_PASS |   common   | Default FTP password for backup            |
+| JENKINS_PASS       |   jenkins  | Default jenkins admin user password        |
+| MSTREAM_PASS       |   media    | Default mStream admin user password        |
 
 
 Notes:

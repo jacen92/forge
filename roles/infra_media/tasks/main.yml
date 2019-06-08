@@ -1,0 +1,2 @@
+- import_tasks: setup_mstream.yml
+  when: ("mstream" in FEATURES)

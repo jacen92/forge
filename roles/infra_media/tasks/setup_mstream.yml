@@ -1,0 +1,64 @@
+- name: "Setup mstream directory"
+  file:
+    path: "/{{ DATACORE }}/mstream"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Get user ID"
+  shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Launch mstream container for ARM {{ MSTREAM_VERSION }}"
+  docker_container:
+    name: "mstream"
+    image: "linuxserver/mstream:arm32v7-{{ MSTREAM_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ MSTREAM_PORT }}:3000"
+    env:
+      PUID: "{{ user_id.stdout }}"
+      PGID: "{{ user_id.stdout }}"
+      USER: "admin"
+      PASSWORD: "{{ MSTREAM_PASS }}"
+      USE_JSON: true
+      TZ: "Europe/Paris"
+    labels:
+      traefik.port: "3000"
+      traefik.enable: "{{ MSTREAM_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ MSTREAM_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/mstream/config:/config"
+      - "/{{ DATACORE }}/mstream/music:/music"
+  become: true
+  become_user: "{{ USER_NAME }}"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Launch mstream container for x86_64 {{ MSTREAM_VERSION }}"
+  docker_container:
+    name: "mstream"
+    image: "linuxserver/mstream:amd64-{{ MSTREAM_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ MSTREAM_PORT }}:3000"
+    env:
+      PUID: "{{ user_id.stdout }}"
+      PGID: "{{ user_id.stdout }}"
+      USER: "admin"
+      PASSWORD: "{{ MSTREAM_PASS }}"
+      USE_JSON: true
+      TZ: "Europe/Paris"
+    labels:
+      traefik.port: "3000"
+      traefik.enable: "{{ MSTREAM_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ MSTREAM_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/mstream/config:/config"
+      - "/{{ DATACORE }}/mstream/music:/music"
+  become: true
+  become_user: "{{ USER_NAME }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
