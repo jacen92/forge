@@ -4,3 +4,4 @@ Content
 =======
 
 * mStream: Music streaming service (Spotify alternative).
+* Peertube: Video streaming service (Youtube alternative).

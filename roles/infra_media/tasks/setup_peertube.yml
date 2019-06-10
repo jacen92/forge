@@ -1,0 +1,112 @@
+- name: "Setup peertube directory"
+  file:
+    path: "/{{ DATACORE }}/peertube"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Launch peertube database container"
+  docker_container:
+    name: "peertube_postgres"
+    image: postgres:10-alpine
+    state: started
+    restart_policy: always
+    recreate: yes
+    env:
+      POSTGRES_USER: "{{ PEERTUBE_DATABASE_USER }}"
+      POSTGRES_PASSWORD: "{{ PEERTUBE_DATABASE_PASS }}"
+      POSTGRES_DB: peertube
+    volumes:
+      - "/{{ DATACORE }}/peertube/db:/var/lib/postgresql/data"
+    labels:
+      traefik.enable: "false"
+
+- name: "Launch peertube redis container"
+  docker_container:
+    name: "peertube_redis"
+    image: redis:4-alpine
+    state: started
+    restart_policy: always
+    recreate: yes
+    volumes:
+      - '/{{ DATACORE }}/peertube/redis:/data'
+    labels:
+      traefik.enable: "false"
+
+- name: "Clone peertube on master"
+  git:
+    repo: "https://github.com/chocobozzz/PeerTube"
+    dest: "{{ PEERTUBE_TMP_PATH }}"
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+    version: "master"
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Replace languages in client.sh to limit build time on arm (build fr_FR and en_US)"
+  replace:
+    path: "{{ PEERTUBE_TMP_PATH }}/scripts/build/client.sh"
+    regexp: '(.*)languages=(.*)'
+    replace: '\1languages=("fr_FR")'
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Use ARM custom dockerfile"
+  template:
+    src: "files/peertube/Dockerfile.arm"
+    dest: "{{ PEERTUBE_TMP_PATH }}/support/docker/production/Dockerfile.stretch"
+    mode: u=rw,g=r,o=r
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Make sure to build the image"
+  docker_image:
+     path: "{{ PEERTUBE_TMP_PATH }}"
+     name: "peertube:{{ PEERTUBE_VERSION }}"
+     rm: false
+     nocache: false
+     dockerfile: "support/docker/production/Dockerfile.stretch"
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Launch peertube container for ARM {{ PEERTUBE_VERSION }}"
+  docker_container:
+    name: "peertube"
+    image: "peertube:{{ PEERTUBE_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ PEERTUBE_PORT }}:9000"
+    links:
+      - "peertube_redis:redis"
+      - "peertube_postgres:postgres"
+    env:
+      PEERTUBE_ADMIN_EMAIL: "{{ USER_MAIL }}"
+      PEERTUBE_DB_USERNAME: "{{ PEERTUBE_DATABASE_USER }}"
+      PEERTUBE_DB_PASSWORD: "{{ PEERTUBE_DATABASE_PASS }}"
+      PEERTUBE_WEBSERVER_PORT: "{{ PEERTUBE_PORT }}"
+      PEERTUBE_WEBSERVER_HOSTNAME: "{{ PEERTUBE_URL }}"
+      PEERTUBE_WEBSERVER_HTTPS: "{{ PEERTUBE_IS_HTTPS }}"
+      # If you need more than one IP as trust_proxy
+      # pass them as a comma separated array:
+      #PEERTUBE_TRUST_PROXY: ["127.0.0.1", "loopback", "172.18.0.0/16"]
+      #PEERTUBE_SMTP_USERNAME:
+      #PEERTUBE_SMTP_PASSWORD:
+      #PEERTUBE_SMTP_HOSTNAME: postfix
+      #PEERTUBE_SMTP_PORT: 25
+      #PEERTUBE_SMTP_FROM: noreply@domain.tld
+      #PEERTUBE_SMTP_TLS: false
+      #PEERTUBE_SMTP_DISABLE_STARTTLS: false
+      # /!\ Prefer to use the PeerTube admin interface to set the following configurations /!\
+      PEERTUBE_SIGNUP_ENABLED: "false"
+      PEERTUBE_TRANSCODING_ENABLED: "false"
+      PEERTUBE_CONTACT_FORM_ENABLED: "false"
+    labels:
+      traefik.port: "9000"
+      traefik.enable: "{{ PEERTUBE_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ PEERTUBE_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/peertube/config:/config"
+      - "/{{ DATACORE }}/peertube/data:/data"
+  become: true
+  become_user: "{{ USER_NAME }}"

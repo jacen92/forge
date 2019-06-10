@@ -3,3 +3,12 @@ MSTREAM_PORT: 8033
 MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
 MSTREAM_EXPOSITION: "false"
+
+PEERTUBE_VERSION: "production-stretch"
+PEERTUBE_PORT: 8034
+PEERTUBE_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+PEERTUBE_EXTERNAL_URL: "video.{{ DOMAIN_NAME }}"
+PEERTUBE_EXPOSITION: "false"
+PEERTUBE_IS_HTTPS: "false"
+PEERTUBE_TMP_PATH: "/tmp/peertube"
+PEERTUBE_DATABASE_USER: "peertube"
