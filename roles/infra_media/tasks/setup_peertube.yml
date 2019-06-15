@@ -35,38 +35,47 @@
 
 - name: "Clone peertube on master"
   git:
-    repo: "https://github.com/chocobozzz/PeerTube"
+    repo: "https://github.com/jacen92/PeerTube"
     dest: "{{ PEERTUBE_TMP_PATH }}"
+    version: "add_arm_dockerfile"
     accept_hostkey: yes
     force: yes
     recursive: no
-    version: "master"
   become: true
   become_user: "{{ USER_NAME }}"
 
-- name: "Replace languages in client.sh to limit build time on arm (build fr_FR and en_US)"
+- name: "Replace languages in client.sh to speep up the build time on arm (build only fr_FR and en_US)"
   replace:
     path: "{{ PEERTUBE_TMP_PATH }}/scripts/build/client.sh"
     regexp: '(.*)languages=(.*)'
     replace: '\1languages=("fr_FR")'
   when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
 
-- name: "Use ARM custom dockerfile"
-  template:
-    src: "files/peertube/Dockerfile.arm"
-    dest: "{{ PEERTUBE_TMP_PATH }}/support/docker/production/Dockerfile.stretch"
-    mode: u=rw,g=r,o=r
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
-
-- name: "Make sure to build the image"
+- name: "Make sure to build the ARM image"
   docker_image:
-     path: "{{ PEERTUBE_TMP_PATH }}"
-     name: "peertube:{{ PEERTUBE_VERSION }}"
-     rm: false
-     nocache: false
-     dockerfile: "support/docker/production/Dockerfile.stretch"
+    path: "{{ PEERTUBE_TMP_PATH }}"
+    buildargs:
+      NPM_RUN_BUILD_OPTS: "--light-fr"
+    name: "peertube:{{ PEERTUBE_VERSION }}"
+    rm: true
+    nocache: true
+    dockerfile: "support/docker/production/Dockerfile.arm"
   become: true
   become_user: "{{ USER_NAME }}"
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
+- name: "Make sure to build the x64 image"
+  docker_image:
+    path: "{{ PEERTUBE_TMP_PATH }}"
+    buildargs:
+      NPM_RUN_BUILD_OPTS: "--light-fr"
+    name: "peertube:{{ PEERTUBE_VERSION }}"
+    rm: true
+    nocache: true
+    dockerfile: "support/docker/production/Dockerfile.stretch"
+  become: true
+  become_user: "{{ USER_NAME }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch peertube container for ARM {{ PEERTUBE_VERSION }}"
   docker_container:

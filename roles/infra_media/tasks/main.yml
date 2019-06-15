@@ -2,4 +2,4 @@
   when: ("mstream" in FEATURES)
 
 - import_tasks: setup_peertube.yml
-  when: ("peertube" in FEATURES) and (USER_MAIL != "{{ USER_NAME }}@{{ DOMAIN_NAME }}")
+  when: ("peertube" in FEATURES)
