@@ -4,7 +4,7 @@ MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address']
 MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
 MSTREAM_EXPOSITION: "false"
 
-PEERTUBE_VERSION: "production-stretch"
+PEERTUBE_VERSION: "production-stretch-fr"
 PEERTUBE_PORT: 8034
 PEERTUBE_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 PEERTUBE_EXTERNAL_URL: "video.{{ DOMAIN_NAME }}"
