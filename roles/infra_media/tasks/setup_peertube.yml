@@ -13,8 +13,8 @@
     restart_policy: always
     recreate: yes
     env:
-      POSTGRES_USER: "{{ PEERTUBE_DATABASE_USER }}"
-      POSTGRES_PASSWORD: "{{ PEERTUBE_DATABASE_PASS }}"
+      POSTGRES_USER: "{{ PEERTUBE_DB_USER }}"
+      POSTGRES_PASSWORD: "{{ PEERTUBE_DB_PASS }}"
       POSTGRES_DB: peertube
     volumes:
       - "/{{ DATACORE }}/peertube/db:/var/lib/postgresql/data"
@@ -47,8 +47,8 @@
       - "peertube_postgres:postgres"
     env:
       PEERTUBE_ADMIN_EMAIL: "{{ USER_MAIL }}"
-      PEERTUBE_DB_USERNAME: "{{ PEERTUBE_DATABASE_USER }}"
-      PEERTUBE_DB_PASSWORD: "{{ PEERTUBE_DATABASE_PASS }}"
+      PEERTUBE_DB_USERNAME: "{{ PEERTUBE_DB_USER }}"
+      PEERTUBE_DB_PASSWORD: "{{ PEERTUBE_DB_PASS }}"
       PEERTUBE_WEBSERVER_PORT: "{{ PEERTUBE_PORT }}"
       PEERTUBE_WEBSERVER_HOSTNAME: "{{ PEERTUBE_URL }}"
       PEERTUBE_WEBSERVER_HTTPS: "{{ PEERTUBE_IS_HTTPS }}"
@@ -91,8 +91,8 @@
       - "peertube_postgres:postgres"
     env:
       PEERTUBE_ADMIN_EMAIL: "{{ USER_MAIL }}"
-      PEERTUBE_DB_USERNAME: "{{ PEERTUBE_DATABASE_USER }}"
-      PEERTUBE_DB_PASSWORD: "{{ PEERTUBE_DATABASE_PASS }}"
+      PEERTUBE_DB_USERNAME: "{{ PEERTUBE_DB_USER }}"
+      PEERTUBE_DB_PASSWORD: "{{ PEERTUBE_DB_PASS }}"
       PEERTUBE_WEBSERVER_PORT: "{{ PEERTUBE_PORT }}"
       PEERTUBE_WEBSERVER_HOSTNAME: "{{ PEERTUBE_URL }}"
       PEERTUBE_WEBSERVER_HTTPS: "{{ PEERTUBE_IS_HTTPS }}"

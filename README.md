@@ -38,6 +38,7 @@ Services
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
 * mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
+* Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
 
 
 Used port
@@ -63,6 +64,7 @@ Used port
 | fdroid server | 8031 |   http   |       yes       |        no        |  fdroid.  |
 | fdroid scp    | 8032 |   ssh    |       yes       |        no        |           |
 | mStream       | 8033 |   http   |       yes       |        no        |   music.  |
+| Peertube      | 8034 |   http   |       yes       |        no        |   video.  |
 
 
 Playbooks parameters
@@ -96,6 +98,7 @@ Features description
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
 | mstream       |   All   | Add or update mStream docker instance                                  |
+| peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
 
 
 Vault file parameters
@@ -109,6 +112,7 @@ Vault file parameters
 | BACKUP_REMOTE_PASS |   common   | Default FTP password for backup            |
 | JENKINS_PASS       |   jenkins  | Default jenkins admin user password        |
 | MSTREAM_PASS       |   media    | Default mStream admin user password        |
+| PEERTUBE_DB_PASS   |   media    | Default peertube database admin password   |
 
 
 Notes:
@@ -150,3 +154,11 @@ About fdroid
 
 Even if fdroid-server image allows to set a password for fdroid user we will use authorized_keys system.
 So update the file in `roles/infra_storage/tasks/files/fdroid/authorized_keys` with your public keys.
+
+
+About Peertube
+--------------
+
+The Peertube image comes from my own fork on github so it will not be updated each time.
+WARNING: USER_MAIL is required.
+WARNING: admin user password is shown only in the docker logs (Keep in mind to connect with it and change the password ASAP).
