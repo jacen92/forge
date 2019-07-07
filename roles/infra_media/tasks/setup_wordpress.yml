@@ -15,13 +15,15 @@
 - name: "Launch mysql container for wordpress"
   docker_container:
     name: "wordpress_db"
-    image: "mysql/mysql-server:{{ WORDPRESS_DB_VERSION }}-aarch64"
+    image: "mysql/mysql-server:{{ WORDPRESS_DB_VERSION }}"
     state: started
     restart_policy: always
     recreate: yes
     env:
       MYSQL_ROOT_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
       MYSQL_ROOT_HOST: "%"
+    ports:
+      - "3306:3306"
     volumes:
       - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql:rw,delegated"
   when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
