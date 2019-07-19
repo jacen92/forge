@@ -1,0 +1,2 @@
+{{ MQTT_READ_USER }}:{{ MQTT_READ_PASS }}
+{{ MQTT_RW_USER }}:{{ MQTT_RW_PASS }}

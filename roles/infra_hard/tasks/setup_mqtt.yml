@@ -1,0 +1,40 @@
+- name: "Setup mqtt directory"
+  file:
+    path: "/{{ DATACORE }}/mqtt"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Setup mqtt directory"
+  file:
+    path: "/{{ DATACORE }}/mqtt/config"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Copy basic configuration files"
+  template:
+    src: "files/mqtt/{{ item }}"
+    dest: "/{{ DATACORE }}/mqtt/config/{{ item }}"
+    mode: u=r,g=r,o=r
+  with_items:
+    - pass.txt
+    - mosquitto.conf
+
+- name: "Launch mqtt container {{ MQTT_VERSION }}"
+  docker_container:
+    name: "mqtt"
+    image: "eclipse-mosquitto:{{ MQTT_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ MQTT_FRONT_PORT }}:1883"
+    labels:
+      traefik.port: "1883"
+      traefik.enable: "{{ MQTT_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ MQTT_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/mqtt:/mosquitto"
+  become: true
+  become_user: "{{ USER_NAME }}"

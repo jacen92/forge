@@ -17,6 +17,8 @@
     restart_policy: always
     recreate: yes
     user: "{{ user_id.stdout }}"
+    links:
+      - mqtt:mqtt
     ports:
       - "{{ NODERED_FRONT_PORT }}:1880"
     labels:

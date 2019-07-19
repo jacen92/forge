@@ -29,7 +29,8 @@ Services
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
 * gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
 * insolante: gerber to gcode converter (wrapper to pcb2gcode) [https://hub.docker.com/r/ngargaud/insolante].
-* nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/ngargaud/insolante].
+* mqtt: Mosquitto broker for the Internet of Things [https://hub.docker.com/_/eclipse-mosquitto].
+* nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/nodered/node-red-docker/].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 * jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
 * registry: Official docker registry [https://hub.docker.com/r/registry/].
@@ -67,6 +68,7 @@ Used port
 | mStream       | 8033 |   http   |       yes       |        no        |   music.  |
 | Peertube      | 8034 |   http   |       yes       |        no        |   video.  |
 | wordpress     | 8035 |   http   |       yes       |        no        |   blog.   |
+| mqtt          | 8036 |   http   |       yes       |        no        |   mqtt.   |
 
 
 Playbooks parameters
@@ -91,7 +93,7 @@ Features description
 | https         |   All   | Add or update traefik configuration (vault must be set)                |
 | gogs          |   All   | Add or update gogs docker instance                                     |
 | insolante     |   All   | Add or update insolante docker instance                                |
-| nodered       |   All   | Add or update nodered docker instance                                  |
+| nodered       |   All   | Add or update nodered adn mosquitto docker instances                   |
 | octoprint     |   All   | Add or update octoprint docker instance                                |
 | jenkins       | not RPI | Add or update jenkins docker instance                                  |
 | registry      |   ARM   | Add or update docker registry node                                     |
@@ -113,10 +115,12 @@ Vault file parameters
 | ROOT_PASS               |   common   | Default root password                    |
 | BACKUP_PASS             |   common   | Default backup password                  |
 | BACKUP_REMOTE_PASS      |   common   | Default FTP password for backup          |
-| JENKINS_PASS            |   jenkins  | Default jenkins admin user password        |
-| MSTREAM_PASS            |   media    | Default mStream admin user password        |
-| PEERTUBE_DB_PASS        |   media    | Default peertube database admin password   |
-| WORDPRESS_DB_PASS       |   infra    | Default database password for wordpress    |
+| JENKINS_PASS            |   jenkins  | Default jenkins admin user password      |
+| MSTREAM_PASS            |   media    | Default mStream admin user password      |
+| PEERTUBE_DB_PASS        |   media    | Default peertube database admin password |
+| WORDPRESS_DB_PASS       |   infra    | Default database password for wordpress  |
+| MQTT_READER_PASS        |   hard     | Default password for user with read acl  |
+| MQTT_RW_PASS            |   hard     | Default password for user with write acl |
 
 
 Notes:
