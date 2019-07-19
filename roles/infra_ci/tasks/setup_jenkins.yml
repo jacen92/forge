@@ -35,6 +35,13 @@
   become: true
   become_user: "{{ USER_NAME }}"
 
+- name: "Use the correct base image for ARM arch"
+  replace:
+    path: "/tmp/jenkins/Dockerfile"
+    regexp: 'FROM (.*)'
+    replace: 'FROM arm32v7/openjdk:8-jre-stretch'
+  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+
 - name: "Build jenkins image and with buildargs"
   docker_image:
      path: "/tmp/jenkins"
@@ -43,7 +50,7 @@
      dockerfile: "Dockerfile"
      buildargs:
        JENKINS_VERSION: "{{ JENKINS_VERSION }}"
-       JENKINS_SHA: "{{ JENKINS_SHA }}"
+       JENKINS_SHA: "{{ JENKINS_SHA_254 }}"
        uid: "{{ user_id.stdout }}"
        gid: "{{ user_id.stdout }}"
 

@@ -1,5 +1,6 @@
-JENKINS_VERSION: "2.150.2"
-JENKINS_SHA: "fab70f4e209855e0806315cc419e0cbbbf1bd9b31c6f221f7702aa21145040f8"
+# Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
+JENKINS_VERSION: "2.186"
+JENKINS_SHA_254: "d98ab2f00a04b193332704e75394b930683f1d7bb748c4ba3a0a2cad234f84ad"
 JENKINS_USER: "admin"
 JENKINS_PORT: 8026
 JENKINS_URL: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ JENKINS_PORT }}"
