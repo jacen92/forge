@@ -39,6 +39,7 @@ Services
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
 * mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
 * Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
+* Wordpress: The WordPress rich content management system [https://hub.docker.com/_/wordpress/].
 
 
 Used port

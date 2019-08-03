@@ -15,17 +15,18 @@
 - name: "Launch mysql container for wordpress"
   docker_container:
     name: "wordpress_db"
-    image: "mysql/mysql-server:{{ WORDPRESS_DB_VERSION }}"
+    image: "arm64v8/mariadb:{{ WORDPRESS_DB_VERSION }}"
     state: started
     restart_policy: always
     recreate: yes
     env:
-      MYSQL_ROOT_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
       MYSQL_ROOT_HOST: "%"
-    ports:
-      - "3306:3306"
+      MYSQL_ROOT_PASSWORD: "{{ WORDPRESS_DB_PASS }}_root"
+      MYSQL_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
     volumes:
-      - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql:rw,delegated"
+      - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql"
   when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
 
 - name: "wait"
@@ -46,8 +47,12 @@
     env:
       WORDPRESS_DB_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
       WORDPRESS_DB_HOST: wordpress_db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_NAME: wordpress
     labels:
       traefik.port: "80"
       traefik.enable: "{{ WORDPRESS_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ WORDPRESS_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/wordpress:/var/www"
   when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
