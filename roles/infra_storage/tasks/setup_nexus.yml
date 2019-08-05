@@ -10,7 +10,7 @@
      path: "/tmp/nexus"
      state: absent
 
-- name: "Clone jenkinsci"
+- name: "Clone Nexus repository"
   git:
     repo: "https://github.com/sonatype/docker-nexus3.git"
     dest: "/tmp/nexus"
