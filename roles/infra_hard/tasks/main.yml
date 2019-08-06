@@ -5,7 +5,7 @@
   when: ("octoprint" in FEATURES)
 
 - import_tasks: setup_mqtt.yml
-  when: ("nodered" in FEATURES)
+  when: ("nodered" in FEATURES) and ("vault" in FEATURES)
 
 - import_tasks: setup_nodered.yml
-  when: ("nodered" in FEATURES)
+  when: ("nodered" in FEATURES) and ("vault" in FEATURES)

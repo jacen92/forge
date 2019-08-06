@@ -35,7 +35,6 @@ exposedbydefault = false
 [acme]
 email = "{{ USER_MAIL }}"
 storage = "/etc/traefik/acme.json"
-onDemand = true
 onHostRule = true
 entryPoint = "https"
   [acme.httpChallenge]

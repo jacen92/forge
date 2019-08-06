@@ -5,4 +5,4 @@
   when: ("peertube" in FEATURES)
 
 - import_tasks: setup_wordpress.yml
-  when: ("vault" in FEATURES) and ("blog" in FEATURES)
+  when: ("vault" in FEATURES) and ("wordpress" in FEATURES)
