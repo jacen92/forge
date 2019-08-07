@@ -33,8 +33,6 @@ Services
 * nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/nodered/node-red-docker/].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 * jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
-* registry: Official docker registry [https://hub.docker.com/r/registry/].
-* registry-ui: Registry front-end and authentication proxy [https://hub.docker.com/r/joxit/docker-registry-ui/].
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
@@ -57,8 +55,6 @@ Used port
 | nodered       | 8024 |   http   |       yes       |        no        |  flows.   |
 | octoprint     | 8025 |   http   |       yes       |        no        | printers. |
 | jenkins       | 8026 |   http   |       yes       |        no        |    ci.    |
-| registry      | 8027 |   http   |       no        |        no        |           |
-| registry-ui   | 8028 |   http   |       yes       |        no        |           |
 | portainer     | 8029 |   http   |       yes       |        no        |           |
 | nexus         | 8030 |   http   |       yes       |        no        |  nexus.   |
 | nexus pull    | 8027 |   http   |       yes       |        no        |           |
@@ -96,8 +92,6 @@ Features description
 | nodered       |   All   | Add or update nodered adn mosquitto docker instances                   |
 | octoprint     |   All   | Add or update octoprint docker instance                                |
 | jenkins       | not RPI | Add or update jenkins docker instance                                  |
-| registry      |   ARM   | Add or update docker registry node                                     |
-| registry-ui   |   ARM   | Add or update docker registry-ui node                                  |
 | portainer     |   All   | Add or update portainer docker instance                                |
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
