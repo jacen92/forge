@@ -1,3 +1,4 @@
+---
 - name: "Setup wordpress database directory"
   file:
     path: "/{{ DATACORE }}/wordpress_db"

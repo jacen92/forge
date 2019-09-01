@@ -34,11 +34,11 @@ Services
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 * jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
+* Wordpress: The WordPress rich content management system [https://hub.docker.com/_/wordpress/].
+* Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
+* mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
-* mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
-* Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
-* Wordpress: The WordPress rich content management system [https://hub.docker.com/_/wordpress/].
 
 
 Used port
@@ -93,9 +93,9 @@ Features description
 | insolante     |   All   | Add or update insolante docker instance                                |
 | octoprint     |   All   | Add or update octoprint docker instance                                |
 | portainer     |   All   | Add or update portainer docker instance                                |
-| mstream       |   All   | Add or update mStream docker instance                                  |
-| peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
 | wordpress     |   All   | Add or update wordpress and database docker instances                  |
+| peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
+| mstream       |   All   | Add or update mStream docker instance                                  |
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
 
