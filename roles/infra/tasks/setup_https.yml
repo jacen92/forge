@@ -1,4 +1,4 @@
-# from: https://www.sheevaboite.fr/articles/traefik-reverse-proxy-https-containers-docker
+---
 - name: "Setup traefik directory"
   file:
     path: "/{{ DATACORE }}/traefik"
@@ -14,6 +14,7 @@
     group: "{{ USER_NAME }}"
     mode: 0644
 
+# from: https://www.sheevaboite.fr/articles/traefik-reverse-proxy-https-containers-docker
 - name: "Launch traefik container for ARM {{ TRAEFIK_VERSION }}"
   docker_container:
     name: "traefik"

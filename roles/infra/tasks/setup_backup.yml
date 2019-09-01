@@ -1,3 +1,4 @@
+---
 - name: "Install duplicity"
   apt:
     pkg: [lftp, duplicity]
@@ -34,10 +35,10 @@
     user: root
     job: /etc/cron.d/duplicity.full
 
-- name: "Create initial remote backup before update"
+- name: "Create initial remote backup before update in '{{ FORGE_MODE }}'"
   shell: "/etc/cron.d/duplicity.full"
   when: BACKUP_MODE == "create"
 
-- name: "Restore last remote backup before recontruction"
+- name: "Restore last remote backup before recontruction from '{{ FORGE_MODE }}'"
   shell: "rm -rf /{{ DATACORE }} && PASSPHRASE='{{ BACKUP_PASS }}' duplicity restore --rsync-options='-p' 'ftp://{{ BACKUP_REMOTE_USER }}:{{ BACKUP_REMOTE_PASS }}@{{ BACKUP_REMOTE_URL }}/{{ BACKUP_REMOTE_PATH }}/{{ FORGE_MODE }}' /{{ DATACORE }}"
   when: BACKUP_MODE == "restore"

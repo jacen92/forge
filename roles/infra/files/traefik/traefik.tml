@@ -25,7 +25,7 @@ address = ":8000"
 # Docker configuration backend
 ################################################################
 [docker]
-domain = "example"
+domain = "forge"
 watch = true
 exposedbydefault = false
 
