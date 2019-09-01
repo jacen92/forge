@@ -1,13 +1,14 @@
-# get the list of default plugins since this step is bypassed
-# ll /{{ DATACORE }}/jenkins/plugins | grep jpi | tr -s ' ' | cut -d ' ' -f 9
+---
 - name: "Get user ID"
   shell: "id -u {{ USER_NAME }}"
   register: user_id
 
-- name: "Use python2 to avoid codec issues"
+- name: "Use python2 to avoid codec issues when installing plugins"
   set_fact:
     ansible_python_interpreter: /usr/bin/python2
 
+# get the list of default plugins since this step is bypassed
+# ll /{{ DATACORE }}/jenkins/plugins | grep jpi | tr -s ' ' | cut -d ' ' -f 9
 - name: "Make sure the default plugins are always installed and up-to-date"
   jenkins_plugin:
     name: "{{ item }}"
@@ -123,7 +124,7 @@
     - purge-job-history
     - windows-slaves
 
-- name: "Use python3"
+- name: "Reset ansible interpreter to use python3"
   set_fact:
     ansible_python_interpreter: /usr/bin/python3
 

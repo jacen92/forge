@@ -1,3 +1,4 @@
+---
 - import_tasks: setup_backup.yml
   when: ("vault" in FEATURES) and (BACKUP_MODE != "")
 

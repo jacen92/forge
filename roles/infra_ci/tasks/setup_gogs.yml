@@ -1,3 +1,4 @@
+---
 - name: "Launch gogs container for ARM {{ GOGS_VERSION }}"
   docker_container:
     name: "gogs"
