@@ -1,8 +1,6 @@
+---
 - import_tasks: setup_fdroid.yml
   when: ("fdroid" in FEATURES)
 
 - import_tasks: setup_nexus.yml
   when: ("nexus" in FEATURES) and ("vault" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
-
-- import_tasks: setup_portainer.yml
-  when: ("portainer" in FEATURES)

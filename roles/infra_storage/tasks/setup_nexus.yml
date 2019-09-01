@@ -1,3 +1,4 @@
+---
 - name: "Set correct owner of full nexus data directory"
   file:
     path: "/{{DATACORE}}/nexus"
