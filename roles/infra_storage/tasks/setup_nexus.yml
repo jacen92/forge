@@ -17,15 +17,9 @@
     accept_hostkey: yes
     force: yes
     recursive: no
+    version: master
   become: true
   become_user: "{{ USER_NAME }}"
-
-# Waiting for: https://github.com/sonatype/docker-nexus3/pull/105/files
-- name: "Fix the dockerfile to install java from yum repository"
-  lineinfile:
-    path: /tmp/nexus/Dockerfile
-    insertbefore: "(.*)VOLUME(.*)"
-    line: "RUN yum install -y java-1.8.0-openjdk"
 
 - name: "Build nexus image and with buildargs"
   docker_image:
