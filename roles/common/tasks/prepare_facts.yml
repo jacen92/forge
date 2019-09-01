@@ -1,3 +1,4 @@
+---
 - name: "Display lsb_release informations"
   debug:
     var: hostvars[inventory_hostname].ansible_lsb

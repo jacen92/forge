@@ -1,3 +1,4 @@
+---
 - name: "Copy authorized_keys for root"
   copy:
     src: "files/authorized_keys"

@@ -1,3 +1,4 @@
+---
 - name: "Set regular user parameters"
   user:
     name: "{{ USER_NAME }}"
