@@ -1,3 +1,4 @@
+---
 - name: "Setup insolante directory"
   file:
     path: "/{{ DATACORE }}/insolante"

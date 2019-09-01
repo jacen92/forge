@@ -88,16 +88,16 @@ Features description
 | vault         |   All   | Unlock user and services passwords                                     |
 | https         |   All   | Add or update traefik configuration (vault must be set)                |
 | gogs          |   All   | Add or update gogs docker instance                                     |
-| insolante     |   All   | Add or update insolante docker instance                                |
-| nodered       |   All   | Add or update nodered adn mosquitto docker instances                   |
-| octoprint     |   All   | Add or update octoprint docker instance                                |
 | jenkins       | not RPI | Add or update jenkins docker instance                                  |
+| domotic       |   All   | Add or update nodered and mosquitto docker instances                   |
+| insolante     |   All   | Add or update insolante docker instance                                |
+| octoprint     |   All   | Add or update octoprint docker instance                                |
 | portainer     |   All   | Add or update portainer docker instance                                |
-| nexus         | not RPI | Add or update jenkins docker instance                                  |
-| fdroid        |   All   | Add or update fdroid docker instance                                   |
 | mstream       |   All   | Add or update mStream docker instance                                  |
 | peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
 | wordpress     |   All   | Add or update wordpress and database docker instances                  |
+| nexus         | not RPI | Add or update jenkins docker instance                                  |
+| fdroid        |   All   | Add or update fdroid docker instance                                   |
 
 
 Vault file parameters
