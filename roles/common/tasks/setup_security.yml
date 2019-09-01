@@ -42,8 +42,8 @@
     src: files/fail2ban/filters/{{ item }}
     dest: /etc/fail2ban/filter.d/{{ item }}
   with_items:
-    - gogs-sshd.conf
-    - gogs-sshd-scan.conf
+    - git-sshd.conf
+    - git-sshd-scan.conf
   register: fail2ban_filter_update
 
 - name: "Copy basic jail configuration for custom edition"
@@ -55,31 +55,31 @@
 - name: "Add scanner filter in custom jail configuration"
   ini_file:
     path: "/etc/fail2ban/jail.d/jail.local"
-    section: "gogs_ssh_scan"
+    section: "git_ssh_scan"
     option: "{{ item.option }}"
     value: "{{ item.value }}"
   loop:
     - { option: "enabled", value: "true"}
-    - { option: "port", value: "{{ GOGS_SSH_PORT }},80,443,22"}
+    - { option: "port", value: "{{ GIT_SSH_PORT }},80,443,22"}
     - { option: "backend", value: "systemd"}
-    - { option: "filter", value: "gogs-sshd-scan"}
+    - { option: "filter", value: "git-sshd-scan"}
     - { option: "action", value: "docker-action"}
     - { option: "maxretry", value: "1"}
     - { option: "findtime", value: "1220"}
     - { option: "bantime", value: "1864000"}
   register: fail2ban_scanner_config_update
 
-- name: "Add gogs_ssh filter in custom jail configuration"
+- name: "Add git_ssh filter in custom jail configuration"
   ini_file:
     path: "/etc/fail2ban/jail.d/jail.local"
-    section: "gogs_ssh"
+    section: "git_ssh"
     option: "{{ item.option }}"
     value: "{{ item.value }}"
   loop:
     - { option: "enabled", value: "true"}
-    - { option: "port", value: "{{ GOGS_SSH_PORT }},80,443,22"}
+    - { option: "port", value: "{{ GIT_SSH_PORT }},80,443,22"}
     - { option: "backend", value: "systemd"}
-    - { option: "filter", value: "gogs-sshd"}
+    - { option: "filter", value: "git-sshd"}
     - { option: "action", value: "docker-action"}
     - { option: "maxretry", value: "2"}
     - { option: "findtime", value: "1220"}
@@ -103,4 +103,4 @@
   with_items:
     - 80
     - 443
-    - "{{ GOGS_SSH_PORT }}"
+    - "{{ GIT_SSH_PORT }}"
