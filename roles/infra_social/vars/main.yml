@@ -1,11 +1,11 @@
 WORDPRESS_VERSION: "5.2.2-php7.1"
 WORDPRESS_DB_VERSION: "10.4.7"
-WORDPRESS_FRONT_PORT: 8035
+WORDPRESS_FRONT_PORT: 8040
 WORDPRESS_EXPOSITION: "false"
 WORDPRESS_EXTERNAL_URL: "blog.{{ DOMAIN_NAME }}"
 
 PEERTUBE_VERSION: "production-stretch-fr"
-PEERTUBE_PORT: 8034
+PEERTUBE_PORT: 8041
 PEERTUBE_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 PEERTUBE_EXTERNAL_URL: "video.{{ DOMAIN_NAME }}"
 PEERTUBE_EXPOSITION: "false"
@@ -14,7 +14,7 @@ PEERTUBE_TMP_PATH: "/tmp/peertube"
 PEERTUBE_DB_USER: "peertube"
 
 MSTREAM_VERSION: "v4.2.1-ls9"
-MSTREAM_PORT: 8033
+MSTREAM_PORT: 8042
 MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
 MSTREAM_EXPOSITION: "false"

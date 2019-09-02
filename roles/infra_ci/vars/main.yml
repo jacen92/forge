@@ -1,17 +1,17 @@
 GOGS_VERSION: "0.11.91"
-GOGS_SSH_PORT: 8022
-GOGS_FRONT_PORT: 3000
+GOGS_FRONT_PORT: 8021
+GOGS_SSH_PORT: "{{ GIT_SSH_PORT }}"
 GOGS_EXPOSITION: "false"
 GOGS_EXTERNAL_URL: "git.{{ DOMAIN_NAME }}"
 
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
 JENKINS_VERSION: "2.192"
 JENKINS_SHA_254: "d88954d034012837df890e8a626061662b7ae5665a43136439652b00a207b971"
-JENKINS_USER: "admin"
-JENKINS_PORT: 8026
-JENKINS_URL: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ JENKINS_PORT }}"
-JENKINS_THEME_COLOR: "blue-grey"
-JENKINS_RESTART_DELAY: 100
+JENKINS_PORT: 8023
 JENKINS_EXPOSITION: "false"
 JENKINS_EXTERNAL_URL: "ci.{{ DOMAIN_NAME }}"
 JENKINS_VALIDATE_PLUGIN_CERTS: false
+JENKINS_USER: "admin"
+JENKINS_URL: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ JENKINS_PORT }}"
+JENKINS_THEME_COLOR: "blue-grey"
+JENKINS_RESTART_DELAY: 100

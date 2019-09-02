@@ -72,22 +72,22 @@ Port listing (exposed from all docker containers)
 | Traefik           | 80   |   http   | infra   |        yes       |           |
 | Traefik           | 443  |   https  | infra   |        yes       |           |
 | Traefik           | 8000 |   http   | infra   |        no        |           |
-| Portainer         | 8029 |   http   | infra   |        no        |           |
-| Gogs              | 3000 |   http   | CI      |        yes       |   git.    |
+| Portainer         | 8010 |   http   | infra   |        no        |           |
+| Gogs              | 8021 |   http   | CI      |        yes       |   git.    |
 | Gogs              | 8022 |   ssh    | CI      |        yes       |   git.    |
-| Jenkins           | 8026 |   http   | CI      |        no        |    ci.    |
-| Mqtt              | 8036 |   http   | Hard    |        no        |   mqtt.   |
-| Nodered           | 8024 |   http   | Hard    |        no        |  flows.   |
-| Insolante         | 8023 |   http   | Hard    |        no        |   pcb.    |
-| Octoprint         | 8025 |   http   | Hard    |        no        | printers. |
-| Wordpress         | 8035 |   http   | Social  |        no        |   blog.   |
-| Peertube          | 8034 |   http   | Social  |        no        |   video.  |
-| mStream           | 8033 |   http   | Social  |        no        |   music.  |
-| Nexus             | 8030 |   http   | Storage |        no        |  nexus.   |
-| Nexus docker pull | 8027 |   http   | Storage |        no        |  nexus.   |
-| Nexus docker push | 8028 |   http   | Storage |        no        |  nexus.   |
-| F-droid server    | 8031 |   http   | Storage |        no        |  fdroid.  |
-| F-droid scp       | 8032 |   ssh    | Storage |        no        |  fdroid.  |
+| Jenkins           | 8023 |   http   | CI      |        no        |    ci.    |
+| Mqtt              | 8030 |   http   | Hard    |        no        |   mqtt.   |
+| Nodered           | 8031 |   http   | Hard    |        no        |  flows.   |
+| Insolante         | 8032 |   http   | Hard    |        no        |   pcb.    |
+| Octoprint         | 8033 |   http   | Hard    |        no        | printers. |
+| Wordpress         | 8040 |   http   | Social  |        no        |   blog.   |
+| Peertube          | 8041 |   http   | Social  |        no        |   video.  |
+| mStream           | 8042 |   http   | Social  |        no        |   music.  |
+| Nexus             | 8050 |   http   | Storage |        no        |  nexus.   |
+| Nexus docker pull | 8051 |   http   | Storage |        no        |  nexus.   |
+| Nexus docker push | 8052 |   http   | Storage |        no        |  nexus.   |
+| F-droid server    | 8053 |   http   | Storage |        no        |  fdroid.  |
+| F-droid scp       | 8054 |   ssh    | Storage |        no        |  fdroid.  |
 
 
 Playbooks parameters
@@ -95,7 +95,7 @@ Playbooks parameters
 
 | Parameter           | Role    | Values                 | Description                                                    |
 | ------------------- |:-------:|:----------------------:| -------------------------------------------------------------- |
-| FORGE_MODE          |  common |      test|forge        | Installation mode (a file vault_${FORGE_MODE} should exists)   |
+| FORGE_MODE          |  common |    test or forge       | Installation mode (a file vault_${FORGE_MODE} should exists)   |
 | DATACORE            |  common |      $HOME/data        | Infrastructure data directory, it will be backuped if enabled  |
 | FEATURES            |  common |          All           | List of features to use                                        |
 | USER_NAME           |  common |          pi            | Default user name (will be created if doesn't exists)          |
