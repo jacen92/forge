@@ -15,7 +15,7 @@ Installation on Rock64
 
 Flash Ubuntu 1804 minimal Arm64 bits. And after boot log in with rock64 user.
 The default image will not authorize access to root from ssh so we need to update the sshd_config.
-Uncomment the section about authorized_keys and add your inside /root/.ssh/authorized_keys.
+Uncomment the section about authorized_keys and add yours inside /root/.ssh/authorized_keys.
 
 Installation on x86_64
 ----------------------
@@ -26,58 +26,81 @@ All roles are also available for x86_64.
 Services
 ========
 
+infra:
+------
+
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
+* portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
+
+
+Continuous integration:
+-----------------------
+
 * gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
+* jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
+
+
+Hardware interaction:
+---------------------
+
 * insolante: gerber to gcode converter (wrapper to pcb2gcode) [https://hub.docker.com/r/ngargaud/insolante].
 * mqtt: Mosquitto broker for the Internet of Things [https://hub.docker.com/_/eclipse-mosquitto].
 * nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/nodered/node-red-docker/].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
-* jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
-* portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
+
+
+Social and media:
+-----------------
+
 * Wordpress: The WordPress rich content management system [https://hub.docker.com/_/wordpress/].
 * Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
 * mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
+
+
+Storage:
+--------
+
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
 
 
-Used port
-=========
+Port listing (exposed from all docker containers)
+=================================================
 
-| Service       | port | protocol | locally exposed | publicly exposed | subDomain |
-| ------------- |:----:|:--------:|:---------------:|:----------------:|:---------:|
-| traefik       | 80   |   http   |       yes       |        yes       |           |
-| traefik       | 443  |   https  |       yes       |        yes       |           |
-| traefik       | 8000 |   https  |       yes       |        no        |           |
-| gogs          | 3000 |   http   |       yes       |        yes       |    git.   |
-| gogs          | 8022 |   ssh    |       yes       |        yes       |           |
-| insolante     | 8023 |   http   |       yes       |        no        |   pcb.    |
-| nodered       | 8024 |   http   |       yes       |        no        |  flows.   |
-| octoprint     | 8025 |   http   |       yes       |        no        | printers. |
-| jenkins       | 8026 |   http   |       yes       |        no        |    ci.    |
-| portainer     | 8029 |   http   |       yes       |        no        |           |
-| nexus         | 8030 |   http   |       yes       |        no        |  nexus.   |
-| nexus pull    | 8027 |   http   |       yes       |        no        |           |
-| nexus push    | 8028 |   http   |       yes       |        no        |           |
-| fdroid server | 8031 |   http   |       yes       |        no        |  fdroid.  |
-| fdroid scp    | 8032 |   ssh    |       yes       |        no        |           |
-| mStream       | 8033 |   http   |       yes       |        no        |   music.  |
-| Peertube      | 8034 |   http   |       yes       |        no        |   video.  |
-| wordpress     | 8035 |   http   |       yes       |        no        |   blog.   |
-| mqtt          | 8036 |   http   |       yes       |        no        |   mqtt.   |
+| Service           | port | protocol | Role    | publicly exposed | subDomain |
+| ----------------- |:----:|:--------:|:-------:|:----------------:|:---------:|
+| Traefik           | 80   |   http   | infra   |        yes       |           |
+| Traefik           | 443  |   https  | infra   |        yes       |           |
+| Traefik           | 8000 |   http   | infra   |        no        |           |
+| Portainer         | 8029 |   http   | infra   |        no        |           |
+| Gogs              | 3000 |   http   | CI      |        yes       |   git.    |
+| Gogs              | 8022 |   ssh    | CI      |        yes       |   git.    |
+| Jenkins           | 8026 |   http   | CI      |        no        |    ci.    |
+| Mqtt              | 8036 |   http   | Hard    |        no        |   mqtt.   |
+| Nodered           | 8024 |   http   | Hard    |        no        |  flows.   |
+| Insolante         | 8023 |   http   | Hard    |        no        |   pcb.    |
+| Octoprint         | 8025 |   http   | Hard    |        no        | printers. |
+| Wordpress         | 8035 |   http   | Social  |        no        |   blog.   |
+| Peertube          | 8034 |   http   | Social  |        no        |   video.  |
+| mStream           | 8033 |   http   | Social  |        no        |   music.  |
+| Nexus             | 8030 |   http   | Storage |        no        |  nexus.   |
+| Nexus docker pull | 8027 |   http   | Storage |        no        |  nexus.   |
+| Nexus docker push | 8028 |   http   | Storage |        no        |  nexus.   |
+| F-droid server    | 8031 |   http   | Storage |        no        |  fdroid.  |
+| F-droid scp       | 8032 |   ssh    | Storage |        no        |  fdroid.  |
 
 
 Playbooks parameters
 ====================
 
-| Parameter           | Role    | Values                 | Description                                                               |
-| ------------------- |:-------:|:----------------------:| ------------------------------------------------------------------------- |
-| FORGE_MODE          |  common |      test|forge        | Installation mode                                                         |
-| FEATURES            |  common |          All           | List of features to use                                                   |
-| USER_NAME           |  common |          pi            | Default user name                                                         |
-| USER_MAIL           |  common |    username@domain     | Default user email for certificate                                        |
-| DATACORE            |  common |      $HOME/data        | Infrastructure data directory, will be backuped if enabled                |
-| DOMAIN_NAME         |  infra  |         ""             | HTTPS and reverse proxy domain name                                       |
+| Parameter           | Role    | Values                 | Description                                                    |
+| ------------------- |:-------:|:----------------------:| -------------------------------------------------------------- |
+| FORGE_MODE          |  common |      test|forge        | Installation mode (a file vault_${FORGE_MODE} should exists)   |
+| DATACORE            |  common |      $HOME/data        | Infrastructure data directory, it will be backuped if enabled  |
+| FEATURES            |  common |          All           | List of features to use                                        |
+| USER_NAME           |  common |          pi            | Default user name (will be created if doesn't exists)          |
+| USER_MAIL           |  infra  |    username@domain     | Default user email (for SSL certificate)                       |
+| DOMAIN_NAME         |  infra  |         ""             | HTTPS and reverse proxy domain name                            |
 
 
 Features description
@@ -86,9 +109,7 @@ Features description
 | Name          |   Arch  | Description                                                            |
 | ------------- |:-------:| ---------------------------------------------------------------------- |
 | vault         |   All   | Unlock user and services passwords                                     |
-| https         |   All   | Add or update traefik configuration (vault must be set)                |
-| gogs          |   All   | Add or update gogs docker instance                                     |
-| jenkins       | not RPI | Add or update jenkins docker instance                                  |
+| https         |   All   | Add or update traefik instance and configuration (vault must be set)   |
 | domotic       |   All   | Add or update nodered and mosquitto docker instances                   |
 | insolante     |   All   | Add or update insolante docker instance                                |
 | octoprint     |   All   | Add or update octoprint docker instance                                |
@@ -96,6 +117,8 @@ Features description
 | wordpress     |   All   | Add or update wordpress and database docker instances                  |
 | peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
 | mstream       |   All   | Add or update mStream docker instance                                  |
+| gogs          |   All   | Add or update gogs docker instance                                     |
+| jenkins       | not RPI | Add or update jenkins docker instance                                  |
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
 
@@ -107,14 +130,14 @@ Vault file parameters
 | ----------------------- |:----------:| ---------------------------------------- |
 | USER_PASS               |   common   | Default user password                    |
 | ROOT_PASS               |   common   | Default root password                    |
-| BACKUP_PASS             |   common   | Default backup password                  |
-| BACKUP_REMOTE_PASS      |   common   | Default FTP password for backup          |
-| JENKINS_PASS            |   jenkins  | Default jenkins admin user password      |
-| MSTREAM_PASS            |   media    | Default mStream admin user password      |
-| PEERTUBE_DB_PASS        |   media    | Default peertube database admin password |
-| WORDPRESS_DB_PASS       |   infra    | Default database password for wordpress  |
+| BACKUP_PASS             |   infra    | Default backup password                  |
+| BACKUP_REMOTE_PASS      |   infra    | Default remote FTP password for backup   |
+| MSTREAM_PASS            |   social   | Default mStream admin user password      |
+| PEERTUBE_DB_PASS        |   social   | Default database password for peertube   |
+| WORDPRESS_DB_PASS       |   social   | Default database password for wordpress  |
 | MQTT_READER_PASS        |   hard     | Default password for user with read acl  |
 | MQTT_RW_PASS            |   hard     | Default password for user with write acl |
+| JENKINS_PASS            |   ci       | Default jenkins admin user password      |
 
 
 Notes:
@@ -130,11 +153,13 @@ When a certificate is valid then it will be in acme.json with chmod=600 and must
 If a bad gateway error occurs then wait a few moments to get the certificate renewal complete.
 The certificate is ciphered with the vault password.
 
+
 About backup
 ------------
 
 This system will create an archive and upload it to the specified FTP server in a directory under `FTP_ROOT/FORGE_MODE/`.
 By default it will keep the 3 latest backups.
+
 
 About docker registry
 ---------------------
@@ -150,6 +175,13 @@ Restart docker daemon:
 ```
   sudo service docker restart
 ```
+
+
+About passwords in vault_test.yml
+---------------------------------
+
+All password are 'test' except for root and the user created by ansible.
+
 
 About fdroid
 ------------
