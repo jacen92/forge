@@ -81,7 +81,7 @@
 - name: "Launch peertube container for x86_64 {{ PEERTUBE_VERSION }}"
   docker_container:
     name: "peertube"
-    image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}-arm"
+    image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}"
     state: started
     restart_policy: always
     recreate: yes

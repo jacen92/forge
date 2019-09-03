@@ -4,7 +4,7 @@ WORDPRESS_FRONT_PORT: 8040
 WORDPRESS_EXPOSITION: "false"
 WORDPRESS_EXTERNAL_URL: "blog.{{ DOMAIN_NAME }}"
 
-PEERTUBE_VERSION: "production-stretch-fr"
+PEERTUBE_VERSION: "v1.4.0-stretch"
 PEERTUBE_PORT: 8041
 PEERTUBE_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 PEERTUBE_EXTERNAL_URL: "video.{{ DOMAIN_NAME }}"
