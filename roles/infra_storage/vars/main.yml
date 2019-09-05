@@ -12,3 +12,9 @@ FDROID_SSH_PORT: 8054
 FDROID_EXPOSITION: "false"
 FDROID_EXTERNAL_URL: "fdroid.{{ DOMAIN_NAME }}"
 FDROID_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+NEXTCLOUD_VERSION: "16.0.4"
+NEXTCLOUD_PORT: 8055
+NEXTCLOUD_EXPOSITION: "false"
+NEXTCLOUD_EXTERNAL_URL: "fdroid.{{ DOMAIN_NAME }}"
+NEXTCLOUD_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"

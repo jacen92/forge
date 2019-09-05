@@ -62,6 +62,7 @@ Storage:
 
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
+* nextcloud: Google drive alternative [https://hub.docker.com/_/nextcloud/].
 
 
 Port listing (exposed from all docker containers)
@@ -88,6 +89,7 @@ Port listing (exposed from all docker containers)
 | Nexus docker push | 8052 |   http   | Storage |        no        |  nexus.   |
 | F-droid server    | 8053 |   http   | Storage |        no        |  fdroid.  |
 | F-droid scp       | 8054 |   ssh    | Storage |        no        |  fdroid.  |
+| Nextcloud         | 8055 |   http   | Storage |        no        |  drive.   |
 
 
 Playbooks parameters
@@ -121,6 +123,7 @@ Features description
 | jenkins       | not RPI | Add or update jenkins docker instance                                  |
 | nexus         | not RPI | Add or update jenkins docker instance                                  |
 | fdroid        |   All   | Add or update fdroid docker instance                                   |
+| nextcloud     |   All   | Add or update extcloud docker instance                                 |
 
 
 Vault file parameters
@@ -138,7 +141,7 @@ Vault file parameters
 | MQTT_READER_PASS        |   hard     | Default password for user with read acl  |
 | MQTT_RW_PASS            |   hard     | Default password for user with write acl |
 | JENKINS_PASS            |   ci       | Default jenkins admin user password      |
-
+| NEXTCLOUD_PASS          |   storage  | Default nextcloud admin user password    |
 
 Notes:
 ======

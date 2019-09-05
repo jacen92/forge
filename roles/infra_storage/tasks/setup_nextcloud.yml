@@ -1,0 +1,36 @@
+---
+- name: "Setup nextcloud directory"
+  file:
+    path: "{{ item }}"
+    owner: "33"
+    group: "33"
+    state: directory
+  with_items:
+    - "/{{ DATACORE }}/nextcloud"
+    - "/{{ DATACORE }}/nextcloud/apps"
+    - "/{{ DATACORE }}/nextcloud/config"
+    - "/{{ DATACORE }}/nextcloud/data"
+
+- name: "Launch nextcloud container {{ NEXTCLOUD_VERSION }}"
+  docker_container:
+    name: "nextcloud"
+    image: "nextcloud:{{ NEXTCLOUD_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ NEXTCLOUD_PORT }}:80"
+    env:
+      SQLITE_DATABASE: "1"
+      NEXTCLOUD_ADMIN_USER: "admin"
+      NEXTCLOUD_ADMIN_PASSWORD: "{{ NEXTCLOUD_PASS }}"
+      NEXTCLOUD_TRUSTED_DOMAINS: "{{ NEXTCLOUD_URL_IN_CONFIG }} {{ NEXTCLOUD_EXTERNAL_URL }} localhost"
+    labels:
+      traefik.port: "80"
+      traefik.enable: "{{ NEXTCLOUD_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ NEXTCLOUD_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/nextcloud:/var/www/html"
+      - "/{{ DATACORE }}/nextcloud/apps:/var/www/html/custom_apps"
+      - "/{{ DATACORE }}/nextcloud/config:/var/www/html/config"
+      - "/{{ DATACORE }}/nextcloud/data:/var/www/html/data"

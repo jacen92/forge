@@ -4,3 +4,6 @@
 
 - import_tasks: setup_nexus.yml
   when: ("nexus" in FEATURES) and ("vault" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
+
+- import_tasks: setup_nextcloud.yml
+  when: ("nextcloud" in FEATURES)
