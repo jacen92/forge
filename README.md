@@ -6,15 +6,15 @@ Preparation
 Installation on Raspberry pi
 ----------------------------
 
-Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.
+Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.  
 This image contains my public key for accessing root user directly.
 
 
 Installation on Rock64
 ----------------------
 
-Flash Ubuntu 1804 minimal Arm64 bits. And after boot log in with rock64 user.
-The default image will not authorize access to root from ssh so we need to update the sshd_config.
+Flash Ubuntu 1804 minimal Arm64 bits. And after boot log in with rock64 user.  
+The default image will not authorize access to root from ssh so we need to update the sshd_config.  
 Uncomment the section about authorized_keys and add yours inside /root/.ssh/authorized_keys.
 
 Installation on x86_64
@@ -150,24 +150,24 @@ Notes:
 About SSL and traefik
 ---------------------
 
-Let's Encrypt have a limit of registrable certificate per week.
-To get a new certificate onDemand should be set to true in traefik.tml.
+Let's Encrypt have a limit of registrable certificate per week.  
+To get a new certificate onDemand should be set to true in traefik.tml.  
 When a certificate is valid then it will be in acme.json with chmod=600 and must be saved.
 
-If a bad gateway error occurs then wait a few moments to get the certificate renewal complete.
+If a bad gateway error occurs then wait a few moments to get the certificate renewal complete.  
 The certificate is ciphered with the vault password.
 
 
 About backup
 ------------
 
-This system will create an archive and upload it to the specified FTP server in a directory under `FTP_ROOT/FORGE_MODE/`.
+This system will create an archive and upload it to the specified FTP server in a directory under `FTP_ROOT/FORGE_MODE/`.  
 By default it will keep the 3 latest backups.
 
 
 About docker registry
 ---------------------
-To login to the docker registry if there is no https (https://github.com/docker/distribution/issues/1874)
+To login to the docker registry if there is no https (https://github.com/docker/distribution/issues/1874)  
 Edit /etc/docker/daemon.json on your host and write:
 ```
 {
@@ -190,13 +190,13 @@ All password are 'test' except for root and the user created by ansible.
 About fdroid
 ------------
 
-Even if fdroid-server image allows to set a password for fdroid user we will use authorized_keys system.
+Even if fdroid-server image allows to set a password for fdroid user we will use authorized_keys system.  
 So update the file in `roles/infra_storage/tasks/files/fdroid/authorized_keys` with your public keys.
 
 
 About Peertube
 --------------
 
-The Peertube image comes from my own fork on github so it will not be updated each time.
-WARNING: USER_MAIL is required.
+The Peertube image comes from my own fork on github so it will not be updated each time.  
+WARNING: USER_MAIL is required.  
 WARNING: admin user password is shown only in the docker logs (Keep in mind to connect with it and change the password ASAP).
