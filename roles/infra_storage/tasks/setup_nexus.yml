@@ -99,6 +99,7 @@
     force_basic_auth: yes
     status_code: 204,404,405
   with_items:
+    - setup_repositories
     - bypass_wizard
 
 - name: "Declaring up-to-date Groovy scripts"
@@ -115,6 +116,7 @@
       type: 'groovy'
       content: "{{ lookup('file', 'files/nexus/' + item + '.groovy') }}"
   with_items:
+    - setup_repositories
     - bypass_wizard
 
 - name: "Execute Groovy scripts"
@@ -128,7 +130,10 @@
     status_code: 200,204
     body:
       admin_password: "{{ NEXUS_ADMIN_PASS }}"
+      docker_push_port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
+      docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
   with_items:
+    - setup_repositories
     - bypass_wizard
 
 # Voir avec:
@@ -137,3 +142,5 @@
 # https://blog.savoirfairelinux.com/fr-ca/2017/ansible-nexus-repository-manager/
 # https://github.com/savoirfairelinux/ansible-nexus3-oss/tree/master/tasks
 # https://github.com/ansible-ThoTeam/nexus3-oss/blob/master/tasks/declare_script_each.yml
+# https://github.com/sonatype-nexus-community/nexus-scripting-examples/blob/master/complex-script/npmAndBowerRepositories.groovy
+# https://github.com/sonatype/nexus-public/blob/master/plugins/nexus-script-plugin/src/main/java/org/sonatype/nexus/script/plugin/RepositoryApi.java

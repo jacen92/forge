@@ -171,7 +171,7 @@ To login to the docker registry if there is no https (https://github.com/docker/
 Edit /etc/docker/daemon.json on your host and write:
 ```
 {
-  "insecure-registries":["registry.ip:8027"]
+  "insecure-registries":["registry.ip:8051", "registry.ip:8052"]
 }
 ```
 
