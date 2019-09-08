@@ -46,6 +46,7 @@
     - "* USER_NAME: {{ USER_NAME }}"
     - "* DOMAIN_NAME: {{ DOMAIN_NAME }}"
     - "* FEATURES: {{ FEATURES }}"
+    - "* DEFAULT_ADMIN_NAME: {{ DEFAULT_ADMIN_NAME }}"
     - "* git url: {{ git_url.stdout }}"
     - "* git branch: {{ git_branch.stdout }}"
     - "* git commit: {{ git_commit.stdout }}"

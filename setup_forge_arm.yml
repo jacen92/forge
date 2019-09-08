@@ -6,6 +6,7 @@
   - USER_NAME: "pi"
   - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
   - DATACORE: "home/{{ USER_NAME }}/data"
+  - DEFAULT_ADMIN_NAME: "admin"
   roles:
     - common
     - infra

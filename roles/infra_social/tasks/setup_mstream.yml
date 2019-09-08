@@ -22,7 +22,7 @@
     env:
       PUID: "{{ user_id.stdout }}"
       PGID: "{{ user_id.stdout }}"
-      USER: "admin"
+      USER: "{{ DEFAULT_ADMIN_NAME }}"
       PASSWORD: "{{ MSTREAM_PASS }}"
       USE_JSON: true
       TZ: "Europe/Paris"
@@ -49,7 +49,7 @@
     env:
       PUID: "{{ user_id.stdout }}"
       PGID: "{{ user_id.stdout }}"
-      USER: "admin"
+      USER: "{{ DEFAULT_ADMIN_NAME }}"
       PASSWORD: "{{ MSTREAM_PASS }}"
       USE_JSON: true
       TZ: "Europe/Paris"

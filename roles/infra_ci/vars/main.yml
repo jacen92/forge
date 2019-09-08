@@ -11,7 +11,7 @@ JENKINS_PORT: 8023
 JENKINS_EXPOSITION: "false"
 JENKINS_EXTERNAL_URL: "ci.{{ DOMAIN_NAME }}"
 JENKINS_VALIDATE_PLUGIN_CERTS: false
-JENKINS_USER: "admin"
+JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
 JENKINS_URL: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ JENKINS_PORT }}"
 JENKINS_THEME_COLOR: "blue-grey"
 JENKINS_RESTART_DELAY: 100
