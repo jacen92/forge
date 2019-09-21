@@ -51,7 +51,7 @@
       traefik.port: "80"
       traefik.enable: "{{ FDROID_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ FDROID_EXTERNAL_URL }}"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch fdroid container for x86_64 {{ FDROID_VERSION }}"
   docker_container:

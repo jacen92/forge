@@ -35,7 +35,29 @@
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
       - "/{{ DATACORE }}/traefik:/etc/traefik"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l"]
+
+- name: "Launch traefik container for ARM64 {{ TRAEFIK_VERSION }}"
+  docker_container:
+    name: "traefik"
+    image: "arm64v8/traefik:{{ TRAEFIK_VERSION }}"
+    command: --api --docker --metrics --ping --logLevel=INFO
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "80:80"
+      - "443:443"
+      - "{{ TRAEFIK_FRONT_PORT }}:8080"
+    labels:
+      traefik.port: "8080"
+      traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ TRAEFIK_EXTERNAL_URL }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/{{ DATACORE }}/traefik/certs/:/certs/"
+      - "/{{ DATACORE }}/traefik:/etc/traefik"
+  when: ansible_architecture in ["aarch64"]
 
 - name: "Launch traefik container for x64 {{ TRAEFIK_VERSION }}"
   docker_container:

@@ -22,7 +22,7 @@
       traefik.port: "5000"
       traefik.enable: "{{ PORTAINER_EXPOSITION }}"
       traefik.frontend.rule: "Host:{{ PORTAINER_EXTERNAL_URL }}"
-  when: ansible_architecture in ["armv6l", "armv7l"]
+  when: ansible_architecture in ["armv7l"]
 
 - name: "Launch portainer container {{ PORTAINER_VERSION }}"
   docker_container:

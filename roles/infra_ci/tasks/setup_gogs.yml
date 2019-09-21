@@ -18,7 +18,7 @@
       traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch gogs container x64 {{ GOGS_VERSION }}"
   docker_container:

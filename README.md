@@ -108,22 +108,22 @@ Playbooks parameters
 Features description
 ====================
 
-| Name          |   Arch  | Description                                                            |
-| ------------- |:-------:| ---------------------------------------------------------------------- |
-| vault         |   All   | Unlock user and services passwords                                     |
-| https         |   All   | Add or update traefik instance and configuration (vault must be set)   |
-| domotic       |   All   | Add or update nodered and mosquitto docker instances                   |
-| insolante     |   All   | Add or update insolante docker instance                                |
-| octoprint     |   All   | Add or update octoprint docker instance                                |
-| portainer     |   All   | Add or update portainer docker instance                                |
-| wordpress     |   All   | Add or update wordpress and database docker instances                  |
-| peertube      |   All   | Add or update Peertube docker instance (fr based on my github fork)    |
-| mstream       |   All   | Add or update mStream docker instance                                  |
-| gogs          |   All   | Add or update gogs docker instance                                     |
-| jenkins       | not RPI | Add or update jenkins docker instance                                  |
-| nexus         | not RPI | Add or update jenkins docker instance                                  |
-| fdroid        |   All   | Add or update fdroid docker instance                                   |
-| nextcloud     |   All   | Add or update extcloud docker instance                                 |
+| Name          |    Arch   | Description                                                            |
+| ------------- |:---------:| ---------------------------------------------------------------------- |
+| vault         |    All    | Unlock user and services passwords                                   |
+| https         |    All    | Add or update traefik instance and configuration (vault must be set) |
+| domotic       |    All    | Add or update nodered and mosquitto docker instances                 |
+| insolante     |    All    | Add or update insolante docker instance                              |
+| octoprint     |    All    | Add or update octoprint docker instance                              |
+| portainer     |    All    | Add or update portainer docker instance                              |
+| wordpress     | Not armv7 | Add or update wordpress and database docker instances                |
+| peertube      | Not armv7 | Add or update Peertube docker instance (fr based on my github fork)  |
+| mstream       |    All    | Add or update mStream docker instance                                |
+| gogs          |    All    | Add or update gogs docker instance                                   |
+| jenkins       | Not armv7 | Add or update jenkins docker instance                                |
+| nexus         | Not armv7 | Add or update jenkins docker instance                                |
+| fdroid        |    All    | Add or update fdroid docker instance                                 |
+| nextcloud     |    All    | Add or update extcloud docker instance                               |
 
 
 Vault file parameters
@@ -200,3 +200,14 @@ About Peertube
 The Peertube image comes from my own fork on github so it will not be updated each time.  
 WARNING: USER_MAIL is required.  
 WARNING: admin user password is shown only in the docker logs (Keep in mind to connect with it and change the password ASAP).
+
+
+About arm variant
+------------------
+
+Some services are not available on Raspberry (armv7l):
+
+* Wordpress: mariadb is not compatible so the service become deactivated.
+* Peertube: The arm image is build on an aarch64 machine so it is not compatible with armv7l now (maybe later).
+* Jenkins: Ressources consumption is really high for this service, is is disabled on armv7.
+* Nexus: Ressources consumption is really high for this service, is is disabled on armv7.

@@ -28,7 +28,7 @@
       MYSQL_USER: wordpress
     volumes:
       - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["aarch64"]
 
 - name: "wait"
   pause:
@@ -56,4 +56,4 @@
       traefik.frontend.rule: "Host:{{ WORDPRESS_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/wordpress:/var/www"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l", "aarch64"]

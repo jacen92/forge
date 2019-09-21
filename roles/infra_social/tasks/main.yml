@@ -1,9 +1,9 @@
 ---
 - import_tasks: setup_wordpress.yml
-  when: ("vault" in FEATURES) and ("wordpress" in FEATURES)
+  when: ("vault" in FEATURES) and ("wordpress" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
 
 - import_tasks: setup_peertube.yml
-  when: ("peertube" in FEATURES)
+  when: ("peertube" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
 
 - import_tasks: setup_mstream.yml
   when: ("mstream" in FEATURES)

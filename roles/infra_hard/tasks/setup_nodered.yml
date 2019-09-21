@@ -30,7 +30,7 @@
       - "/{{ DATACORE }}/nodered:/data"
   become: true
   become_user: "{{ USER_NAME }}"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch nodered container for x86_64 {{ NODERED_VERSION }}-v8"
   docker_container:

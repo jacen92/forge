@@ -24,7 +24,7 @@
       traefik.frontend.rule: "Host:{{ INSOLANTE_EXTERNAL_URL }}"
     volumes:
       - "/{{ DATACORE }}/insolante:/opt/core/data"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch insolante container for x86_64 {{ INSOLANTE_VERSION }}"
   docker_container:

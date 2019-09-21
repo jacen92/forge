@@ -34,7 +34,7 @@
     labels:
       traefik.enable: "false"
 
-- name: "Launch peertube container for ARM {{ PEERTUBE_VERSION }}"
+- name: "Launch peertube container for ARM64 {{ PEERTUBE_VERSION }}"
   docker_container:
     name: "peertube"
     image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}-arm64"
@@ -76,7 +76,7 @@
       - "/{{ DATACORE }}/peertube/data:/data"
   become: true
   become_user: "{{ USER_NAME }}"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["aarch64"]
 
 - name: "Launch peertube container for x86_64 {{ PEERTUBE_VERSION }}"
   docker_container:

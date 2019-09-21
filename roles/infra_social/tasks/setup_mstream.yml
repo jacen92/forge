@@ -35,7 +35,7 @@
       - "/{{ DATACORE }}/mstream/music:/music"
   become: true
   become_user: "{{ USER_NAME }}"
-  when: ansible_architecture in ["armv6l", "armv7l", "aarch64"]
+  when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch mstream container for x86_64 {{ MSTREAM_VERSION }}"
   docker_container:
