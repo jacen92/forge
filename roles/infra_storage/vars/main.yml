@@ -19,3 +19,10 @@ NEXTCLOUD_PORT: 8055
 NEXTCLOUD_EXPOSITION: "false"
 NEXTCLOUD_EXTERNAL_URL: "drive.{{ DOMAIN_NAME }}"
 NEXTCLOUD_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+ODOO_VERSION: "12.0"
+ODOO_PORT: 8056
+ODOO_EXPOSITION: "false"
+ODOO_EXTERNAL_URL: "erp.{{ DOMAIN_NAME }}"
+ODOO_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+ODOO_DB_USER: "odoo"

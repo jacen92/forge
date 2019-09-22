@@ -7,3 +7,6 @@
 
 - import_tasks: setup_nextcloud.yml
   when: ("nextcloud" in FEATURES)
+
+- import_tasks: setup_odoo.yml
+  when: ("vault" in FEATURES) and ("erp" in FEATURES)

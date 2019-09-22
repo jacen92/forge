@@ -63,6 +63,7 @@ Storage:
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
 * nextcloud: Google drive alternative [https://hub.docker.com/_/nextcloud/].
+* Odoo: (formerly known as OpenERP) is a suite of open-source business apps [https://hub.docker.com/_/odoo].
 
 
 Port listing (exposed from all docker containers)
@@ -90,6 +91,7 @@ Port listing (exposed from all docker containers)
 | F-droid server    | 8053 |   http   | Storage |        no        |  fdroid.  |
 | F-droid scp       | 8054 |   ssh    | Storage |        no        |  fdroid.  |
 | Nextcloud         | 8055 |   http   | Storage |        no        |  drive.   |
+| Odoo              | 8056 |   http   | Storage |        no        |  erp.   |
 
 
 Playbooks parameters
@@ -108,8 +110,8 @@ Playbooks parameters
 Features description
 ====================
 
-| Name          |    Arch   | Description                                                            |
-| ------------- |:---------:| ---------------------------------------------------------------------- |
+| Name          |    Arch   | Description                                                          |
+| ------------- |:---------:| -------------------------------------------------------------------- |
 | vault         |    All    | Unlock user and services passwords                                   |
 | https         |    All    | Add or update traefik instance and configuration (vault must be set) |
 | domotic       |    All    | Add or update nodered and mosquitto docker instances                 |
@@ -124,6 +126,7 @@ Features description
 | nexus         | Not armv7 | Add or update jenkins docker instance                                |
 | fdroid        |    All    | Add or update fdroid docker instance                                 |
 | nextcloud     |    All    | Add or update extcloud docker instance                               |
+| erp           | Not armv7 | Add or update Odoo and database docker instance                      |
 
 
 Vault file parameters
@@ -143,6 +146,7 @@ Vault file parameters
 | JENKINS_PASS            |   ci       | Default jenkins admin user password      |
 | NEXTCLOUD_PASS          |   storage  | Default nextcloud admin user password    |
 | NEXUS_ADMIN_PASS        |   storage  | Default nexus admin user password        |
+| ODOO_DB_PASS            |   storage  | Default database password for odoo       |
 
 Notes:
 ======

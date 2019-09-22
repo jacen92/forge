@@ -1,0 +1,51 @@
+---
+- name: "Setup odoo directory"
+  file:
+    path: "{{ item }}"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+  with_items:
+    - "/{{ DATACORE }}/odoo"
+    - "/{{ DATACORE }}/odoo/addons"
+    - "/{{ DATACORE }}/odoo/config"
+    - "/{{ DATACORE }}/odoo/db"
+
+- name: "Launch odoo database container"
+  docker_container:
+    name: "odoo_postgres"
+    image: postgres:10-alpine
+    state: started
+    restart_policy: always
+    recreate: yes
+    env:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: "{{ ODOO_DB_USER }}"
+      POSTGRES_PASSWORD: "{{ ODOO_DB_PASS }}"
+    volumes:
+      - "/{{ DATACORE }}/odoo/db:/var/lib/postgresql/data"
+    labels:
+      traefik.enable: "false"
+
+- name: "Launch odoo container {{ ODOO_VERSION }}"
+  docker_container:
+    name: "odoo"
+    image: "odoo:{{ ODOO_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ ODOO_PORT }}:8069"
+    links:
+      - "odoo_postgres:db"
+    env:
+      USER: "{{ ODOO_DB_USER }}"
+      PASSWORD: "{{ ODOO_DB_PASS }}"
+    labels:
+      traefik.port: "8069"
+      traefik.enable: "{{ ODOO_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ ODOO_EXTERNAL_URL }}"
+    volumes:
+      - "/{{ DATACORE }}/odoo/addons:/mnt/extra-addons"
+      - "/{{ DATACORE }}/odoo/config:/etc/odoo"
+  when: ansible_architecture in ["amd64", "x86_64", "aarch64"]
