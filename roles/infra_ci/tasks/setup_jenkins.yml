@@ -51,7 +51,7 @@
      dockerfile: "Dockerfile"
      buildargs:
        JENKINS_VERSION: "{{ JENKINS_VERSION }}"
-       JENKINS_SHA: "{{ JENKINS_SHA_254 }}"
+       JENKINS_SHA: "{{ JENKINS_SHA_256 }}"
        uid: "{{ user_id.stdout }}"
        gid: "{{ user_id.stdout }}"
 
