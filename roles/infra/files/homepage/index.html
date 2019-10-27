@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Forge homepage ({{ FORGE_MODE }})</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    			  crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper grey lighten-1 center">
+        <a href="#" class="brand-logo"><b>Forge</b></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="https://maison-gargaud.info" target="_blank">WordPress</a></li>
+          <li><a href="https://github.com/jacen92/forge" target="_blank">Github</a></li>
+          <li><a href="https://hub.docker.com/u/ngargaud" target="_blank">Dockerhub</a></li>
+        </ul>
+      </div>
+    </nav>
+    <ul class="collapsible" id="main"></ul>
+
+  </body>
+  <footer>
+     <div class="footer-copyright grey lighten-4 center">
+       <div class="container">
+       Forge © 2018 Nicolas Gargaud (jacen92) </br>
+       <a class="center" target="_blank" href="https://maison-gargaud.info/forge">Maison Gargaud</a>
+       </div>
+     </div>
+  </footer>
+  <script>
+  var fillWithServiceMap = function(text) {
+    var forge = JSON.parse(text).forge;
+    var services = JSON.parse(text).services;
+    var keys = Object.keys(services);
+    $('#main').empty();
+
+    for(var i = 0; i < keys.length; ++i) {
+      var row_id = addRow(keys[i]);
+      var row_service = services[keys[i]];
+      for(var j = 0; j < row_service.length; ++j) {
+        addCard(row_id, forge, row_service[j]);
+      }
+    }
+  };
+
+  var addRow = function(name) {
+    var row_id = 'row_' + name;
+    $('#main').append(`
+    <li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i>` + name + `</div>
+      <div class="collapsible-body"><div class="row" id="` + row_id + `"></div></div>
+    </li>`);
+    return row_id;
+  };
+
+  var addCard = function(row_id, forge, service) {
+    var name = service.name + " (version: " + service.version + ")";
+    var local = 'http://' + forge.address + ':' + service.port;
+    var local_id = "service_local_" + service.name;
+    var external_id = "service_external_" + service.name;
+    var external = 'Unknown';
+    var dockerhub = 'Unknown';
+    var source = 'Unknown';
+    if(forge.domain) {
+      external = service.external;
+    }
+    if(service.dockerhub) {
+      dockerhub = service.dockerhub;
+    }
+    if(service.source) {
+      source = service.source;
+    }
+    var card = `
+    <div class="col s4 m3">
+      <div class="card grey lighten-5">
+        <div class="card-content">
+          <h5 class="center"><a href="` + local + `" target="_blank"><b><i>` + name + `</i></b></a></h5>
+          <p><u>Dockerhub:</u> <a href="` + service.dockerhub + `" target="_blank">` + dockerhub + `</a></p>
+          <p><u>Sources:</u> <a href="` + service.source + `" target="_blank">` + source + `</a></p>
+          <p><u>Description:</u> ` + service.description + `</p>
+          </br>
+          <div class="grey lighten-3">
+            <p><u>Intranet url:</u> <a href="` + local + `" target="_blank">` + local + `</a></p>
+            <p><u>Internet url:</u> <a href="` + external + `" target="_blank">` + external + `</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+`;
+    $('#' + row_id).append(card);
+    //setInterval(checkService(local_id, local), 1000);
+    //setInterval(checkService(external_id, external), 1000);
+  };
+
+  var checkService = function(ret_id, link) {
+    $.ajax({
+  		type: 'HEAD',
+  		url: link,
+      headers : {
+        "Accept" : "application/json"
+      },
+      crossDomain: true,
+      crossOrigin: true,
+      statusCode: {
+        404: function() {
+          console.log('not found', link);
+          $('#' + ret_id).addClass('red');
+          $('#' + ret_id).removeClass('green');
+        },
+        200: function() {
+          console.log('found', link);
+          $('#' + ret_id).addClass('green');
+          $('#' + ret_id).removeClass('red');
+        }
+      },
+  		complete: function(xhr) {
+  			console.log('checked', link, xhr);
+  		}
+    });
+  };
+
+  var updateServiceMap = function() {
+    fetch('/services.json')
+    .then(response => response.text())
+    .then(text => fillWithServiceMap(text));
+  };
+
+  updateServiceMap();
+  M.AutoInit();
+  </script>
+</html>

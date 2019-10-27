@@ -1,0 +1,166 @@
+{
+  "forge": {
+    "mode": "{{FORGE_MODE}}",
+    "address": "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}",
+    "domain": "{{ DOMAIN_NAME }}",
+    "backup": {
+      "url": "{{ BACKUP_REMOTE_URL }}"
+    }
+  },
+  "services": {
+    "Infrastructure": [
+      {
+        "name": "Traefik",
+        "port": "{{ TRAEFIK_FRONT_PORT }}",
+        "version": "{{ TRAEFIK_VERSION }}",
+        "external": "https://{{ TRAEFIK_EXTERNAL_URL }}",
+        "description": "HTTPS support and reverse proxy with domain name.",
+        "dockerhub": "https://hub.docker.com/r/arm32v6/traefik/",
+        "source": ""
+      },
+      {
+        "name": "Homepage",
+        "port": "{{ NGINX_FRONT_PORT }}",
+        "version": "{{ NGINX_VERSION }}",
+        "external": "https://{{ NGINX_EXTERNAL_URL }}",
+        "description": "This homepage server based on Nginx and a static page.",
+        "dockerhub": "https://hub.docker.com/_/nginx",
+        "source": ""
+      },
+      {
+        "name": "Portainer",
+        "port": "{{ PORTAINER_PORT }}",
+        "version": "{{ PORTAINER_VERSION }}",
+        "external": "https://{{ PORTAINER_EXTERNAL_URL }}",
+        "description": "Docker images manager.",
+        "dockerhub": "https://hub.docker.com/r/portainer/portainer/",
+        "source": ""
+      }
+    ],
+    "Development": [
+      {
+        "name": "Gogs",
+        "port": "{{ GOGS_FRONT_PORT }}",
+        "version": "{{ GOGS_VERSION }}",
+        "external": "https://{{ GOGS_EXTERNAL_URL }}",
+        "description": "Github like server, source storage (lighter than gitlab), git port on {{ GOGS_SSH_PORT }}.",
+        "dockerhub": "https://hub.docker.com/r/gogs/gogs-rpi/",
+        "source": ""
+      },
+      {
+        "name": "Jenkins",
+        "port": "{{ JENKINS_PORT }}",
+        "version": "{{ JENKINS_VERSION }}",
+        "external": "https://{{ JENKINS_EXTERNAL_URL }}",
+        "description": "The leading open source automation server.",
+        "dockerhub": "",
+        "source": "https://github.com/jenkinsci/docker"
+      }
+    ],
+    "Hardware": [
+      {
+        "name": "MQTT",
+        "port": "{{ MQTT_FRONT_PORT }}",
+        "version": "{{ MQTT_VERSION }}",
+        "external": "https://{{ MQTT_EXTERNAL_URL }}",
+        "description": "Mosquitto broker for the Internet of Things.",
+        "dockerhub": "https://hub.docker.com/_/eclipse-mosquitto",
+        "source": ""
+      },
+      {
+        "name": "Nodered",
+        "port": "{{ NODERED_FRONT_PORT }}",
+        "version": "{{ NODERED_VERSION }}",
+        "external": "https://{{ NODERED_EXTERNAL_URL }}",
+        "description": "Flow-based programming for the Internet of Things.",
+        "dockerhub": "https://hub.docker.com/r/nodered/node-red-docker/",
+        "source": ""
+      },
+      {
+        "name": "Octoprint",
+        "port": "{{ OCTOPRINT_PORT }}",
+        "version": "{{ OCTOPRINT_VERSION }}",
+        "external": "https://{{ OCTOPRINT_EXTERNAL_URL }}",
+        "description": "The snappy web interface for your 3D printer.",
+        "dockerhub": "https://hub.docker.com/r/nunofgs/octoprint",
+        "source": ""
+      },
+      {
+        "name": "Insolante",
+        "port": "{{ INSOLANTE_PORT }}",
+        "version": "{{ INSOLANTE_VERSION }}",
+        "external": "https://{{ INSOLANTE_EXTERNAL_URL }}",
+        "description": "Gerber to gcode converter (wrapper to pcb2gcode).",
+        "dockerhub": "https://hub.docker.com/r/ngargaud/insolante",
+        "source": ""
+      }
+    ],
+    "Social": [
+      {
+        "name": "WordPress",
+        "port": "{{ WORDPRESS_FRONT_PORT }}",
+        "version": "{{ WORDPRESS_VERSION }}",
+        "external": "https://{{ WORDPRESS_EXTERNAL_URL }}",
+        "description": "The WordPress rich content management system.",
+        "dockerhub": "https://hub.docker.com/_/wordpress/",
+        "source": ""
+      },
+      {
+        "name": "Peertube",
+        "port": "{{ PEERTUBE_PORT }}",
+        "version": "{{ PEERTUBE_VERSION }}",
+        "external": "https://{{ PEERTUBE_EXTERNAL_URL }}",
+        "description": "Federated video streaming platform.",
+        "dockerhub": "https://hub.docker.com/r/ngargaud/peertube",
+        "source": ""
+      },
+      {
+        "name": "MStream",
+        "port": "{{ MSTREAM_PORT }}",
+        "version": "{{ MSTREAM_VERSION }}",
+        "external": "https://{{ MSTREAM_EXTERNAL_URL }}",
+        "description": "The easiest music streaming server available.",
+        "dockerhub": "https://hub.docker.com/r/linuxserver/mstream",
+        "source": ""
+      }
+    ],
+    "Storage": [
+      {
+        "name": "Nexus",
+        "port": "{{ NEXUS_PORT }}",
+        "version": "{{ NEXUS_VERSION }}",
+        "external": "https://{{ NEXUS_EXTERNAL_URL }}",
+        "description": "Artifact manager and docker registry (push: {{ NEXUS_DOCKER_PUSH_PORT }}, pull: {{ NEXUS_DOCKER_PULL_PORT }}).",
+        "dockerhub": "",
+        "source": "https://github.com/sonatype/docker-nexus3"
+      },
+      {
+        "name": "F-Droid",
+        "port": "{{ FDROID_PORT }}",
+        "version": "{{ FDROID_VERSION }}",
+        "external": "https://{{ FDROID_EXTERNAL_URL }}",
+        "description": "Android application server (with scp access through {{ FDROID_SSH_PORT }}).",
+        "dockerhub": "https://hub.docker.com/r/ngargaud/fdroid-server",
+        "source": ""
+      },
+      {
+        "name": "NextCloud",
+        "port": "{{ NEXTCLOUD_PORT }}",
+        "version": "{{ NEXTCLOUD_VERSION }}",
+        "external": "https://{{ NEXTCLOUD_EXTERNAL_URL }}",
+        "description": "Google drive alternative.",
+        "dockerhub": "https://hub.docker.com/_/nextcloud/",
+        "source": ""
+      },
+      {
+        "name": "Odoo",
+        "port": "{{ ODOO_PORT }}",
+        "version": "{{ ODOO_VERSION }}",
+        "external": "https://{{ ODOO_EXTERNAL_URL }}",
+        "description": "(formerly known as OpenERP) is a suite of open-source business apps.",
+        "dockerhub": "https://hub.docker.com/_/odoo",
+        "source": ""
+      }
+    ]
+  }
+}

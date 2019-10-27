@@ -2,6 +2,8 @@
 - import_tasks: setup_backup.yml
   when: ("vault" in FEATURES) and (BACKUP_MODE != "")
 
+- import_tasks: setup_homepage.yml
+
 - import_tasks: setup_https.yml
   when: ("https" in FEATURES) and (DOMAIN_NAME != "")
 

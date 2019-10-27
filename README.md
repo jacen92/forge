@@ -29,6 +29,7 @@ Services
 infra:
 ------
 
+* nginx: HTTP server for static page in this case [https://hub.docker.com/_/nginx].
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
 
@@ -74,6 +75,7 @@ Port listing (exposed from all docker containers)
 | Traefik           | 80   |   http   | infra   |        yes       |           |
 | Traefik           | 443  |   https  | infra   |        yes       |           |
 | Traefik           | 8000 |   http   | infra   |        no        |           |
+| Nginx             | 8001 |   http   | infra   |        no        |   home.   |
 | Portainer         | 8010 |   http   | infra   |        no        |           |
 | Gogs              | 8021 |   http   | CI      |        yes       |   git.    |
 | Gogs              | 8022 |   ssh    | CI      |        yes       |   git.    |
