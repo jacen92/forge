@@ -46,7 +46,7 @@ Hardware interaction:
 
 * insolante: gerber to gcode converter (wrapper to pcb2gcode) [https://hub.docker.com/r/ngargaud/insolante].
 * mqtt: Mosquitto broker for the Internet of Things [https://hub.docker.com/_/eclipse-mosquitto].
-* nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/nodered/node-red-docker/].
+* nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/nodered/node-red].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 
 

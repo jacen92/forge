@@ -73,7 +73,7 @@
         "version": "{{ NODERED_VERSION }}",
         "external": "https://{{ NODERED_EXTERNAL_URL }}",
         "description": "Flow-based programming for the Internet of Things.",
-        "dockerhub": "https://hub.docker.com/r/nodered/node-red-docker/",
+        "dockerhub": "https://hub.docker.com/r/nodered/node-red",
         "source": ""
       },
       {
