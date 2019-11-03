@@ -1,4 +1,4 @@
-WORDPRESS_VERSION: "5.2.3-php7.3"
+WORDPRESS_VERSION: "5.2.4-php7.3"
 WORDPRESS_DB_VERSION: "10.4.8"
 WORDPRESS_FRONT_PORT: 8040
 WORDPRESS_EXPOSITION: "false"
@@ -13,7 +13,7 @@ PEERTUBE_IS_HTTPS: "false"
 PEERTUBE_TMP_PATH: "/tmp/peertube"
 PEERTUBE_DB_USER: "peertube"
 
-MSTREAM_VERSION: "v4.2.1-ls12"
+MSTREAM_VERSION: "v4.5.0-ls14"
 MSTREAM_PORT: 8042
 MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
