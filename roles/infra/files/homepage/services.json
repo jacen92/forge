@@ -53,7 +53,7 @@
         "version": "{{ JENKINS_VERSION }}",
         "external": "https://{{ JENKINS_EXTERNAL_URL }}",
         "description": "The leading open source automation server.",
-        "dockerhub": "",
+        "dockerhub": "https://hub.docker.com/r/jenkins/jenkins",
         "source": "https://github.com/jenkinsci/docker"
       }
     ],
