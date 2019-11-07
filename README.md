@@ -7,7 +7,7 @@ Installation on Raspberry pi
 ----------------------------
 
 Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.  
-This image contains my public key for accessing root user directly.
+This image contains my public key for accessing root user directly via ssh.
 
 
 Installation on Rock64
@@ -33,6 +33,7 @@ infra:
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
 
+![Renderer screenshot](/documents/screenshots/infrastructure.png)
 
 Continuous integration:
 -----------------------
@@ -40,6 +41,7 @@ Continuous integration:
 * gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
 * jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
 
+![Renderer screenshot](/documents/screenshots/development.png)
 
 Hardware interaction:
 ---------------------
@@ -49,6 +51,7 @@ Hardware interaction:
 * nodered: Flow-based programming for the Internet of Things [https://hub.docker.com/r/nodered/node-red].
 * octoprint: The snappy web interface for your 3D printer. [https://hub.docker.com/r/nunofgs/octoprint].
 
+![Renderer screenshot](/documents/screenshots/hardware.png)
 
 Social and media:
 -----------------
@@ -57,6 +60,7 @@ Social and media:
 * Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
 * mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
 
+![Renderer screenshot](/documents/screenshots/social.png)
 
 Storage:
 --------
@@ -66,6 +70,7 @@ Storage:
 * nextcloud: Google drive alternative [https://hub.docker.com/_/nextcloud/].
 * Odoo: (formerly known as OpenERP) is a suite of open-source business apps [https://hub.docker.com/_/odoo].
 
+![Renderer screenshot](/documents/screenshots/storage.png)
 
 Port listing (exposed from all docker containers)
 =================================================
