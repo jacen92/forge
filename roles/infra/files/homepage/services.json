@@ -35,6 +35,15 @@
         "description": "Docker images manager.",
         "dockerhub": "https://hub.docker.com/r/portainer/portainer/",
         "source": ""
+      },
+      {
+        "name": "Netdata",
+        "port": "{{ NETDATA_PORT }}",
+        "version": "{{ NETDATA_VERSION }}",
+        "external": "https://{{ NETDATA_EXTERNAL_URL }}",
+        "description": "The open-source, real-time, performance and health monitoring.",
+        "dockerhub": "https://hub.docker.com/r/netdata/netdata",
+        "source": ""
       }
     ],
     "Development": [

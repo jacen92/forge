@@ -6,6 +6,7 @@ Content
 * backup: install stuff to do backup of the datacore on a remote FTP server.
 * HTTPS: reverse-proxy with HTTPS.
 * portainer: docker machine web interface.
+* netdata: server monitoring web interface.
 
 NOTES:
 ======

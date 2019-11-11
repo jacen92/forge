@@ -32,6 +32,7 @@ infra:
 * nginx: HTTP server for static page in this case [https://hub.docker.com/_/nginx].
 * traefik: HTTPS support and reverse proxy with domain name [https://hub.docker.com/r/arm32v6/traefik/].
 * portainer: Docker images manager [https://hub.docker.com/r/portainer/portainer/].
+* Netdata: The open-source, real-time, performance and health monitoring. [https://hub.docker.com/r/netdata/netdata].
 
 ![Renderer screenshot](/documents/screenshots/infrastructure.png)
 
@@ -82,6 +83,7 @@ Port listing (exposed from all docker containers)
 | Traefik           | 8000 |   http   | infra   |        no        |           |
 | Nginx             | 8001 |   http   | infra   |        no        |   home.   |
 | Portainer         | 8010 |   http   | infra   |        no        |           |
+| Netdata           | 8011 |   http   | infra   |        no        | monitor.  |
 | Gogs              | 8021 |   http   | CI      |        yes       |   git.    |
 | Gogs              | 8022 |   ssh    | CI      |        yes       |   git.    |
 | Jenkins           | 8023 |   http   | CI      |        no        |    ci.    |
@@ -125,6 +127,7 @@ Features description
 | insolante     |    All    | Add or update insolante docker instance                              |
 | octoprint     |    All    | Add or update octoprint docker instance                              |
 | portainer     |    All    | Add or update portainer docker instance                              |
+| netdata       |    All    | Add or update netdata docker instance                              |
 | wordpress     | Not armv7 | Add or update wordpress and database docker instances                |
 | peertube      | Not armv7 | Add or update Peertube docker instance (fr based on my github fork)  |
 | mstream       |    All    | Add or update mStream docker instance                                |

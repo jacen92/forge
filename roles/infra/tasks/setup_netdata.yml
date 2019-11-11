@@ -1,0 +1,48 @@
+---
+- name: "Get docker group ID"
+  shell: "grep docker /etc/group | cut -d ':' -f 3"
+  register: docker_id
+
+- name: "Launch netdata container for ARM {{ NETDATA_VERSION }}"
+  docker_container:
+    name: "netdata"
+    image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ NETDATA_PORT }}:19999"
+    volumes:
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    capabilities:
+      - SYS_PTRACE
+    env:
+      PGID: "{{ docker_id.stdout }}"
+    labels:
+      traefik.port: "19999"
+      traefik.enable: "{{ NETDATA_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ NETDATA_EXTERNAL_URL }}"
+  when: ansible_architecture in ["armv7l", "aarch64"]
+
+- name: "Launch netdata container {{ NETDATA_VERSION }}"
+  docker_container:
+    name: "netdata"
+    image: "netdata/netdata:{{ NETDATA_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    ports:
+      - "{{ NETDATA_PORT }}:19999"
+    volumes:
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    capabilities:
+      - SYS_PTRACE
+    labels:
+      traefik.port: "19999"
+      traefik.enable: "{{ NETDATA_EXPOSITION }}"
+      traefik.frontend.rule: "Host:{{ NETDATA_EXTERNAL_URL }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
