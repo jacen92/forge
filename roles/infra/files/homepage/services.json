@@ -34,7 +34,7 @@
         "external": "https://{{ PORTAINER_EXTERNAL_URL }}",
         "description": "Docker images manager.",
         "dockerhub": "https://hub.docker.com/r/portainer/portainer/",
-        "source": ""
+        "source": "https://github.com/portainer/portainer"
       },
       {
         "name": "Netdata",
