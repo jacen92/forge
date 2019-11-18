@@ -1,15 +1,16 @@
-- hosts: prod_x64
+- hosts: test
   vars:
   - FORGE_MODE: "test"
   - DOMAIN_NAME: ""
-  - FEATURES: []
+  - FEATURES: ["vault"]
   - USER_NAME: "forge"
   - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
   - DATACORE: "home/{{ USER_NAME }}/data"
+  - DEFAULT_ADMIN_NAME: "admin"
   roles:
-  - common
-  - infra
-  - infra_ci
-  - infra_hard
-  - infra_social
-  - infra_storage
+    - common
+    - infra
+    - infra_ci
+    - infra_hard
+    - infra_social
+    - infra_storage
