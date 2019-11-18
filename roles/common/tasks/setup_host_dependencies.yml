@@ -6,6 +6,11 @@
     update_cache: true
     cache_valid_time: 3600
 
+- name: "Locally install pip packages"
+  delegate_to: 127.0.0.1
+  pip:
+    name: [passlib]
+
 - name: "Install pip packages"
   pip:
     name: [docker-py, passlib, setuptools]
