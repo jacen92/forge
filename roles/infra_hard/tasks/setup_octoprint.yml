@@ -27,7 +27,7 @@
 - name: "Launch octoprint container {{ OCTOPRINT_VERSION }}"
   docker_container:
     name: "octoprint"
-    image: "octoprint/octoprint:{{ OCTOPRINT_VERSION }}"
+    image: "nunofgs/octoprint:{{ OCTOPRINT_VERSION }}"
     state: started
     restart_policy: always
     recreate: yes
