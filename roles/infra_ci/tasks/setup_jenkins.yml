@@ -33,6 +33,7 @@
     accept_hostkey: yes
     force: yes
     recursive: no
+    version: "6ff70386bc677a86787717cf636c9e6e927a4f83"
   become: true
   become_user: "{{ USER_NAME }}"
 
@@ -40,8 +41,8 @@
   replace:
     path: "/tmp/jenkins/Dockerfile"
     regexp: 'FROM (.*)'
-    replace: 'FROM arm32v7/openjdk:8-jre-stretch'
-  when: ansible_architecture in ["armv7l", "aarch64"]
+    replace: 'FROM arm64v8/openjdk:8-jre-stretch'
+  when: ansible_architecture in ["aarch64"]
 
 - name: "Build jenkins image and with buildargs"
   docker_image:
