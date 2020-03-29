@@ -48,4 +48,4 @@
     volumes:
       - "/{{ DATACORE }}/odoo/addons:/mnt/extra-addons"
       - "/{{ DATACORE }}/odoo/config:/etc/odoo"
-  when: ansible_architecture in ["amd64", "x86_64", "aarch64"]
+  when: ansible_architecture in ["amd64", "x86_64"]
