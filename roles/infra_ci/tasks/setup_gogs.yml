@@ -10,12 +10,16 @@
     log_options:
       tag: gogs
     ports:
-      - "{{ GOGS_SSH_PORT }}:22"
       - "{{ GOGS_FRONT_PORT }}:3000"
+      - "{{ GOGS_SSH_PORT }}:22"
     labels:
-      traefik.port: "3000"
       traefik.enable: "{{ GOGS_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
+      traefik.http.services.gogs.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.gogs_http.middlewares: "https_redirect"
+      traefik.http.routers.gogs_http.rule: "Host(`{{ GOGS_EXTERNAL_URL }}`)"
+      traefik.http.routers.gogs_https.rule: "Host(`{{ GOGS_EXTERNAL_URL }}`)"
+      traefik.http.routers.gogs_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
   when: ansible_architecture in ["armv7l", "aarch64"]
@@ -31,12 +35,16 @@
     log_options:
       tag: gogs
     ports:
-      - "{{ GOGS_SSH_PORT }}:22"
       - "{{ GOGS_FRONT_PORT }}:3000"
+      - "{{ GOGS_SSH_PORT }}:22"
     labels:
-      traefik.port: "3000"
       traefik.enable: "{{ GOGS_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ GOGS_EXTERNAL_URL }}"
+      traefik.http.services.gogs.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.gogs_http.middlewares: "https_redirect"
+      traefik.http.routers.gogs_http.rule: "Host(`{{ GOGS_EXTERNAL_URL }}`)"
+      traefik.http.routers.gogs_https.rule: "Host(`{{ GOGS_EXTERNAL_URL }}`)"
+      traefik.http.routers.gogs_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/gogs:/data"
   when: ansible_architecture in ["amd64", "x86_64"]

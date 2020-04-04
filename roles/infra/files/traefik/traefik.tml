@@ -1,13 +1,17 @@
-defaultEntryPoints = ["http", "https"]
+[global]
+  sendAnonymousUsage = false
+
+[log]
+  level = "INFO"
+  format = "common"
 
 ################################################################
 # Web configuration backend
 ################################################################
 [api]
-address = ":8000"
-# [api.auth.basic]
-# User: toto | Password: password
-# users = ["toto:$2y$05$zNs3wc5UPB4su8vbFugVPuKEaLJXMf5Z.9hAI1ulJpBbhbBprfppO"]
+  insecure = true
+  dashboard = true
+  debug = true
 
 ################################################################
 # Entry-points configuration
@@ -15,27 +19,25 @@ address = ":8000"
 [entryPoints]
   [entryPoints.http]
     address = ":80"
-    [entryPoints.http.redirect]
-      entryPoint = "https"
+
   [entryPoints.https]
     address = ":443"
-    [entryPoints.https.tls]
+    [entryPoints.https.http.tls]
+      certResolver = "letsencrypt"
 
 ################################################################
 # Docker configuration backend
 ################################################################
-[docker]
-domain = "forge"
-watch = true
-exposedbydefault = false
+[providers.docker]
+  endpoint = "unix:///var/run/docker.sock"
+  exposedbydefault = false
+  watch = true
 
 ################################################################
 # Let's encrypt
 ################################################################
-[acme]
-email = "{{ USER_MAIL }}"
-storage = "/etc/traefik/acme.json"
-onHostRule = true
-entryPoint = "https"
-  [acme.httpChallenge]
-  entryPoint = "http"
+[certificatesResolvers.letsencrypt.acme]
+  email = "{{ USER_MAIL }}"
+  storage = "/etc/traefik/certs/acme.json"
+  [certificatesResolvers.letsencrypt.acme.httpChallenge]
+    entrypoint = "http"

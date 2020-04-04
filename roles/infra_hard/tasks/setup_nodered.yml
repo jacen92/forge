@@ -23,9 +23,13 @@
     ports:
       - "{{ NODERED_FRONT_PORT }}:1880"
     labels:
-      traefik.port: "1880"
       traefik.enable: "{{ NODERED_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ NODERED_EXTERNAL_URL }}"
+      traefik.http.services.nodered.loadbalancer.server.port: "1880"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.nodered_http.middlewares: "https_redirect"
+      traefik.http.routers.nodered_http.rule: "Host(`{{ NODERED_EXTERNAL_URL }}`)"
+      traefik.http.routers.nodered_https.rule: "Host(`{{ NODERED_EXTERNAL_URL }}`)"
+      traefik.http.routers.nodered_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/nodered:/data"
   become: true

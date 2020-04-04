@@ -27,8 +27,12 @@
     ports:
       - "{{ NGINX_FRONT_PORT }}:80"
     labels:
-      traefik.port: "80"
       traefik.enable: "{{ NGINX_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ NGINX_EXTERNAL_URL }}"
+      traefik.http.services.nginx.loadbalancer.server.port: "80"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.nginx_http.middlewares: "https_redirect"
+      traefik.http.routers.nginx_http.rule: "Host(`{{ NGINX_EXTERNAL_URL }}`)"
+      traefik.http.routers.nginx_https.rule: "Host(`{{ NGINX_EXTERNAL_URL }}`)"
+      traefik.http.routers.nginx_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/homepage:/usr/share/nginx/html:ro"

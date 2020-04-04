@@ -27,9 +27,13 @@
       USE_JSON: true
       TZ: "Europe/Paris"
     labels:
-      traefik.port: "3000"
       traefik.enable: "{{ MSTREAM_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ MSTREAM_EXTERNAL_URL }}"
+      traefik.http.services.mstream.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.mstream_http.middlewares: "https_redirect"
+      traefik.http.routers.mstream_http.rule: "Host(`{{ MSTREAM_EXTERNAL_URL }}`)"
+      traefik.http.routers.mstream_https.rule: "Host(`{{ MSTREAM_EXTERNAL_URL }}`)"
+      traefik.http.routers.mstream_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/mstream/config:/config"
       - "/{{ DATACORE }}/mstream/music:/music"
@@ -54,9 +58,13 @@
       USE_JSON: true
       TZ: "Europe/Paris"
     labels:
-      traefik.port: "3000"
       traefik.enable: "{{ MSTREAM_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ MSTREAM_EXTERNAL_URL }}"
+      traefik.http.services.mstream.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.mstream_http.middlewares: "https_redirect"
+      traefik.http.routers.mstream_http.rule: "Host(`{{ MSTREAM_EXTERNAL_URL }}`)"
+      traefik.http.routers.mstream_https.rule: "Host(`{{ MSTREAM_EXTERNAL_URL }}`)"
+      traefik.http.routers.mstream_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/mstream/config:/config"
       - "/{{ DATACORE }}/mstream/music:/music"

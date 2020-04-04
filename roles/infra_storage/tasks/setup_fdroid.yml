@@ -48,9 +48,13 @@
       - "/{{ DATACORE }}/fdroid/apk:/opt/apk"
       - "/{{ DATACORE }}/fdroid/config:/opt/config"
     labels:
-      traefik.port: "80"
       traefik.enable: "{{ FDROID_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ FDROID_EXTERNAL_URL }}"
+      traefik.http.services.fdroid.loadbalancer.server.port: "80"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.fdroid_http.middlewares: "https_redirect"
+      traefik.http.routers.fdroid_http.rule: "Host(`{{ FDROID_EXTERNAL_URL }}`)"
+      traefik.http.routers.fdroid_https.rule: "Host(`{{ FDROID_EXTERNAL_URL }}`)"
+      traefik.http.routers.fdroid_https.tls: "true"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch fdroid container for x86_64 {{ FDROID_VERSION }}"
@@ -67,7 +71,11 @@
       - "/{{ DATACORE }}/fdroid/apk:/opt/apk"
       - "/{{ DATACORE }}/fdroid/config:/opt/config"
     labels:
-      traefik.port: "80"
       traefik.enable: "{{ FDROID_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ FDROID_EXTERNAL_URL }}"
+      traefik.http.services.fdroid.loadbalancer.server.port: "80"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.fdroid_http.middlewares: "https_redirect"
+      traefik.http.routers.fdroid_http.rule: "Host(`{{ FDROID_EXTERNAL_URL }}`)"
+      traefik.http.routers.fdroid_https.rule: "Host(`{{ FDROID_EXTERNAL_URL }}`)"
+      traefik.http.routers.fdroid_https.tls: "true"
   when: ansible_architecture in ["amd64", "x86_64"]

@@ -44,9 +44,13 @@
       - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
       - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
     labels:
-      traefik.port: "8081"
       traefik.enable: "{{ NEXUS_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ NEXUS_EXTERNAL_URL }}"
+      traefik.http.services.nexus.loadbalancer.server.port: "8081"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.nexus_http.middlewares: "https_redirect"
+      traefik.http.routers.nexus_http.rule: "Host(`{{ NEXUS_EXTERNAL_URL }}`)"
+      traefik.http.routers.nexus_https.rule: "Host(`{{ NEXUS_EXTERNAL_URL }}`)"
+      traefik.http.routers.nexus_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/nexus:/nexus-data"
 

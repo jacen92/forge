@@ -19,9 +19,13 @@
       RPORT: "{{ INSOLANTE_PORT }}"
       DEBUG: "false"
     labels:
-      traefik.port: "5000"
       traefik.enable: "{{ INSOLANTE_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ INSOLANTE_EXTERNAL_URL }}"
+      traefik.http.services.insolante.loadbalancer.server.port: "5000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.insolante_http.middlewares: "https_redirect"
+      traefik.http.routers.insolante_http.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
+      traefik.http.routers.insolante_https.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
+      traefik.http.routers.insolante_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/insolante:/opt/core/data"
   when: ansible_architecture in ["armv7l", "aarch64"]
@@ -39,9 +43,13 @@
       RPORT: "{{ INSOLANTE_PORT }}"
       DEBUG: "false"
     labels:
-      traefik.port: "5000"
       traefik.enable: "{{ INSOLANTE_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ INSOLANTE_EXTERNAL_URL }}"
+      traefik.http.services.insolante.loadbalancer.server.port: "5000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.insolante_http.middlewares: "https_redirect"
+      traefik.http.routers.insolante_http.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
+      traefik.http.routers.insolante_https.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
+      traefik.http.routers.insolante_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/insolante:/opt/core/data"
   when: ansible_architecture in ["amd64", "x86_64"]

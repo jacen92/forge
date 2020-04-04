@@ -19,7 +19,6 @@
   docker_container:
     name: "traefik"
     image: "arm32v6/traefik:{{ TRAEFIK_VERSION }}"
-    command: --api --docker --metrics --ping --logLevel=INFO
     state: started
     restart_policy: always
     recreate: yes
@@ -28,9 +27,13 @@
       - "443:443"
       - "{{ TRAEFIK_FRONT_PORT }}:8080"
     labels:
-      traefik.port: "8080"
       traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ TRAEFIK_EXTERNAL_URL }}"
+      traefik.http.routers.traefik.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.traefik_http.middlewares: "https_redirect"
+      traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
+      traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
+      traefik.http.routers.traefik_https.tls: "true"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
@@ -41,7 +44,6 @@
   docker_container:
     name: "traefik"
     image: "arm64v8/traefik:{{ TRAEFIK_VERSION }}"
-    command: --api --docker --metrics --ping --logLevel=INFO
     state: started
     restart_policy: always
     recreate: yes
@@ -50,9 +52,13 @@
       - "443:443"
       - "{{ TRAEFIK_FRONT_PORT }}:8080"
     labels:
-      traefik.port: "8080"
       traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ TRAEFIK_EXTERNAL_URL }}"
+      traefik.http.services.traefik.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.traefik_http.middlewares: "https_redirect"
+      traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
+      traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
+      traefik.http.routers.traefik_https.tls: "true"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
@@ -63,7 +69,6 @@
   docker_container:
     name: "traefik"
     image: "traefik:{{ TRAEFIK_VERSION }}"
-    command: --api --docker --metrics --ping --logLevel=INFO
     state: started
     restart_policy: always
     recreate: yes
@@ -72,9 +77,13 @@
       - "443:443"
       - "{{ TRAEFIK_FRONT_PORT }}:8080"
     labels:
-      traefik.port: "8080"
       traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ TRAEFIK_EXTERNAL_URL }}"
+      traefik.http.services.traefik.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.traefik_http.middlewares: "https_redirect"
+      traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
+      traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
+      traefik.http.routers.traefik_https.tls: "true"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
@@ -89,7 +98,7 @@
 
 - name: "Make sure the certificate file has the correct rights"
   file:
-    path: "/{{ DATACORE }}/traefik/acme.json"
+    path: "/{{ DATACORE }}/traefik/certs/acme.json"
     owner: "root"
     group: "root"
     mode: 0600

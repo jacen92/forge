@@ -21,9 +21,13 @@
     env:
       PGID: "{{ docker_id.stdout }}"
     labels:
-      traefik.port: "19999"
       traefik.enable: "{{ NETDATA_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ NETDATA_EXTERNAL_URL }}"
+      traefik.http.services.netdata.loadbalancer.server.port: "19999"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.netdata_http.middlewares: "https_redirect"
+      traefik.http.routers.netdata_http.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
+      traefik.http.routers.netdata_https.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
+      traefik.http.routers.netdata_https.tls: "true"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Launch netdata container {{ NETDATA_VERSION }}"
@@ -42,7 +46,11 @@
     capabilities:
       - SYS_PTRACE
     labels:
-      traefik.port: "19999"
       traefik.enable: "{{ NETDATA_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ NETDATA_EXTERNAL_URL }}"
+      traefik.http.services.netdata.loadbalancer.server.port: "19999"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.netdata_http.middlewares: "https_redirect"
+      traefik.http.routers.netdata_http.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
+      traefik.http.routers.netdata_https.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
+      traefik.http.routers.netdata_https.tls: "true"
   when: ansible_architecture in ["amd64", "x86_64"]

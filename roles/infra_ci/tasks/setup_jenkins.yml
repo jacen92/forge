@@ -66,9 +66,13 @@
     ports:
       - "{{ JENKINS_PORT }}:8080"
     labels:
-      traefik.port: "8080"
       traefik.enable: "{{ JENKINS_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ JENKINS_EXTERNAL_URL }}"
+      traefik.http.services.jenkins.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.jenkins_http.middlewares: "https_redirect"
+      traefik.http.routers.jenkins_http.rule: "Host(`{{ JENKINS_EXTERNAL_URL }}`)"
+      traefik.http.routers.jenkins_https.rule: "Host(`{{ JENKINS_EXTERNAL_URL }}`)"
+      traefik.http.routers.jenkins_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/jenkins:/var/jenkins_home"
 

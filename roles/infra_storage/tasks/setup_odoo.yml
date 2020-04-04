@@ -42,9 +42,13 @@
       USER: "{{ ODOO_DB_USER }}"
       PASSWORD: "{{ ODOO_DB_PASS }}"
     labels:
-      traefik.port: "8069"
       traefik.enable: "{{ ODOO_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ ODOO_EXTERNAL_URL }}"
+      traefik.http.services.odoo.loadbalancer.server.port: "8069"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.odoo_http.middlewares: "https_redirect"
+      traefik.http.routers.odoo_http.rule: "Host(`{{ ODOO_EXTERNAL_URL }}`)"
+      traefik.http.routers.odoo_https.rule: "Host(`{{ ODOO_EXTERNAL_URL }}`)"
+      traefik.http.routers.odoo_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/odoo/addons:/mnt/extra-addons"
       - "/{{ DATACORE }}/odoo/config:/etc/odoo"

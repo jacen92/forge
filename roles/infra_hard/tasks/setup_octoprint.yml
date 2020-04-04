@@ -17,9 +17,9 @@
     ports:
       - "{{ OCTOPRINT_PORT }}:80"
     labels:
-      traefik.port: "80"
       traefik.enable: "{{ OCTOPRINT_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ OCTOPRINT_EXTERNAL_URL }}"
+      traefik.http.services.octoprint.loadbalancer.server.port: "80"
+      traefik.http.routers.octoprint.rule: "Host(`{{ OCTOPRINT_EXTERNAL_URL }}`)"
     volumes:
       - "/{{ DATACORE }}/octoprint:/data"
   when: ansible_architecture in ["armv7l", "aarch64"]
@@ -34,9 +34,13 @@
     ports:
       - "{{ OCTOPRINT_PORT }}:80"
     labels:
-      traefik.port: "80"
       traefik.enable: "{{ OCTOPRINT_EXPOSITION }}"
-      traefik.frontend.rule: "Host:{{ OCTOPRINT_EXTERNAL_URL }}"
+      traefik.http.services.octoprint.loadbalancer.server.port: "80"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.octoprint_http.middlewares: "https_redirect"
+      traefik.http.routers.octoprint_http.rule: "Host(`{{ OCTOPRINT_EXTERNAL_URL }}`)"
+      traefik.http.routers.octoprint_https.rule: "Host(`{{ OCTOPRINT_EXTERNAL_URL }}`)"
+      traefik.http.routers.octoprint_https.tls: "true"
     volumes:
       - "/{{ DATACORE }}/octoprint:/data"
   when: ansible_architecture in ["amd64", "x86_64"]
