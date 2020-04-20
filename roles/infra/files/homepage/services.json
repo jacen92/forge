@@ -64,6 +64,15 @@
         "description": "The leading open source automation server.",
         "dockerhub": "https://hub.docker.com/r/jenkins/jenkins",
         "source": "https://github.com/jenkinsci/docker"
+      },
+      {
+        "name": "Redmine",
+        "port": "{{ REDMINE_FRONT_PORT }}",
+        "version": "{{ REDMINE_VERSION }}",
+        "external": "https://{{ REDMINE_EXTERNAL_URL }}",
+        "description": "A flexible project management web application.",
+        "dockerhub": "https://hub.docker.com/_/redmine",
+        "source": ""
       }
     ],
     "Hardware": [

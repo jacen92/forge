@@ -41,6 +41,7 @@ Continuous integration:
 
 * gogs: github like server, source storage (lighter than gitlab) [https://hub.docker.com/r/gogs/gogs-rpi/].
 * jenkins: The leading open source automation server [https://github.com/jenkinsci/docker].
+* redmine: A flexible project management web application [https://hub.docker.com/_/redmine].
 
 ![Renderer screenshot](/documents/screenshots/development.png)
 

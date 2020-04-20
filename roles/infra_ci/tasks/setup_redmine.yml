@@ -1,0 +1,61 @@
+---
+- name: "Setup redmine database directory"
+  file:
+    path: "/{{ DATACORE }}/redmine_db"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Setup redmine directory"
+  file:
+    path: "/{{ DATACORE }}/redmine"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+
+- name: "Launch redmine database container"
+  docker_container:
+    name: "redmine_postgres"
+    image: "postgres:{{ REDMINE_DB_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    env:
+      POSTGRES_USER: "{{ REDMINE_DB_USER }}"
+      POSTGRES_PASSWORD: "{{ REDMINE_DB_PASS }}"
+      POSTGRES_DB: "{{ REDMINE_DB_NAME }}"
+    volumes:
+      - "/{{ DATACORE }}/redmine_db:/var/lib/postgresql/data"
+    labels:
+      traefik.enable: "false"
+
+- name: "wait"
+  pause:
+    minutes: 3
+
+- name: "Launch redmine container"
+  docker_container:
+    name: "redmine"
+    image: "redmine:{{ REDMINE_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    links:
+      - redmine_postgres:redmine_postgres
+    ports:
+      - "{{ REDMINE_FRONT_PORT }}:3000"
+    env:
+      REDMINE_DB_POSTGRES: redmine_postgres
+      REDMINE_DB_PASSWORD: "{{ REDMINE_DB_PASS }}"
+      REDMINE_DB_USERNAME: "{{ REDMINE_DB_USER }}"
+      REDMINE_DB_DATABASE: "{{ REDMINE_DB_NAME }}"
+    labels:
+      traefik.enable: "{{ REDMINE_EXPOSITION }}"
+      traefik.http.services.redmine.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.redmine_http.middlewares: "https_redirect"
+      traefik.http.routers.redmine_http.rule: "Host(`{{ REDMINE_EXTERNAL_URL }}`)"
+      traefik.http.routers.redmine_https.rule: "Host(`{{ REDMINE_EXTERNAL_URL }}`)"
+      traefik.http.routers.redmine_https.tls: "true"
+    volumes:
+      - "/{{ DATACORE }}/redmine:/usr/src/redmine/files"

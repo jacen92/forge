@@ -7,3 +7,6 @@
 
 - import_tasks: setup_jenkins_plugins.yml
   when: ("jenkins" in FEATURES) and ("vault" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
+
+- import_tasks: setup_redmine.yml
+  when: ("redmine" in FEATURES)
