@@ -21,6 +21,14 @@
   shell: curl -sSL https://get.docker.com | sh
   when: '"docker-ce" not in ansible_facts.packages'
 
+- name: "Ensure aliases are present in users profile"
+  lineinfile:
+    path: '/etc/environment'
+    line: "{{ item }}"
+  loop:
+    - "COMPOSE_HTTP_TIMEOUT=6000"
+    - "DOCKER_CLIENT_TIMEOUT=6000"
+
 - name: "Ensure docker service exec command is correct"
   ini_file:
     path: "/lib/systemd/system/docker.service"
