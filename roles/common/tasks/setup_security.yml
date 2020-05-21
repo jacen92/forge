@@ -25,7 +25,7 @@
     port: "{{ item }}"
     proto: tcp
   with_items:
-    - 22
+    - '22'
 
 # fail2ban configuration
 # https://www.the-lazy-dev.com/en/install-fail2ban-with-docker/
@@ -101,6 +101,6 @@
     port: "{{ item }}"
     proto: tcp
   with_items:
-    - 80
-    - 443
+    - "80"
+    - "443"
     - "{{ GIT_SSH_PORT }}"
