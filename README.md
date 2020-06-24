@@ -3,24 +3,31 @@ Ansible roles to setup infrastructure on the Raspberry Pi, the rock64 or any x86
 Preparation
 ===========
 
-Installation on Raspberry pi
-----------------------------
+Host
+----
 
-Install ansible on the host and engrave the latest https://github.com/jacen92/pi-gen lite image.  
-This image contains my public key for accessing root user directly via ssh.
+Install ansible and edit the hosts file to set the correct IP of your target(s).  
+Edit the setup_forge.yml file to add required features and some information about the new forge like the user, your mail and domain, ...  
+Edit the vault_test.yml file to set your passwords (the default password to edit it is "password", remember to change it)
 
+```
+EDITOR=nano ansible-vault edit vault_test.yml
+```
 
-Installation on Rock64
-----------------------
+Target
+------
 
-Flash Ubuntu 1804 minimal Arm64 bits. And after boot log in with rock64 user.  
-The default image will not authorize access to root from ssh so we need to update the sshd_config.  
-Uncomment the section about authorized_keys and add yours inside /root/.ssh/authorized_keys.
+Flash your image or install an OS on the target.  
+The default image may not authorize access to root from ssh so we need to update the sshd_config.  
+Add your public key inside /root/.ssh/authorized_keys (this playbook is using root access by default).  
+Some roles are not available for ARM 32 bits (see the table below).  
+When your access is set up you just have to do (it will ask for the vault file password):
 
-Installation on x86_64
-----------------------
-
-All roles are also available for x86_64.
+```
+time ansible-playbook -i hosts --ask-vault-pass setup_forge.yml
+# or with a file containing the passwords
+time ansible-playbook -i hosts --vault-password-file ~/.ansible-vault/test setup_forge.yml
+```
 
 
 Services
