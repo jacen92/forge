@@ -20,12 +20,13 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     env:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: "{{ WORDPRESS_DB_PASS }}_root"
       MYSQL_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
+      MYSQL_DATABASE: "wordpress"
+      MYSQL_USER: "wordpress"
     volumes:
       - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql"
 
@@ -40,15 +41,16 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     links:
       - wordpress_db:wordpress_db
     ports:
       - "{{ WORDPRESS_FRONT_PORT }}:80"
     env:
       WORDPRESS_DB_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
-      WORDPRESS_DB_HOST: wordpress_db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_HOST: "wordpress_db:3306"
+      WORDPRESS_DB_USER: "wordpress"
+      WORDPRESS_DB_NAME: "wordpress"
     labels:
       traefik.enable: "{{ WORDPRESS_EXPOSITION }}"
       traefik.http.services.wordpress.loadbalancer.server.port: "80"

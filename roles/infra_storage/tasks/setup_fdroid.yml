@@ -41,6 +41,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ FDROID_PORT }}:80"
       - "{{ FDROID_SSH_PORT }}:22"
@@ -64,6 +65,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ FDROID_PORT }}:80"
       - "{{ FDROID_SSH_PORT }}:22"

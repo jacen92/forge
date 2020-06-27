@@ -24,4 +24,8 @@
 - name: "Ensure aliases are present in users profile"
   lineinfile:
     path: '/home/{{ USER_NAME }}/.profile'
-    line: alias ll='ls -alh'
+    line: "{{ item }}"
+  with_items:
+    - alias ll='ls -alh'
+    - alias dpsa='docker ps -a'
+    - alias dpsf='docker ps -a --format {% raw %} "{{.Names}} ({{.Image}}) {{.Status}} on {{ .Ports}}" {% endraw %}'

@@ -12,6 +12,7 @@
     image: "ngargaud/insolante:arm-{{ INSOLANTE_VERSION }}"
     state: started
     restart_policy: always
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ INSOLANTE_PORT }}:5000"
     env:
@@ -36,6 +37,7 @@
     image: "ngargaud/insolante:{{ INSOLANTE_VERSION }}"
     state: started
     restart_policy: always
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ INSOLANTE_PORT }}:5000"
     env:

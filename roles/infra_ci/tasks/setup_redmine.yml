@@ -20,6 +20,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     env:
       POSTGRES_USER: "{{ REDMINE_DB_USER }}"
       POSTGRES_PASSWORD: "{{ REDMINE_DB_PASS }}"
@@ -40,6 +41,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     links:
       - redmine_postgres:redmine_postgres
     ports:

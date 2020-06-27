@@ -17,6 +17,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     user: "{{ user_id.stdout }}"
     links:
       - mqtt:mqtt

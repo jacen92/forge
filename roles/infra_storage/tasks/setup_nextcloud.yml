@@ -18,6 +18,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ NEXTCLOUD_PORT }}:80"
     env:

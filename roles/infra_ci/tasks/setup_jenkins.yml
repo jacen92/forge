@@ -34,8 +34,6 @@
     force: yes
     recursive: no
     version: "6ff70386bc677a86787717cf636c9e6e927a4f83"
-  become: true
-  become_user: "{{ USER_NAME }}"
 
 - name: "Use the correct base image for ARM arch"
   replace:
@@ -46,15 +44,18 @@
 
 - name: "Build jenkins image and with buildargs"
   docker_image:
-     path: "/tmp/jenkins"
      name: "jenkins"
      tag: "{{ JENKINS_VERSION }}"
-     dockerfile: "Dockerfile"
-     buildargs:
-       JENKINS_VERSION: "{{ JENKINS_VERSION }}"
-       JENKINS_SHA: "{{ JENKINS_SHA_256 }}"
-       uid: "{{ user_id.stdout }}"
-       gid: "{{ user_id.stdout }}"
+     source: "build"
+     build:
+       pull: yes
+       path: "/tmp/jenkins"
+       dockerfile: "Dockerfile"
+       args:
+         JENKINS_VERSION: "{{ JENKINS_VERSION }}"
+         JENKINS_SHA: "{{ JENKINS_SHA_256 }}"
+         uid: "{{ user_id.stdout }}"
+         gid: "{{ user_id.stdout }}"
 
 - name: "Launch jenkins container {{ JENKINS_VERSION }}"
   docker_container:
@@ -63,6 +64,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ JENKINS_PORT }}:8080"
     labels:

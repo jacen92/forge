@@ -24,13 +24,16 @@
 
 - name: "Build nexus image and with buildargs"
   docker_image:
-     path: "/tmp/nexus"
      name: "nexus"
      tag: "{{ NEXUS_VERSION }}"
-     dockerfile: "Dockerfile"
-     buildargs:
-       NEXUS_VERSION: "{{ NEXUS_VERSION }}"
-       NEXUS_DOWNLOAD_SHA256_HASH: "{{ NEXUS_SHA }}"
+     source: "build"
+     build:
+       pull: yes
+       path: "/tmp/nexus"
+       dockerfile: "Dockerfile"
+       args:
+         NEXUS_VERSION: "{{ NEXUS_VERSION }}"
+         NEXUS_DOWNLOAD_SHA256_HASH: "{{ NEXUS_SHA }}"
 
 - name: "Launch nexus container {{ NEXUS_VERSION }}"
   docker_container:
@@ -39,6 +42,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ NEXUS_PORT }}:8081"
       - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"

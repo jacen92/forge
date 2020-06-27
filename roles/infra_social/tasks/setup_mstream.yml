@@ -17,6 +17,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ MSTREAM_PORT }}:3000"
     env:
@@ -24,7 +25,7 @@
       PGID: "{{ user_id.stdout }}"
       USER: "{{ DEFAULT_ADMIN_NAME }}"
       PASSWORD: "{{ MSTREAM_PASS }}"
-      USE_JSON: true
+      USE_JSON: "true"
       TZ: "Europe/Paris"
     labels:
       traefik.enable: "{{ MSTREAM_EXPOSITION }}"
@@ -48,6 +49,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ MSTREAM_PORT }}:3000"
     env:
@@ -55,7 +57,7 @@
       PGID: "{{ user_id.stdout }}"
       USER: "{{ DEFAULT_ADMIN_NAME }}"
       PASSWORD: "{{ MSTREAM_PASS }}"
-      USE_JSON: true
+      USE_JSON: "true"
       TZ: "Europe/Paris"
     labels:
       traefik.enable: "{{ MSTREAM_EXPOSITION }}"

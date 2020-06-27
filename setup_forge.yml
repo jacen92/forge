@@ -1,4 +1,7 @@
 - hosts: test
+  any_errors_fatal: true
+  max_fail_percentage: 0
+  serial: 100%
   vars:
   - FORGE_MODE: "test"
   - DOMAIN_NAME: ""

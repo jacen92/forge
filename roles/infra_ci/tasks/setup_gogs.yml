@@ -6,6 +6,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     log_driver: journald
     log_options:
       tag: gogs
@@ -31,6 +32,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     log_driver: journald
     log_options:
       tag: gogs

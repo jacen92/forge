@@ -131,11 +131,11 @@ Features description
 | ------------- |:---------:| -------------------------------------------------------------------- |
 | vault         |    All    | Unlock user and services passwords                                   |
 | https         |    All    | Add or update traefik instance and configuration (vault must be set) |
+| portainer     |    All    | Add or update portainer docker instance                              |
+| netdata       |    All    | Add or update netdata docker instance                                |
 | domotic       |    All    | Add or update nodered and mosquitto docker instances                 |
 | insolante     |    All    | Add or update insolante docker instance                              |
 | octoprint     |    All    | Add or update octoprint docker instance                              |
-| portainer     |    All    | Add or update portainer docker instance                              |
-| netdata       |    All    | Add or update netdata docker instance                              |
 | wordpress     | Not armv7 | Add or update wordpress and database docker instances                |
 | peertube      | Not armv7 | Add or update Peertube docker instance (fr based on my github fork)  |
 | mstream       |    All    | Add or update mStream docker instance                                |

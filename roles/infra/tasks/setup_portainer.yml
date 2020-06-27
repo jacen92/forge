@@ -13,6 +13,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ PORTAINER_PORT }}:9000"
     volumes:
@@ -35,6 +36,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ PORTAINER_PORT }}:9000"
     volumes:

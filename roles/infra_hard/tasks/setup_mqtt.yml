@@ -29,6 +29,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ MQTT_FRONT_PORT }}:1883"
     labels:

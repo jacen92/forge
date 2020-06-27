@@ -3,13 +3,14 @@
   shell: "grep docker /etc/group | cut -d ':' -f 3"
   register: docker_id
 
-- name: "Launch netdata container for ARM {{ NETDATA_VERSION }}"
+- name: "Create netdata container for ARM {{ NETDATA_VERSION }} (stopped)"
   docker_container:
     name: "netdata"
     image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ NETDATA_PORT }}:19999"
     volumes:
@@ -37,6 +38,7 @@
     state: started
     restart_policy: always
     recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
       - "{{ NETDATA_PORT }}:19999"
     volumes:

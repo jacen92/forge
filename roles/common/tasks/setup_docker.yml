@@ -1,0 +1,37 @@
+---
+- name: "Ensure docker timeouts are long enough (108000 = 30min)"
+  lineinfile:
+    path: '/etc/environment'
+    line: "{{ item }}"
+  loop:
+    - "COMPOSE_HTTP_TIMEOUT={{ DOCKER_TIMEOUT }}"
+    - "DOCKER_CLIENT_TIMEOUT={{ DOCKER_TIMEOUT }}"
+    - "DOCKER_TIMEOUT={{ DOCKER_TIMEOUT }}"
+  register: docker_update
+
+- name: "get location"
+  shell: pip3 show docker-py
+  register: python_location
+
+- name: "set python location"
+  set_fact:
+    python_location: "{{ python_location.stdout | regex_search(regexp,'\\1') | first }}"
+  vars:
+    regexp: 'Location: ([^"]+)'
+
+- set_fact:
+    python_location: "{{ python_location.split()[0] }}"
+
+- name: "Ensure docker.io is installed"
+  apt:
+    pkg: [docker.io]
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: "Reload and restart service docker"
+  service:
+    name: docker
+    state: restarted
+    daemon_reload : yes
+  when: docker_update.changed
