@@ -1,7 +1,7 @@
 ---
 - name: "Install security dependencies"
   apt:
-    pkg: [fail2ban, ufw, iptables, python-systemd, python3-systemd]
+    pkg: [fail2ban, ufw, iptables, python3-systemd]
     state: present
     update_cache: true
     cache_valid_time: 3600
