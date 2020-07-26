@@ -15,7 +15,7 @@ repository.repositoryManager.browse().each { Repository repo ->
 if(installedRepositories.contains('docker-internal') == false)
 {
   repository.createDockerHosted('docker-internal',             // name
-                                parsed_args.docker_push_port,  // httpPort
+                                parsed_args.docker_push_port.toInteger(),  // httpPort
                                 null                           // httpsPort
                                 )
   log.info('Create docker-internal repository')
@@ -43,7 +43,7 @@ if(installedRepositories.contains('docker-all') == false)
 {
   def groupMembers = ['docker-hub', 'docker-internal']
   repository.createDockerGroup('docker-all',                  // name
-                               parsed_args.docker_pull_port,  // httpPort
+                               parsed_args.docker_pull_port.toInteger(),  // httpPort
                                null,                          // httpsPort
                                groupMembers,
                                true                           // v1Enabled
