@@ -33,7 +33,7 @@
     accept_hostkey: yes
     force: yes
     recursive: no
-    version: "6ff70386bc677a86787717cf636c9e6e927a4f83"
+    version: "0d3c2a3a9442fb34e86426ea556ba5cf2a09ff45"
 
 - name: "Use the correct base image for ARM arch"
   replace:
