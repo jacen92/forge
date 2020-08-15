@@ -29,6 +29,9 @@ time ansible-playbook -i hosts --ask-vault-pass setup_forge.yml
 time ansible-playbook -i hosts --vault-password-file ~/.ansible-vault/test setup_forge.yml
 ```
 
+All available services will be installed and configured to be ready to use but, except the infra core (traefik, portainer, ...), all services will be stopped by default and you will need to use portainer to start them.
+This behavior depends on the parameter SERVICE_DEFAULT_STATE for each services in the vars/main.yml files of each roles.
+
 
 Services
 ========
@@ -92,8 +95,8 @@ Port listing (exposed from all docker containers)
 | Nginx             | 8001 |   http   | infra   |        no        |   home.   |
 | Portainer         | 8010 |   http   | infra   |        no        |           |
 | Netdata           | 8011 |   http   | infra   |        no        | monitor.  |
-| Gogs              | 8021 |   http   | CI      |        yes       |   git.    |
-| Gogs              | 8022 |   ssh    | CI      |        yes       |   git.    |
+| Gogs              | 8021 |   http   | CI      |        no        |   git.    |
+| Gogs              | 8022 |   ssh    | CI      |        no        |   git.    |
 | Jenkins           | 8023 |   http   | CI      |        no        |    ci.    |
 | Mqtt              | 8030 |   http   | Hard    |        no        |   mqtt.   |
 | Nodered           | 8031 |   http   | Hard    |        no        |  flows.   |
@@ -118,34 +121,20 @@ Playbooks parameters
 | ------------------- |:-------:|:----------------------:| -------------------------------------------------------------- |
 | FORGE_MODE          |  common |    test or forge       | Installation mode (a file vault_${FORGE_MODE} should exists)   |
 | DATACORE            |  common |      $HOME/data        | Infrastructure data directory, it will be backuped if enabled  |
-| SKIP_SERVICES       |  common |         All            | List of service installation to skip                           |
 | USER_NAME           |  common |          pi            | Default user name (will be created if doesn't exists)          |
 | USER_MAIL           |  infra  |    username@domain     | Default user email (for SSL certificate)                       |
 | DOMAIN_NAME         |  infra  |          ""            | HTTPS and reverse proxy domain name                            |
+| SKIP_SERVICES       |  common |         All            | List of service installation to skip                           |
 
 
-Features description
+Services description
 ====================
 
-Some services are not skipable like https, netdata and portainer.
-
-| Name          |    Arch   | Description                                                          |
-| ------------- |:---------:| -------------------------------------------------------------------- |
-| https         |    All    | Add or update traefik instance and configuration (vault must be set) |
-| portainer     |    All    | Add or update portainer docker instance                              |
-| netdata       |    All    | Add or update netdata docker instance                                |
-| domotic       |    All    | Add or update nodered and mosquitto docker instances                 |
-| insolante     |    All    | Add or update insolante docker instance                              |
-| octoprint     |    All    | Add or update octoprint docker instance                              |
-| wordpress     | Not armv7 | Add or update wordpress and database docker instances                |
-| peertube      | Not armv7 | Add or update Peertube docker instance (fr based on my github fork)  |
-| mstream       |    All    | Add or update mStream docker instance                                |
-| gogs          |    All    | Add or update gogs docker instance                                   |
-| jenkins       | Not armv7 | Add or update jenkins docker instance                                |
-| nexus         | Not armv7 | Add or update jenkins docker instance                                |
-| fdroid        |    All    | Add or update fdroid docker instance                                 |
-| nextcloud     |    All    | Add or update extcloud docker instance                               |
-| erp           | Not armv7 | Add or update Odoo and database docker instance                      |
+Some services are not skipable like https, netdata and portainer.  
+MQTT and nodered services are named can be skipped by adding "domotic" in SKIP_SERVICES.  
+Odoo is known as "erp" in the SKIP_SERVICES list.  
+All others use the main container name (nexus, gogs, jenkins, peertube, wordpress, insolante, ...).  
+Some services like jenkins, nexus, wordpress, peertube and odoo are not available on armv7.
 
 
 Vault file parameters
