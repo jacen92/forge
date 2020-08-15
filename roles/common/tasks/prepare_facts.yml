@@ -10,7 +10,6 @@
 - name: "Import secret variables from vault file ({{ FORGE_MODE }})"
   include_vars: "vault_{{ FORGE_MODE }}.yml"
   no_log: true
-  when: ("vault" in FEATURES)
 
 - name: "Get repository information (url)"
   shell: "git remote get-url origin"
@@ -50,8 +49,8 @@
     - "* FORGE_MODE: {{ FORGE_MODE }}"
     - "* DATACORE: {{ DATACORE }}"
     - "* USER_NAME: {{ USER_NAME }}"
+    - "* USER_MAIL: {{ USER_MAIL }}"
     - "* DOMAIN_NAME: {{ DOMAIN_NAME }}"
-    - "* FEATURES: {{ FEATURES }}"
     - "* DEFAULT_ADMIN_NAME: {{ DEFAULT_ADMIN_NAME }}"
     - "* git url: {{ git_url.stdout }}"
     - "* git branch: {{ git_branch.stdout }}"

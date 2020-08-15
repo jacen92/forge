@@ -4,6 +4,4 @@
 - import_tasks: setup_docker.yml
 - import_tasks: setup_security.yml
 - import_tasks: setup_user.yml
-  when: ("vault" in FEATURES)
 - import_tasks: setup_access.yml
-  when: ("vault" in FEATURES)

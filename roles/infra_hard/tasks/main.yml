@@ -1,12 +1,12 @@
 ---
 - import_tasks: setup_mqtt.yml
-  when: ("domotic" in FEATURES) and ("vault" in FEATURES)
+  when: ("domotic" not in SKIP_SERVICES)
 
 - import_tasks: setup_nodered.yml
-  when: ("domotic" in FEATURES) and ("vault" in FEATURES)
+  when: ("domotic" not in SKIP_SERVICES)
 
 - import_tasks: setup_insolante.yml
-  when: ("insolante" in FEATURES)
+  when: ("insolante" not in SKIP_SERVICES)
 
 - import_tasks: setup_octoprint.yml
-  when: ("octoprint" in FEATURES)
+  when: ("octoprint" not in SKIP_SERVICES)

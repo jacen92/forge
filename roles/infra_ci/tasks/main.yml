@@ -1,12 +1,12 @@
 ---
 - import_tasks: setup_gogs.yml
-  when: ("gogs" in FEATURES)
+  when: ("gogs" not in SKIP_SERVICES)
 
 - import_tasks: setup_jenkins.yml
-  when: ("jenkins" in FEATURES) and ("vault" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
+  when: ("jenkins" not in SKIP_SERVICES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
 
 - import_tasks: setup_jenkins_plugins.yml
-  when: ("jenkins" in FEATURES) and ("vault" in FEATURES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
+  when: ("jenkins" not in SKIP_SERVICES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]
 
 - import_tasks: setup_redmine.yml
-  when: ("redmine" in FEATURES)
+  when: ("redmine" not in SKIP_SERVICES)

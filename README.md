@@ -118,18 +118,19 @@ Playbooks parameters
 | ------------------- |:-------:|:----------------------:| -------------------------------------------------------------- |
 | FORGE_MODE          |  common |    test or forge       | Installation mode (a file vault_${FORGE_MODE} should exists)   |
 | DATACORE            |  common |      $HOME/data        | Infrastructure data directory, it will be backuped if enabled  |
-| FEATURES            |  common |          All           | List of features to use                                        |
+| SKIP_SERVICES       |  common |         All            | List of service installation to skip                           |
 | USER_NAME           |  common |          pi            | Default user name (will be created if doesn't exists)          |
 | USER_MAIL           |  infra  |    username@domain     | Default user email (for SSL certificate)                       |
-| DOMAIN_NAME         |  infra  |         ""             | HTTPS and reverse proxy domain name                            |
+| DOMAIN_NAME         |  infra  |          ""            | HTTPS and reverse proxy domain name                            |
 
 
 Features description
 ====================
 
+Some services are not skipable like https, netdata and portainer.
+
 | Name          |    Arch   | Description                                                          |
 | ------------- |:---------:| -------------------------------------------------------------------- |
-| vault         |    All    | Unlock user and services passwords                                   |
 | https         |    All    | Add or update traefik instance and configuration (vault must be set) |
 | portainer     |    All    | Add or update portainer docker instance                              |
 | netdata       |    All    | Add or update netdata docker instance                                |

@@ -5,7 +5,7 @@
   vars:
   - FORGE_MODE: "test"
   - DOMAIN_NAME: ""
-  - FEATURES: ["vault"]
+  - SKIP_SERVICES: []
   - USER_NAME: "forge"
   - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
   - DATACORE: "home/{{ USER_NAME }}/data"
