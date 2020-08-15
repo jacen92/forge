@@ -34,11 +34,11 @@
   pause:
     minutes: 5
 
-- name: "Launch wordpress container"
+- name: "Create wordpress container"
   docker_container:
     name: "wordpress"
     image: "wordpress:{{ WORDPRESS_VERSION }}"
-    state: started
+    state: "{{ WORDPRESS_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

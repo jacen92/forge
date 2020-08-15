@@ -40,7 +40,7 @@
   docker_container:
     name: "peertube"
     image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}-arm64"
-    state: started
+    state: "{{ PEERTUBE_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
@@ -89,7 +89,7 @@
   docker_container:
     name: "peertube"
     image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}"
-    state: started
+    state: "{{ PEERTUBE_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

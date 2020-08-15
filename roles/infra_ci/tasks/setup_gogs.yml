@@ -3,7 +3,7 @@
   docker_container:
     name: "gogs"
     image: "gogs/gogs-rpi:{{ GOGS_VERSION }}"
-    state: started
+    state: "{{ GOGS_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
@@ -29,7 +29,7 @@
   docker_container:
     name: "gogs"
     image: "gogs/gogs:{{ GOGS_VERSION }}"
-    state: started
+    state: "{{ GOGS_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

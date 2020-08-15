@@ -14,7 +14,7 @@
   docker_container:
     name: "nodered"
     image: "nodered/node-red:{{ NODERED_VERSION }}"
-    state: started
+    state: "{{ NODERED_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

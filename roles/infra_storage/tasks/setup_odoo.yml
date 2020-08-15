@@ -32,7 +32,7 @@
   docker_container:
     name: "odoo"
     image: "odoo:{{ ODOO_VERSION }}"
-    state: started
+    state: "{{ ODOO_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

@@ -15,7 +15,7 @@
   docker_container:
     name: "nextcloud"
     image: "nextcloud:{{ NEXTCLOUD_VERSION }}"
-    state: started
+    state: "{{NEXTCLOUD_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

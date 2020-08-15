@@ -38,7 +38,7 @@
   docker_container:
     name: "fdroid"
     image: "ngargaud/fdroid-server:arm-{{ FDROID_VERSION }}"
-    state: started
+    state: "{{FDROID_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
@@ -62,7 +62,7 @@
   docker_container:
     name: "fdroid"
     image: "ngargaud/fdroid-server:{{ FDROID_VERSION }}"
-    state: started
+    state: "{{FDROID_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

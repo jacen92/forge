@@ -10,7 +10,7 @@
   docker_container:
     name: "octoprint"
     image: "octoprint/octoprint:{{ OCTOPRINT_VERSION }}"
-    state: started
+    state: "{{ OCTOPRINT_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

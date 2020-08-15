@@ -3,6 +3,7 @@ GOGS_FRONT_PORT: "8021"
 GOGS_SSH_PORT: "{{ GIT_SSH_PORT }}"
 GOGS_EXPOSITION: "false"
 GOGS_EXTERNAL_URL: "git.{{ DOMAIN_NAME }}"
+GOGS_DEFAULT_STATE: stopped
 
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
 JENKINS_VERSION: "2.228"
@@ -10,6 +11,7 @@ JENKINS_SHA_256: "1e2114b82b1b76764a1c4c02817b39b0a53a86e798f6071d6a9676944baabc
 JENKINS_PORT: "8023"
 JENKINS_EXPOSITION: "false"
 JENKINS_EXTERNAL_URL: "ci.{{ DOMAIN_NAME }}"
+JENKINS_DEFAULT_STATE: stopped
 JENKINS_VALIDATE_PLUGIN_CERTS: false
 JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
 JENKINS_URL: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ JENKINS_PORT }}"
@@ -24,3 +26,4 @@ REDMINE_DB_NAME: "redmine"
 REDMINE_FRONT_PORT: "8024"
 REDMINE_EXPOSITION: "false"
 REDMINE_EXTERNAL_URL: "redmine.{{ DOMAIN_NAME }}"
+REDMINE_DEFAULT_STATE: stopped

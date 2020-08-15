@@ -6,6 +6,7 @@ NEXUS_DOCKER_PUSH_PORT: "8052"
 NEXUS_EXPOSITION: "false"
 NEXUS_EXTERNAL_URL: "nexus.{{ DOMAIN_NAME }}"
 NEXUS_RESTART_DELAY: 40
+NEXUS_DEFAULT_STATE: stopped
 
 FDROID_VERSION: "0.5"
 FDROID_PORT: "8053"
@@ -13,12 +14,14 @@ FDROID_SSH_PORT: "8054"
 FDROID_EXPOSITION: "false"
 FDROID_EXTERNAL_URL: "fdroid.{{ DOMAIN_NAME }}"
 FDROID_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+FDROID_DEFAULT_STATE: stopped
 
 NEXTCLOUD_VERSION: "19.0.0"
 NEXTCLOUD_PORT: "8055"
 NEXTCLOUD_EXPOSITION: "false"
 NEXTCLOUD_EXTERNAL_URL: "drive.{{ DOMAIN_NAME }}"
 NEXTCLOUD_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+NEXTCLOUD_DEFAULT_STATE: stopped
 
 ODOO_VERSION: "12.0"
 ODOO_PORT: "8056"
@@ -26,3 +29,4 @@ ODOO_EXPOSITION: "false"
 ODOO_EXTERNAL_URL: "erp.{{ DOMAIN_NAME }}"
 ODOO_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 ODOO_DB_USER: "odoo"
+ODOO_DEFAULT_STATE: stopped

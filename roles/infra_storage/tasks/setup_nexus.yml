@@ -145,6 +145,12 @@
     - setup_repositories
     - bypass_wizard
 
+- name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
+  docker_container:
+    name: nexus
+    state: "{{ NEXUS_DEFAULT_STATE }}"
+    restart: yes
+
 # Voir avec:
 # https://blog.mimacom.com/automate-nexus/
 # https://blog.savoirfairelinux.com/en-ca/2017/ansible-nexus-repository-manager/

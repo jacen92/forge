@@ -140,21 +140,8 @@
     group: "{{ user_id.stdout }}"
     recurse: yes
 
-- name: "Restart jenkins container"
+- name: "set jenkins container final state ({{ JENKINS_DEFAULT_STATE }})"
   docker_container:
     name: jenkins
-    state: started
+    state: "{{ JENKINS_DEFAULT_STATE }}"
     restart: yes
-
-- name: "Wait for Jenkins to start up"
-  uri:
-    url: "http://localhost:{{ JENKINS_PORT }}"
-    status_code: "200,403"
-    timeout: 40
-  register: jenkins_service_status
-  # Keep trying for 5 mins in 5 sec intervals
-  retries: "{{ JENKINS_RESTART_DELAY }}"
-  delay: 30
-  until: >
-     'status' in jenkins_service_status and
-     jenkins_service_status['status'] == 200 or jenkins_service_status['status'] == 403

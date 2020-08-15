@@ -38,7 +38,7 @@
   docker_container:
     name: "redmine"
     image: "redmine:{{ REDMINE_VERSION }}"
-    state: started
+    state: "{{ REDMINE_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

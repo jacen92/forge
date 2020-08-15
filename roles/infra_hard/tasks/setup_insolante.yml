@@ -10,7 +10,7 @@
   docker_container:
     name: "insolante"
     image: "ngargaud/insolante:arm-{{ INSOLANTE_VERSION }}"
-    state: started
+    state: "{{ INSOLANTE_DEFAULT_STATE }}"
     restart_policy: always
     timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
@@ -35,7 +35,7 @@
   docker_container:
     name: "insolante"
     image: "ngargaud/insolante:{{ INSOLANTE_VERSION }}"
-    state: started
+    state: "{{ INSOLANTE_DEFAULT_STATE }}"
     restart_policy: always
     timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
