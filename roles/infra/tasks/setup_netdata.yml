@@ -7,7 +7,7 @@
   docker_container:
     name: "netdata"
     image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
-    state: started
+    state: "{{ NETDATA_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
@@ -35,7 +35,7 @@
   docker_container:
     name: "netdata"
     image: "netdata/netdata:{{ NETDATA_VERSION }}"
-    state: started
+    state: "{{ NETDATA_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"

@@ -130,8 +130,8 @@ Playbooks parameters
 Services description
 ====================
 
-Some services are not skipable like https, netdata and portainer.  
-MQTT and nodered services are named can be skipped by adding "domotic" in SKIP_SERVICES.  
+Some services are not skipable like https, homepage and portainer.  
+MQTT and nodered services can be skipped by adding "domotic" in SKIP_SERVICES.  
 Odoo is known as "erp" in the SKIP_SERVICES list.  
 All others use the main container name (nexus, gogs, jenkins, peertube, wordpress, insolante, ...).  
 Some services like jenkins, nexus, wordpress, peertube and odoo are not available on armv7.
