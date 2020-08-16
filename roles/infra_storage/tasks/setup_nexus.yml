@@ -2,8 +2,8 @@
 - name: "Set correct owner of full nexus data directory"
   file:
     path: "/{{DATACORE}}/nexus"
-    owner: 200
-    group: 200
+    owner: "200"
+    group: "200"
     recurse: yes
 
 - name: "Remove previous nexus tmp directory"
