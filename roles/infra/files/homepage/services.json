@@ -11,36 +11,36 @@
     "Infrastructure": [
       {
         "name": "Traefik",
-        "port": "{{ TRAEFIK_FRONT_PORT }}",
-        "version": "{{ TRAEFIK_VERSION }}",
-        "external": "https://{{ TRAEFIK_EXTERNAL_URL }}",
+        "port": "{{ TRAEFIK_FRONT_PORT | default('unknown') }}",
+        "version": "{{ TRAEFIK_VERSION | default('unknown') }}",
+        "external": "https://{{ TRAEFIK_EXTERNAL_URL | default('unknown') }}",
         "description": "HTTPS support and reverse proxy with domain name.",
         "dockerhub": "https://hub.docker.com/r/arm32v6/traefik/",
         "source": ""
       },
       {
         "name": "Homepage",
-        "port": "{{ NGINX_FRONT_PORT }}",
-        "version": "{{ NGINX_VERSION }}",
-        "external": "https://{{ NGINX_EXTERNAL_URL }}",
+        "port": "{{ NGINX_FRONT_PORT | default('unknown') }}",
+        "version": "{{ NGINX_VERSION | default('unknown') }}",
+        "external": "https://{{ NGINX_EXTERNAL_URL | default('unknown') }}",
         "description": "This homepage server based on Nginx and a static page.",
         "dockerhub": "https://hub.docker.com/_/nginx",
         "source": ""
       },
       {
         "name": "Portainer",
-        "port": "{{ PORTAINER_PORT }}",
-        "version": "{{ PORTAINER_VERSION }}",
-        "external": "https://{{ PORTAINER_EXTERNAL_URL }}",
+        "port": "{{ PORTAINER_PORT | default('unknown') }}",
+        "version": "{{ PORTAINER_VERSION | default('unknown') }}",
+        "external": "https://{{ PORTAINER_EXTERNAL_URL | default('unknown') }}",
         "description": "Docker images manager.",
         "dockerhub": "https://hub.docker.com/r/portainer/portainer/",
         "source": "https://github.com/portainer/portainer"
       },
       {
         "name": "Netdata",
-        "port": "{{ NETDATA_PORT }}",
-        "version": "{{ NETDATA_VERSION }}",
-        "external": "https://{{ NETDATA_EXTERNAL_URL }}",
+        "port": "{{ NETDATA_PORT | default('unknown') }}",
+        "version": "{{ NETDATA_VERSION | default('unknown') }}",
+        "external": "https://{{ NETDATA_EXTERNAL_URL | default('unknown') }}",
         "description": "The open-source, real-time, performance and health monitoring.",
         "dockerhub": "https://hub.docker.com/r/netdata/netdata",
         "source": ""
@@ -49,27 +49,27 @@
     "Development": [
       {
         "name": "Gogs",
-        "port": "{{ GOGS_FRONT_PORT }}",
-        "version": "{{ GOGS_VERSION }}",
-        "external": "https://{{ GOGS_EXTERNAL_URL }}",
-        "description": "Github like server, source storage (lighter than gitlab), git port on {{ GOGS_SSH_PORT }}.",
+        "port": "{{ GOGS_FRONT_PORT | default('unknown') }}",
+        "version": "{{ GOGS_VERSION | default('unknown') }}",
+        "external": "https://{{ GOGS_EXTERNAL_URL | default('unknown') }}",
+        "description": "Github like server, source storage (lighter than gitlab), git port on {{ GOGS_SSH_PORT | default('unknown') }}.",
         "dockerhub": "https://hub.docker.com/r/gogs/gogs-rpi/",
         "source": ""
       },
       {
         "name": "Jenkins",
-        "port": "{{ JENKINS_PORT }}",
-        "version": "{{ JENKINS_VERSION }}",
-        "external": "https://{{ JENKINS_EXTERNAL_URL }}",
+        "port": "{{ JENKINS_PORT | default('unknown') }}",
+        "version": "{{ JENKINS_VERSION | default('unknown') }}",
+        "external": "https://{{ JENKINS_EXTERNAL_URL | default('unknown') }}",
         "description": "The leading open source automation server.",
         "dockerhub": "https://hub.docker.com/r/jenkins/jenkins",
         "source": "https://github.com/jenkinsci/docker"
       },
       {
         "name": "Redmine",
-        "port": "{{ REDMINE_FRONT_PORT }}",
-        "version": "{{ REDMINE_VERSION }}",
-        "external": "https://{{ REDMINE_EXTERNAL_URL }}",
+        "port": "{{ REDMINE_FRONT_PORT | default('unknown') }}",
+        "version": "{{ REDMINE_VERSION | default('unknown') }}",
+        "external": "https://{{ REDMINE_EXTERNAL_URL | default('unknown') }}",
         "description": "A flexible project management web application.",
         "dockerhub": "https://hub.docker.com/_/redmine",
         "source": ""
@@ -78,36 +78,36 @@
     "Hardware": [
       {
         "name": "MQTT",
-        "port": "{{ MQTT_FRONT_PORT }}",
-        "version": "{{ MQTT_VERSION }}",
-        "external": "https://{{ MQTT_EXTERNAL_URL }}",
+        "port": "{{ MQTT_FRONT_PORT | default('unknown') }}",
+        "version": "{{ MQTT_VERSION | default('unknown') }}",
+        "external": "https://{{ MQTT_EXTERNAL_URL | default('unknown') }}",
         "description": "Mosquitto broker for the Internet of Things.",
         "dockerhub": "https://hub.docker.com/_/eclipse-mosquitto",
         "source": ""
       },
       {
         "name": "Nodered",
-        "port": "{{ NODERED_FRONT_PORT }}",
-        "version": "{{ NODERED_VERSION }}",
-        "external": "https://{{ NODERED_EXTERNAL_URL }}",
+        "port": "{{ NODERED_FRONT_PORT | default('unknown') }}",
+        "version": "{{ NODERED_VERSION | default('unknown') }}",
+        "external": "https://{{ NODERED_EXTERNAL_URL | default('unknown') }}",
         "description": "Flow-based programming for the Internet of Things.",
         "dockerhub": "https://hub.docker.com/r/nodered/node-red",
         "source": ""
       },
       {
         "name": "Octoprint",
-        "port": "{{ OCTOPRINT_PORT }}",
-        "version": "{{ OCTOPRINT_VERSION }}",
-        "external": "https://{{ OCTOPRINT_EXTERNAL_URL }}",
+        "port": "{{ OCTOPRINT_PORT | default('unknown') }}",
+        "version": "{{ OCTOPRINT_VERSION | default('unknown') }}",
+        "external": "https://{{ OCTOPRINT_EXTERNAL_URL | default('unknown') }}",
         "description": "The snappy web interface for your 3D printer.",
         "dockerhub": "https://hub.docker.com/r/octoprint/octoprint",
         "source": ""
       },
       {
         "name": "Insolante",
-        "port": "{{ INSOLANTE_PORT }}",
-        "version": "{{ INSOLANTE_VERSION }}",
-        "external": "https://{{ INSOLANTE_EXTERNAL_URL }}",
+        "port": "{{ INSOLANTE_PORT | default('unknown') }}",
+        "version": "{{ INSOLANTE_VERSION | default('unknown') }}",
+        "external": "https://{{ INSOLANTE_EXTERNAL_URL | default('unknown') }}",
         "description": "Gerber to gcode converter (wrapper to pcb2gcode).",
         "dockerhub": "https://hub.docker.com/r/ngargaud/insolante",
         "source": ""
@@ -116,27 +116,27 @@
     "Social": [
       {
         "name": "WordPress",
-        "port": "{{ WORDPRESS_FRONT_PORT }}",
-        "version": "{{ WORDPRESS_VERSION }}",
-        "external": "https://{{ WORDPRESS_EXTERNAL_URL }}",
+        "port": "{{ WORDPRESS_FRONT_PORT | default('unknown') }}",
+        "version": "{{ WORDPRESS_VERSION | default('unknown') }}",
+        "external": "https://{{ WORDPRESS_EXTERNAL_URL | default('unknown') }}",
         "description": "The WordPress rich content management system.",
         "dockerhub": "https://hub.docker.com/_/wordpress/",
         "source": ""
       },
       {
         "name": "Peertube",
-        "port": "{{ PEERTUBE_PORT }}",
-        "version": "{{ PEERTUBE_VERSION }}",
-        "external": "https://{{ PEERTUBE_EXTERNAL_URL }}",
+        "port": "{{ PEERTUBE_PORT | default('unknown') }}",
+        "version": "{{ PEERTUBE_VERSION | default('unknown') }}",
+        "external": "https://{{ PEERTUBE_EXTERNAL_URL | default('unknown') }}",
         "description": "Federated video streaming platform.",
         "dockerhub": "https://hub.docker.com/r/ngargaud/peertube",
         "source": ""
       },
       {
         "name": "MStream",
-        "port": "{{ MSTREAM_PORT }}",
-        "version": "{{ MSTREAM_VERSION }}",
-        "external": "https://{{ MSTREAM_EXTERNAL_URL }}",
+        "port": "{{ MSTREAM_PORT | default('unknown') }}",
+        "version": "{{ MSTREAM_VERSION | default('unknown') }}",
+        "external": "https://{{ MSTREAM_EXTERNAL_URL | default('unknown') }}",
         "description": "The easiest music streaming server available.",
         "dockerhub": "https://hub.docker.com/r/linuxserver/mstream",
         "source": ""
@@ -145,36 +145,36 @@
     "Storage": [
       {
         "name": "Nexus",
-        "port": "{{ NEXUS_PORT }}",
-        "version": "{{ NEXUS_VERSION }}",
-        "external": "https://{{ NEXUS_EXTERNAL_URL }}",
-        "description": "Artifact manager and docker registry (push: {{ NEXUS_DOCKER_PUSH_PORT }}, pull: {{ NEXUS_DOCKER_PULL_PORT }}).",
+        "port": "{{ NEXUS_PORT | default('unknown') }}",
+        "version": "{{ NEXUS_VERSION | default('unknown') }}",
+        "external": "https://{{ NEXUS_EXTERNAL_URL | default('unknown') }}",
+        "description": "Artifact manager and docker registry (push: {{ NEXUS_DOCKER_PUSH_PORT | default('unknown') }}, pull: {{ NEXUS_DOCKER_PULL_PORT | default('unknown') }}).",
         "dockerhub": "",
         "source": "https://github.com/sonatype/docker-nexus3"
       },
       {
         "name": "F-Droid",
-        "port": "{{ FDROID_PORT }}",
-        "version": "{{ FDROID_VERSION }}",
-        "external": "https://{{ FDROID_EXTERNAL_URL }}",
-        "description": "Android application server (with scp access through {{ FDROID_SSH_PORT }}).",
+        "port": "{{ FDROID_PORT | default('unknown') }}",
+        "version": "{{ FDROID_VERSION | default('unknown') }}",
+        "external": "https://{{ FDROID_EXTERNAL_URL | default('unknown') }}",
+        "description": "Android application server (with scp access through {{ FDROID_SSH_PORT | default('unknown') }}).",
         "dockerhub": "https://hub.docker.com/r/ngargaud/fdroid-server",
         "source": ""
       },
       {
         "name": "NextCloud",
-        "port": "{{ NEXTCLOUD_PORT }}",
-        "version": "{{ NEXTCLOUD_VERSION }}",
-        "external": "https://{{ NEXTCLOUD_EXTERNAL_URL }}",
+        "port": "{{ NEXTCLOUD_PORT | default('unknown') }}",
+        "version": "{{ NEXTCLOUD_VERSION | default('unknown') }}",
+        "external": "https://{{ NEXTCLOUD_EXTERNAL_URL | default('unknown') }}",
         "description": "Google drive alternative.",
         "dockerhub": "https://hub.docker.com/_/nextcloud/",
         "source": ""
       },
       {
         "name": "Odoo",
-        "port": "{{ ODOO_PORT }}",
-        "version": "{{ ODOO_VERSION }}",
-        "external": "https://{{ ODOO_EXTERNAL_URL }}",
+        "port": "{{ ODOO_PORT | default('unknown') }}",
+        "version": "{{ ODOO_VERSION | default('unknown') }}",
+        "external": "https://{{ ODOO_EXTERNAL_URL | default('unknown') }}",
         "description": "(formerly known as OpenERP) is a suite of open-source business apps.",
         "dockerhub": "https://hub.docker.com/_/odoo",
         "source": ""
