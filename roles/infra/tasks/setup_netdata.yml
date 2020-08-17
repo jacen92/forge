@@ -47,6 +47,8 @@
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     capabilities:
       - SYS_PTRACE
+    env:
+      PGID: "{{ docker_id.stdout }}"
     labels:
       traefik.enable: "{{ NETDATA_EXPOSITION }}"
       traefik.http.services.netdata.loadbalancer.server.port: "19999"
