@@ -1,76 +1,57 @@
 ---
 - name: "Setup traefik directory"
   file:
-    path: "/{{ DATACORE }}/traefik"
+    path: "/{{ DATACORE }}/{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
+  with_items:
+    - traefik
+    - traefik/certs
 
-- name: "Copy traefik configuration in traefik directory"
+- name: "Copy traefik configurations in traefik directory"
   template:
-    src: files/traefik/traefik.tml
-    dest: "/{{ DATACORE }}/traefik/traefik.toml"
+    src: "files/traefik/{{ item }}"
+    dest: "/{{ DATACORE }}/traefik/{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     mode: 0644
+  with_items:
+    - traefik.toml
+    - tls-certs.toml
 
-# from: https://www.sheevaboite.fr/articles/traefik-reverse-proxy-https-containers-docker
-- name: "Launch traefik container for ARM {{ TRAEFIK_VERSION }}"
-  docker_container:
-    name: "traefik"
-    image: "arm32v6/traefik:{{ TRAEFIK_VERSION }}"
-    state: started
-    restart_policy: always
-    recreate: yes
-    timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "{{ TRAEFIK_FRONT_PORT }}:8080"
-    labels:
-      traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
-      traefik.http.routers.traefik.loadbalancer.server.port: "8080"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.traefik_http.middlewares: "https_redirect"
-      traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
-      traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
-      traefik.http.routers.traefik_https.tls: "true"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/{{ DATACORE }}/traefik/certs/:/certs/"
-      - "/{{ DATACORE }}/traefik:/etc/traefik"
+- name: "Copy traefik certificates in traefik directory"
+  copy:
+    src: "files/traefik/ssl/{{ item.file }}"
+    dest: "/{{ DATACORE }}/traefik/certs/{{ item.file }}"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - {file: "{{ TRAEFIK_CERT_NAME }}-key.pem", mode: 600}
+    - {file: "{{ TRAEFIK_CERT_NAME }}.pem", mode: 644}
+  when: "TRAEFIK_CERT_NAME | length > 0"
+
+- name: "Define traefik_image armv7l?"
+  set_fact:
+     traefik_image: "arm32v6/traefik:{{ TRAEFIK_VERSION }}"
   when: ansible_architecture in ["armv7l"]
 
-- name: "Launch traefik container for ARM64 {{ TRAEFIK_VERSION }}"
-  docker_container:
-    name: "traefik"
-    image: "arm64v8/traefik:{{ TRAEFIK_VERSION }}"
-    state: started
-    restart_policy: always
-    recreate: yes
-    timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "{{ TRAEFIK_FRONT_PORT }}:8080"
-    labels:
-      traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
-      traefik.http.services.traefik.loadbalancer.server.port: "8080"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.traefik_http.middlewares: "https_redirect"
-      traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
-      traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
-      traefik.http.routers.traefik_https.tls: "true"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/{{ DATACORE }}/traefik/certs/:/certs/"
-      - "/{{ DATACORE }}/traefik:/etc/traefik"
+- name: "Define traefik_image aarch64?"
+  set_fact:
+     traefik_image: "arm64v8/traefik:{{ TRAEFIK_VERSION }}"
   when: ansible_architecture in ["aarch64"]
 
-- name: "Launch traefik container for x64 {{ TRAEFIK_VERSION }}"
+- name: "Define traefik_image amd64?"
+  set_fact:
+     traefik_image: "traefik:{{ TRAEFIK_VERSION }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
+
+# from: https://www.sheevaboite.fr/articles/traefik-reverse-proxy-https-containers-docker
+- name: "Launch traefik container version {{ TRAEFIK_VERSION }}"
   docker_container:
     name: "traefik"
-    image: "traefik:{{ TRAEFIK_VERSION }}"
+    image: "{{ traefik_image }}"
     state: started
     restart_policy: always
     recreate: yes
@@ -79,19 +60,22 @@
       - "80:80"
       - "443:443"
       - "{{ TRAEFIK_FRONT_PORT }}:8080"
+      - "{{ NGINX_FRONT_PORT }}:{{ NGINX_FRONT_PORT }}"
+      - "{{ PORTAINER_PORT }}:{{ PORTAINER_PORT }}"
+      - "{{ NETDATA_PORT }}:{{ NETDATA_PORT }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/{{ DATACORE }}/traefik/certs/:/certs/"
+      - "/{{ DATACORE }}/traefik:/etc/traefik"
     labels:
-      traefik.enable: "{{ TRAEFIK_EXPOSITION }}"
+      traefik.enable: "false"
       traefik.http.services.traefik.loadbalancer.server.port: "8080"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.traefik_http.middlewares: "https_redirect"
       traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
       traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
       traefik.http.routers.traefik_https.tls: "true"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/{{ DATACORE }}/traefik/certs/:/certs/"
-      - "/{{ DATACORE }}/traefik:/etc/traefik"
-  when: ansible_architecture in ["amd64", "x86_64"]
+  when: traefik_image is defined
 
 - name: "Sleep for 30 seconds to let traefik starts"
   wait_for: timeout=30
@@ -105,3 +89,4 @@
     owner: "root"
     group: "root"
     mode: 0600
+  when: TRAEFIK_USE_LETSENCRYPT|bool

@@ -1,7 +1,18 @@
 Ansible roles to setup infrastructure on the Raspberry Pi, the rock64 or any x86_64 computer running Debian or Ubuntu.
 
+This projects aims to create a full software forge with all required services for development, home automation, storage, etc.
+All services are available throught traefik which act as a TLS proxy. If no certificate is provided for the local network then traefik
+will create it's own certificates for all services (you will need to accept each of them on your browser).
+Only traefik is not exposed with TLS and will be acccessible with HTTP.
+You can provide a custom CA for your local network and prevent traefik to create a lot of untrusted certificates by following [this](/roles/infra/files/traefik/ssl/NOTES.md).
+
 Preparation
 ===========
+
+Two type of certificates are used by the forge:
+
+* Let's encrypt: When you server is exposed to the internet a let's encrypt certificate can be generated for all exposed routes.
+* Local CA: On your local network you should make a certificate authority for the forge target. For testing purpose you can use mkcert tool.
 
 Host
 ----

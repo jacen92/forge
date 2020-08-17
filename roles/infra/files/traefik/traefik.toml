@@ -17,22 +17,36 @@
 # Entry-points configuration
 ################################################################
 [entryPoints]
-  [entryPoints.http]
-    address = ":80"
-
   [entryPoints.https]
     address = ":443"
     [entryPoints.https.http.tls]
+    {% if TRAEFIK_USE_LETSENCRYPT == true %}
       certResolver = "letsencrypt"
+    {% endif %}
 
-################################################################
-# Docker configuration backend
-################################################################
-[providers.docker]
-  endpoint = "unix:///var/run/docker.sock"
-  exposedbydefault = false
-  watch = true
+  [entryPoints.http]
+    address = ":80"
 
+{% for ep in TRAEFIK_ENTRYPOINT_MAP %}
+  [entryPoints.{{ ep.name }}]
+    address = ":{{ ep.port }}"
+{% endfor %}
+################################################################
+# Docker and ssl providers
+################################################################
+[providers]
+  [providers.docker]
+    endpoint = "unix:///var/run/docker.sock"
+    exposedbydefault = false
+    watch = true
+
+{% if TRAEFIK_CERT_NAME|length > 0 %}
+  [providers.file]
+    filename = "/etc/traefik/tls-certs.toml"
+    watch = true
+{% endif %}
+
+{% if TRAEFIK_USE_LETSENCRYPT == true %}
 ################################################################
 # Let's encrypt
 ################################################################
@@ -41,3 +55,4 @@
   storage = "/etc/traefik/certs/acme.json"
   [certificatesResolvers.letsencrypt.acme.httpChallenge]
     entrypoint = "http"
+{% endif %}

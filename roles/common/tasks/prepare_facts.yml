@@ -32,7 +32,7 @@
   vars:
     ansible_python_interpreter: python
 
-- name: "get the apt package facts"
+- name: "Get the apt package facts"
   package_facts:
     manager: "auto"
 
@@ -55,3 +55,7 @@
     - "* git url: {{ git_url.stdout }}"
     - "* git branch: {{ git_branch.stdout }}"
     - "* git commit: {{ git_commit.stdout }}"
+
+- name: "Define global_proxy_rule"
+  set_fact:
+     global_proxy_rule: "Host(`{{ inventory_hostname }}`) || Host(`{{ DOMAIN_NAME }}`) || Host(`{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}`)"

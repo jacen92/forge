@@ -67,7 +67,11 @@
 
   var addCard = function(row_id, forge, service) {
     var name = service.name + " (version: " + service.version + ")";
-    var local = 'http://' + forge.address + ':' + service.port;
+    var protocol = "https";
+    if(['Traefik'].indexOf(service.name) !== -1) {
+      protocol = "http";
+    }
+    var local = protocol + '://' + forge.address + ':' + service.port;
     var local_id = "service_local_" + service.name;
     var external_id = "service_external_" + service.name;
     var external = 'Unknown';

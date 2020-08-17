@@ -25,15 +25,23 @@
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ NGINX_FRONT_PORT }}:80"
-    labels:
-      traefik.enable: "{{ NGINX_EXPOSITION }}"
-      traefik.http.services.nginx.loadbalancer.server.port: "80"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.nginx_http.middlewares: "https_redirect"
-      traefik.http.routers.nginx_http.rule: "Host(`{{ NGINX_EXTERNAL_URL }}`)"
-      traefik.http.routers.nginx_https.rule: "Host(`{{ NGINX_EXTERNAL_URL }}`)"
-      traefik.http.routers.nginx_https.tls: "true"
+#    ports:
+#      - "{{ NGINX_FRONT_PORT }}:80"
     volumes:
       - "/{{ DATACORE }}/homepage:/usr/share/nginx/html:ro"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.homepage.loadbalancer.server.port: "80"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.homepage_http.middlewares: "https_redirect"
+      traefik.http.routers.homepage_http.rule: "Host(`{{ NGINX_EXTERNAL_URL }}`)"
+      traefik.http.routers.homepage_http.service: homepage
+      traefik.http.routers.homepage_https.rule: "Host(`{{ NGINX_EXTERNAL_URL }}`)"
+      traefik.http.routers.homepage_https.service: homepage
+      traefik.http.routers.homepage_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.homepage_proxy.loadbalancer.server.port: "80"
+      traefik.http.routers.homepage_proxy.service: homepage_proxy
+      traefik.http.routers.homepage_proxy.entrypoints: homepage
+      traefik.http.routers.homepage_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.homepage_proxy.tls: "true"

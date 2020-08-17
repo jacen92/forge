@@ -1,19 +1,20 @@
 - hosts: test
+  gather_facts: yes
   any_errors_fatal: true
   max_fail_percentage: 0
   serial: 100%
   vars:
   - FORGE_MODE: "test"
-  - DOMAIN_NAME: ""
+  - DOMAIN_NAME: "maison-gargaud.info"
   - SKIP_SERVICES: []
   - USER_NAME: "forge"
-  - USER_MAIL: "{{ USER_NAME}}@{{ DOMAIN_NAME }}"
+  - USER_MAIL: "jacen92@gmail.com"
   - DATACORE: "home/{{ USER_NAME }}/data"
   - DEFAULT_ADMIN_NAME: "admin"
   roles:
     - common
     - infra
-    - infra_ci
-    - infra_hard
-    - infra_social
-    - infra_storage
+#    - infra_ci
+#    - infra_hard
+#    - infra_social
+#    - infra_storage

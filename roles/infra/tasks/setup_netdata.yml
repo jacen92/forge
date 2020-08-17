@@ -3,44 +3,26 @@
   shell: "grep docker /etc/group | cut -d ':' -f 3"
   register: docker_id
 
-- name: "Create netdata container for ARM {{ NETDATA_VERSION }} (stopped)"
-  docker_container:
-    name: "netdata"
-    image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
-    state: "{{ NETDATA_DEFAULT_STATE }}"
-    restart_policy: always
-    recreate: yes
-    timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ NETDATA_PORT }}:19999"
-    volumes:
-      - "/proc:/host/proc:ro"
-      - "/sys:/host/sys:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    capabilities:
-      - SYS_PTRACE
-    env:
-      PGID: "{{ docker_id.stdout }}"
-    labels:
-      traefik.enable: "{{ NETDATA_EXPOSITION }}"
-      traefik.http.services.netdata.loadbalancer.server.port: "19999"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.netdata_http.middlewares: "https_redirect"
-      traefik.http.routers.netdata_http.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
-      traefik.http.routers.netdata_https.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
-      traefik.http.routers.netdata_https.tls: "true"
+- name: "Define netdata_image Arm?"
+  set_fact:
+     netdata_image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
   when: ansible_architecture in ["armv7l", "aarch64"]
+
+- name: "Define netdata_image amd64?"
+  set_fact:
+     netdata_image: "netdata/netdata:{{ NETDATA_VERSION }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch netdata container {{ NETDATA_VERSION }}"
   docker_container:
     name: "netdata"
-    image: "netdata/netdata:{{ NETDATA_VERSION }}"
+    image: "{{ netdata_image }}"
     state: "{{ NETDATA_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ NETDATA_PORT }}:19999"
+#    ports:
+#      - "{{ NETDATA_PORT }}:19999"
     volumes:
       - "/proc:/host/proc:ro"
       - "/sys:/host/sys:ro"
@@ -50,11 +32,20 @@
     env:
       PGID: "{{ docker_id.stdout }}"
     labels:
-      traefik.enable: "{{ NETDATA_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.netdata.loadbalancer.server.port: "19999"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.netdata_http.middlewares: "https_redirect"
       traefik.http.routers.netdata_http.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
+      traefik.http.routers.netdata_http.service: netdata
       traefik.http.routers.netdata_https.rule: "Host(`{{ NETDATA_EXTERNAL_URL }}`)"
+      traefik.http.routers.netdata_https.service: netdata
       traefik.http.routers.netdata_https.tls: "true"
-  when: ansible_architecture in ["amd64", "x86_64"]
+
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.netdata_proxy.loadbalancer.server.port: "19999"
+      traefik.http.routers.netdata_proxy.service: netdata_proxy
+      traefik.http.routers.netdata_proxy.entrypoints: netdata
+      traefik.http.routers.netdata_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.netdata_proxy.tls: "true"
+  when: netdata_image is defined

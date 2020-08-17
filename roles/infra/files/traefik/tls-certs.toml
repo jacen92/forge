@@ -1,0 +1,6 @@
+
+[tls.stores]
+  [tls.stores.default]
+    [tls.stores.default.defaultCertificate]
+      keyFile = "/certs/{{ TRAEFIK_CERT_NAME }}-key.pem"
+      certFile = "/certs/{{ TRAEFIK_CERT_NAME }}.pem"

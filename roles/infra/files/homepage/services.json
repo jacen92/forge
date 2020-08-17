@@ -1,7 +1,7 @@
 {
   "forge": {
     "mode": "{{FORGE_MODE}}",
-    "address": "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}",
+    "address": "{{ inventory_hostname }}",
     "domain": "{{ DOMAIN_NAME }}",
     "backup": {
       "url": "{{ BACKUP_REMOTE_URL }}"
