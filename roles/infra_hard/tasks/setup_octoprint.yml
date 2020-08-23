@@ -14,19 +14,26 @@
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ OCTOPRINT_PORT }}:5000"
+#    ports:
+#      - "{{ OCTOPRINT_PORT }}:5000"
     devices:
       - "{{ OCTOPRINT_DEVICE_0 }}:/dev/ttyACM0"
       - "{{ OCTOPRINT_DEVICE_1 }}:/dev/ttyACM1"
+    volumes:
+      - "/{{ DATACORE }}/octoprint:/home/octoprint/.octoprint"
     labels:
-      traefik.enable: "{{ OCTOPRINT_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.octoprint.loadbalancer.server.port: "5000"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.octoprint_http.middlewares: "https_redirect"
       traefik.http.routers.octoprint_http.rule: "Host(`{{ OCTOPRINT_EXTERNAL_URL }}`)"
+      traefik.http.routers.octoprint_http.service: octoprint
       traefik.http.routers.octoprint_https.rule: "Host(`{{ OCTOPRINT_EXTERNAL_URL }}`)"
+      traefik.http.routers.octoprint_https.service: octoprint
       traefik.http.routers.octoprint_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/octoprint:/home/octoprint/.octoprint"
-  when: ansible_architecture in ["amd64", "x86_64", "armv7l", "aarch64"]
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.octoprint_proxy.loadbalancer.server.port: "5000"
+      traefik.http.routers.octoprint_proxy.service: octoprint_proxy
+      traefik.http.routers.octoprint_proxy.entrypoints: octoprint
+      traefik.http.routers.octoprint_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.octoprint_proxy.tls: "true"

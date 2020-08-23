@@ -6,52 +6,45 @@
     group: "{{ USER_NAME }}"
     state: directory
 
-- name: "Launch insolante container for ARM {{ INSOLANTE_VERSION }}"
-  docker_container:
-    name: "insolante"
-    image: "ngargaud/insolante:arm-{{ INSOLANTE_VERSION }}"
-    state: "{{ INSOLANTE_DEFAULT_STATE }}"
-    restart_policy: always
-    timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ INSOLANTE_PORT }}:5000"
-    env:
-      URL: "{{ INSOLANTE_URL }}"
-      RPORT: "{{ INSOLANTE_PORT }}"
-      DEBUG: "false"
-    labels:
-      traefik.enable: "{{ INSOLANTE_EXPOSITION }}"
-      traefik.http.services.insolante.loadbalancer.server.port: "5000"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.insolante_http.middlewares: "https_redirect"
-      traefik.http.routers.insolante_http.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
-      traefik.http.routers.insolante_https.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
-      traefik.http.routers.insolante_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/insolante:/opt/core/data"
+- name: "Define insolante_image Arm?"
+  set_fact:
+     insolante_image: "ngargaud/insolante:arm-{{ INSOLANTE_VERSION }}"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
-- name: "Launch insolante container for x86_64 {{ INSOLANTE_VERSION }}"
+- name: "Define insolante_image amd64?"
+  set_fact:
+     insolante_image: "ngargaud/insolante:{{ INSOLANTE_VERSION }}"
+  when: ansible_architecture in ["amd64", "x86_64"]
+
+- name: "Launch insolante container {{ INSOLANTE_VERSION }}"
   docker_container:
     name: "insolante"
-    image: "ngargaud/insolante:{{ INSOLANTE_VERSION }}"
+    image: "{{ insolante_image }}"
     state: "{{ INSOLANTE_DEFAULT_STATE }}"
     restart_policy: always
     timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ INSOLANTE_PORT }}:5000"
+#    ports:
+#      - "{{ INSOLANTE_PORT }}:5000"
     env:
       URL: "{{ INSOLANTE_URL }}"
       RPORT: "{{ INSOLANTE_PORT }}"
       DEBUG: "false"
+    volumes:
+      - "/{{ DATACORE }}/insolante:/opt/core/data"
     labels:
-      traefik.enable: "{{ INSOLANTE_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.insolante.loadbalancer.server.port: "5000"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.insolante_http.middlewares: "https_redirect"
       traefik.http.routers.insolante_http.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
+      traefik.http.routers.insolante_http.service: insolante
       traefik.http.routers.insolante_https.rule: "Host(`{{ INSOLANTE_EXTERNAL_URL }}`)"
+      traefik.http.routers.insolante_https.service: insolante
       traefik.http.routers.insolante_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/insolante:/opt/core/data"
-  when: ansible_architecture in ["amd64", "x86_64"]
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.insolante_proxy.loadbalancer.server.port: "5000"
+      traefik.http.routers.insolante_proxy.service: insolante_proxy
+      traefik.http.routers.insolante_proxy.entrypoints: insolante
+      traefik.http.routers.insolante_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.insolante_proxy.tls: "true"
+  when: insolante_image is defined

@@ -15,6 +15,10 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ GOGS_FRONT_PORT }}", name: "gogs" }
   - { port: "{{ JENKINS_PORT }}", name: "jenkins" }
   - { port: "{{ REDMINE_FRONT_PORT }}", name: "redmine" }
+  - { port: "{{ MQTT_FRONT_PORT }}", name: "mqtt" }
+  - { port: "{{ NODERED_FRONT_PORT }}", name: "nodered" }
+  - { port: "{{ OCTOPRINT_PORT }}", name: "octoprint" }
+  - { port: "{{ INSOLANTE_PORT }}", name: "insolante" }
 
 NGINX_VERSION: "1.19.0"
 NGINX_FRONT_PORT: "8001"

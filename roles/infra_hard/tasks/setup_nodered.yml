@@ -21,17 +21,25 @@
     user: "{{ user_id.stdout }}"
     links:
       - mqtt:mqtt
-    ports:
-      - "{{ NODERED_FRONT_PORT }}:1880"
+#    ports:
+#      - "{{ NODERED_FRONT_PORT }}:1880"
+    volumes:
+      - "/{{ DATACORE }}/nodered:/data"
     labels:
-      traefik.enable: "{{ NODERED_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.nodered.loadbalancer.server.port: "1880"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.nodered_http.middlewares: "https_redirect"
       traefik.http.routers.nodered_http.rule: "Host(`{{ NODERED_EXTERNAL_URL }}`)"
+      traefik.http.routers.nodered_http.service: nodered
       traefik.http.routers.nodered_https.rule: "Host(`{{ NODERED_EXTERNAL_URL }}`)"
+      traefik.http.routers.nodered_https.service: nodered
       traefik.http.routers.nodered_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/nodered:/data"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.nodered_proxy.loadbalancer.server.port: "1880"
+      traefik.http.routers.nodered_proxy.service: nodered_proxy
+      traefik.http.routers.nodered_proxy.entrypoints: nodered
+      traefik.http.routers.nodered_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.nodered_proxy.tls: "true"
   become: true
   become_user: "{{ USER_NAME }}"

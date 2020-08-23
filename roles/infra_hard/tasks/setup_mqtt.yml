@@ -30,16 +30,24 @@
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ MQTT_FRONT_PORT }}:1883"
+#    ports:
+#      - "{{ MQTT_FRONT_PORT }}:1883"
     labels:
-      traefik.enable: "{{ MQTT_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.mqtt.loadbalancer.server.port: "1883"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.mqtt_http.middlewares: "https_redirect"
       traefik.http.routers.mqtt_http.rule: "Host(`{{ MQTT_EXTERNAL_URL }}`)"
+      traefik.http.routers.mqtt_http.service: mqtt
       traefik.http.routers.mqtt_https.rule: "Host(`{{ MQTT_EXTERNAL_URL }}`)"
+      traefik.http.routers.mqtt_https.service: mqtt
       traefik.http.routers.mqtt_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.mqtt_proxy.loadbalancer.server.port: "1883"
+      traefik.http.routers.mqtt_proxy.service: mqtt_proxy
+      traefik.http.routers.mqtt_proxy.entrypoints: mqtt
+      traefik.http.routers.mqtt_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.mqtt_proxy.tls: "true"
     volumes:
       - "/{{ DATACORE }}/mqtt:/mosquitto"
   become: true

@@ -66,6 +66,10 @@
       - "{{ GOGS_FRONT_PORT }}:{{ GOGS_FRONT_PORT }}"
       - "{{ JENKINS_PORT }}:{{ JENKINS_PORT }}"
       - "{{ REDMINE_FRONT_PORT }}:{{ REDMINE_FRONT_PORT }}"
+      - "{{ MQTT_FRONT_PORT }}:{{ MQTT_FRONT_PORT }}"
+      - "{{ NODERED_FRONT_PORT }}:{{ NODERED_FRONT_PORT }}"
+      - "{{ OCTOPRINT_PORT }}:{{ OCTOPRINT_PORT }}"
+      - "{{ INSOLANTE_PORT }}:{{ INSOLANTE_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
