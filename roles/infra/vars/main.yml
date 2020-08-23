@@ -12,7 +12,9 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ NGINX_FRONT_PORT }}", name: "homepage" }
   - { port: "{{ PORTAINER_PORT }}", name: "portainer" }
   - { port: "{{ NETDATA_PORT }}", name: "netdata" }
-
+  - { port: "{{ GOGS_FRONT_PORT }}", name: "gogs" }
+  - { port: "{{ JENKINS_PORT }}", name: "jenkins" }
+  - { port: "{{ REDMINE_FRONT_PORT }}", name: "redmine" }
 
 NGINX_VERSION: "1.19.0"
 NGINX_FRONT_PORT: "8001"

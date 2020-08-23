@@ -56,6 +56,8 @@
          JENKINS_SHA: "{{ JENKINS_SHA_256 }}"
          uid: "{{ user_id.stdout }}"
          gid: "{{ user_id.stdout }}"
+  become: true
+  become_user: "{{ USER_NAME }}"
 
 - name: "Launch jenkins container {{ JENKINS_VERSION }}"
   docker_container:
@@ -63,24 +65,18 @@
     image: "jenkins:{{ JENKINS_VERSION }}"
     state: started
     restart_policy: always
-    recreate: yes
+    recreate: no
     timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
-      - "{{ JENKINS_PORT }}:8080"
-    labels:
-      traefik.enable: "{{ JENKINS_EXPOSITION }}"
-      traefik.http.services.jenkins.loadbalancer.server.port: "8080"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.jenkins_http.middlewares: "https_redirect"
-      traefik.http.routers.jenkins_http.rule: "Host(`{{ JENKINS_EXTERNAL_URL }}`)"
-      traefik.http.routers.jenkins_https.rule: "Host(`{{ JENKINS_EXTERNAL_URL }}`)"
-      traefik.http.routers.jenkins_https.tls: "true"
+      - "{{ JENKINS_PORT_CONFIG }}:8080"
     volumes:
       - "/{{ DATACORE }}/jenkins:/var/jenkins_home"
+  become: true
+  become_user: "{{ USER_NAME }}"
 
 - name: "Wait for Jenkins to start up"
   uri:
-    url: "http://localhost:{{ JENKINS_PORT }}"
+    url: "http://localhost:{{ JENKINS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
   register: jenkins_service_status
@@ -160,10 +156,12 @@
     name: jenkins
     state: started
     restart: yes
+  become: true
+  become_user: "{{ USER_NAME }}"
 
 - name: "Wait for Jenkins to start up"
   uri:
-    url: "http://localhost:{{ JENKINS_PORT }}"
+    url: "http://localhost:{{ JENKINS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
   register: jenkins_service_status

@@ -63,6 +63,9 @@
       - "{{ NGINX_FRONT_PORT }}:{{ NGINX_FRONT_PORT }}"
       - "{{ PORTAINER_PORT }}:{{ PORTAINER_PORT }}"
       - "{{ NETDATA_PORT }}:{{ NETDATA_PORT }}"
+      - "{{ GOGS_FRONT_PORT }}:{{ GOGS_FRONT_PORT }}"
+      - "{{ JENKINS_PORT }}:{{ JENKINS_PORT }}"
+      - "{{ REDMINE_FRONT_PORT }}:{{ REDMINE_FRONT_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"

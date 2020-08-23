@@ -29,6 +29,8 @@
       - "/{{ DATACORE }}/redmine_db:/var/lib/postgresql/data"
     labels:
       traefik.enable: "false"
+  become: true
+  become_user: "{{ USER_NAME }}"
 
 - name: "wait"
   pause:
@@ -44,20 +46,31 @@
     timeout: "{{ DOCKER_TIMEOUT }}"
     links:
       - redmine_postgres:redmine_postgres
-    ports:
-      - "{{ REDMINE_FRONT_PORT }}:3000"
+#    ports:
+#      - "{{ REDMINE_FRONT_PORT }}:3000"
     env:
       REDMINE_DB_POSTGRES: redmine_postgres
       REDMINE_DB_PASSWORD: "{{ REDMINE_DB_PASS }}"
       REDMINE_DB_USERNAME: "{{ REDMINE_DB_USER }}"
       REDMINE_DB_DATABASE: "{{ REDMINE_DB_NAME }}"
+    volumes:
+      - "/{{ DATACORE }}/redmine:/usr/src/redmine/files"
     labels:
-      traefik.enable: "{{ REDMINE_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.redmine.loadbalancer.server.port: "3000"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.redmine_http.middlewares: "https_redirect"
       traefik.http.routers.redmine_http.rule: "Host(`{{ REDMINE_EXTERNAL_URL }}`)"
+      traefik.http.routers.redmine_http.service: redmine
       traefik.http.routers.redmine_https.rule: "Host(`{{ REDMINE_EXTERNAL_URL }}`)"
+      traefik.http.routers.redmine_https.service: redmine
       traefik.http.routers.redmine_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/redmine:/usr/src/redmine/files"
+
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.redmine_proxy.loadbalancer.server.port: "3000"
+      traefik.http.routers.redmine_proxy.service: redmine_proxy
+      traefik.http.routers.redmine_proxy.entrypoints: redmine
+      traefik.http.routers.redmine_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.redmine_proxy.tls: "true"
+  become: true
+  become_user: "{{ USER_NAME }}"
