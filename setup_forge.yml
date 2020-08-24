@@ -14,7 +14,7 @@
   roles:
     - common
     - infra
-#    - infra_ci
-#    - infra_hard
-#    - infra_social
-#    - infra_storage
+    - infra_ci
+    - infra_hard
+    - infra_social
+    - infra_storage

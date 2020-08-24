@@ -44,23 +44,13 @@
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
     ports:
-      - "{{ NEXUS_PORT }}:8081"
-      - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
-      - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
-    labels:
-      traefik.enable: "{{ NEXUS_EXPOSITION }}"
-      traefik.http.services.nexus.loadbalancer.server.port: "8081"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.nexus_http.middlewares: "https_redirect"
-      traefik.http.routers.nexus_http.rule: "Host(`{{ NEXUS_EXTERNAL_URL }}`)"
-      traefik.http.routers.nexus_https.rule: "Host(`{{ NEXUS_EXTERNAL_URL }}`)"
-      traefik.http.routers.nexus_https.tls: "true"
+      - "{{ NEXUS_PORT_CONFIG }}:8081"
     volumes:
       - "/{{ DATACORE }}/nexus:/nexus-data"
 
 - name: "Wait for Nexus to start up"
   uri:
-    url: "http://localhost:{{ NEXUS_PORT }}"
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
   register: nexus_service_status
@@ -83,7 +73,7 @@
 
 - name: "Check nexus connection with status API and defaut password"
   uri:
-    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/status"
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/status"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
     method: GET
@@ -100,7 +90,7 @@
 
 - name: "Removing (potential) previously declared Groovy scripts"
   uri:
-    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/script/{{ item }}"
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/{{ item }}"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
     method: DELETE
@@ -112,7 +102,7 @@
 
 - name: "Declaring up-to-date Groovy scripts"
   uri:
-    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/script"
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
     body_format: json
@@ -129,7 +119,7 @@
 
 - name: "Execute Groovy scripts"
   uri:
-    url: "http://localhost:{{ NEXUS_PORT }}/service/rest/v1/script/{{ item }}/run"
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/{{ item }}/run"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
     body_format: json
@@ -147,9 +137,46 @@
 
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
   docker_container:
-    name: nexus
+    name: "nexus"
+    image: "nexus:{{ NEXUS_VERSION }}"
     state: "{{ NEXUS_DEFAULT_STATE }}"
-    restart: yes
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    ports:
+  #      - "{{ NEXUS_PORT_CONFIG }}:8081"
+  #      - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
+  #      - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
+    volumes:
+      - "/{{ DATACORE }}/nexus:/nexus-data"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.nexus.loadbalancer.server.port: "8081"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.nexus_http.middlewares: "https_redirect"
+      traefik.http.routers.nexus_http.rule: "Host(`{{ NEXUS_EXTERNAL_URL }}`)"
+      traefik.http.routers.nexus_http.service: nexus
+      traefik.http.routers.nexus_https.rule: "Host(`{{ NEXUS_EXTERNAL_URL }}`)"
+      traefik.http.routers.nexus_https.service: nexus
+      traefik.http.routers.nexus_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.nexus_proxy.loadbalancer.server.port: "8081"
+      traefik.http.routers.nexus_proxy.service: nexus_proxy
+      traefik.http.routers.nexus_proxy.entrypoints: nexus
+      traefik.http.routers.nexus_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.nexus_proxy.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.nexus_push_proxy.loadbalancer.server.port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
+      traefik.http.routers.nexus_push_proxy.service: nexus_push_proxy
+      traefik.http.routers.nexus_push_proxy.entrypoints: nexus_docker_push
+      traefik.http.routers.nexus_push_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.nexus_push_proxy.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.nexus_pull_proxy.loadbalancer.server.port: "{{ NEXUS_DOCKER_PULL_PORT }}"
+      traefik.http.routers.nexus_pull_proxy.service: nexus_pull_proxy
+      traefik.http.routers.nexus_pull_proxy.entrypoints: nexus_docker_pull
+      traefik.http.routers.nexus_pull_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.nexus_pull_proxy.tls: "true"
 
 # Voir avec:
 # https://blog.mimacom.com/automate-nexus/

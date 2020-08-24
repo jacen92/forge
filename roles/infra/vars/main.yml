@@ -22,6 +22,12 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ WORDPRESS_FRONT_PORT }}", name: "wordpress" }
   - { port: "{{ PEERTUBE_PORT }}", name: "peertube" }
   - { port: "{{ MSTREAM_PORT }}", name: "mstream" }
+  - { port: "{{ NEXUS_PORT }}", name: "nexus" }
+  - { port: "{{ NEXUS_DOCKER_PULL_PORT }}", name: "nexus_docker_pull" }
+  - { port: "{{ NEXUS_DOCKER_PUSH_PORT }}", name: "nexus_docker_push" }
+  - { port: "{{ FDROID_PORT }}", name: "fdroid" }
+  - { port: "{{ NEXTCLOUD_PORT }}", name: "nextcloud" }
+  - { port: "{{ ODOO_PORT }}", name: "odoo" }
 
 NGINX_VERSION: "1.19.0"
 NGINX_FRONT_PORT: "8001"

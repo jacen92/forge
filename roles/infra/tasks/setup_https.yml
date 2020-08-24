@@ -73,6 +73,12 @@
       - "{{ WORDPRESS_FRONT_PORT }}:{{ WORDPRESS_FRONT_PORT }}"
       - "{{ PEERTUBE_PORT }}:{{ PEERTUBE_PORT }}"
       - "{{ MSTREAM_PORT }}:{{ MSTREAM_PORT }}"
+      - "{{ NEXUS_PORT }}:{{ NEXUS_PORT }}"
+      - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
+      - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
+      - "{{ FDROID_PORT }}:{{ FDROID_PORT }}"
+      - "{{ NEXTCLOUD_PORT }}:{{ NEXTCLOUD_PORT }}"
+      - "{{ ODOO_PORT }}:{{ ODOO_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"

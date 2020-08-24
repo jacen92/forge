@@ -36,22 +36,29 @@
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    ports:
-      - "{{ ODOO_PORT }}:8069"
+#    ports:
+#      - "{{ ODOO_PORT }}:8069"
     links:
       - "odoo_postgres:db"
     env:
       USER: "{{ ODOO_DB_USER }}"
       PASSWORD: "{{ ODOO_DB_PASS }}"
+    volumes:
+      - "/{{ DATACORE }}/odoo/addons:/mnt/extra-addons"
+      - "/{{ DATACORE }}/odoo/config:/etc/odoo"
     labels:
-      traefik.enable: "{{ ODOO_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.odoo.loadbalancer.server.port: "8069"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.odoo_http.middlewares: "https_redirect"
       traefik.http.routers.odoo_http.rule: "Host(`{{ ODOO_EXTERNAL_URL }}`)"
+      traefik.http.routers.odoo_http.service: odoo
       traefik.http.routers.odoo_https.rule: "Host(`{{ ODOO_EXTERNAL_URL }}`)"
+      traefik.http.routers.odoo_https.service: odoo
       traefik.http.routers.odoo_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/odoo/addons:/mnt/extra-addons"
-      - "/{{ DATACORE }}/odoo/config:/etc/odoo"
-  when: ansible_architecture in ["amd64", "x86_64"]
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.odoo_proxy.loadbalancer.server.port: "8069"
+      traefik.http.routers.odoo_proxy.service: odoo_proxy
+      traefik.http.routers.odoo_proxy.entrypoints: odoo
+      traefik.http.routers.odoo_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.odoo_proxy.tls: "true"
