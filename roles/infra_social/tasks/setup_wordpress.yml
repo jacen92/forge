@@ -44,20 +44,28 @@
     timeout: "{{ DOCKER_TIMEOUT }}"
     links:
       - wordpress_db:wordpress_db
-    ports:
-      - "{{ WORDPRESS_FRONT_PORT }}:80"
+#    ports:
+#      - "{{ WORDPRESS_FRONT_PORT }}:80"
     env:
       WORDPRESS_DB_PASSWORD: "{{ WORDPRESS_DB_PASS }}"
       WORDPRESS_DB_HOST: "wordpress_db:3306"
       WORDPRESS_DB_USER: "wordpress"
       WORDPRESS_DB_NAME: "wordpress"
+    volumes:
+      - "/{{ DATACORE }}/wordpress:/var/www"
     labels:
-      traefik.enable: "{{ WORDPRESS_EXPOSITION }}"
+      traefik.enable: "true"
       traefik.http.services.wordpress.loadbalancer.server.port: "80"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       traefik.http.routers.wordpress_http.middlewares: "https_redirect"
       traefik.http.routers.wordpress_http.rule: "Host(`{{ WORDPRESS_EXTERNAL_URL }}`)"
+      traefik.http.routers.wordpress_http.service: wordpress
       traefik.http.routers.wordpress_https.rule: "Host(`{{ WORDPRESS_EXTERNAL_URL }}`)"
+      traefik.http.routers.wordpress_https.service: wordpress
       traefik.http.routers.wordpress_https.tls: "true"
-    volumes:
-      - "/{{ DATACORE }}/wordpress:/var/www"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.wordpress_proxy.loadbalancer.server.port: "80"
+      traefik.http.routers.wordpress_proxy.service: wordpress_proxy
+      traefik.http.routers.wordpress_proxy.entrypoints: wordpress
+      traefik.http.routers.wordpress_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.wordpress_proxy.tls: "true"

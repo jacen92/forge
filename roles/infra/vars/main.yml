@@ -19,6 +19,9 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ NODERED_FRONT_PORT }}", name: "nodered" }
   - { port: "{{ OCTOPRINT_PORT }}", name: "octoprint" }
   - { port: "{{ INSOLANTE_PORT }}", name: "insolante" }
+  - { port: "{{ WORDPRESS_FRONT_PORT }}", name: "wordpress" }
+  - { port: "{{ PEERTUBE_PORT }}", name: "peertube" }
+  - { port: "{{ MSTREAM_PORT }}", name: "mstream" }
 
 NGINX_VERSION: "1.19.0"
 NGINX_FRONT_PORT: "8001"

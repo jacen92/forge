@@ -1,7 +1,6 @@
 WORDPRESS_VERSION: "5.4.2-php7.4"
 WORDPRESS_DB_VERSION: "10.4.10"
 WORDPRESS_FRONT_PORT: "8040"
-WORDPRESS_EXPOSITION: "false"
 WORDPRESS_EXTERNAL_URL: "blog.{{ DOMAIN_NAME }}"
 WORDPRESS_DEFAULT_STATE: stopped
 
@@ -9,7 +8,6 @@ PEERTUBE_VERSION: "v1.4.0-stretch"
 PEERTUBE_PORT: "8041"
 PEERTUBE_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 PEERTUBE_EXTERNAL_URL: "video.{{ DOMAIN_NAME }}"
-PEERTUBE_EXPOSITION: "false"
 PEERTUBE_IS_HTTPS: "false"
 PEERTUBE_TMP_PATH: "/tmp/peertube"
 PEERTUBE_DB_USER: "peertube"
@@ -19,5 +17,4 @@ MSTREAM_VERSION: "v4.7.0-ls24"
 MSTREAM_PORT: "8042"
 MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
-MSTREAM_EXPOSITION: "false"
 MSTREAM_DEFAULT_STATE: stopped

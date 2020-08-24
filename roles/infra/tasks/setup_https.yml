@@ -70,6 +70,9 @@
       - "{{ NODERED_FRONT_PORT }}:{{ NODERED_FRONT_PORT }}"
       - "{{ OCTOPRINT_PORT }}:{{ OCTOPRINT_PORT }}"
       - "{{ INSOLANTE_PORT }}:{{ INSOLANTE_PORT }}"
+      - "{{ WORDPRESS_FRONT_PORT }}:{{ WORDPRESS_FRONT_PORT }}"
+      - "{{ PEERTUBE_PORT }}:{{ PEERTUBE_PORT }}"
+      - "{{ MSTREAM_PORT }}:{{ MSTREAM_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
