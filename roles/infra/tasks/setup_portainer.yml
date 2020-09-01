@@ -16,6 +16,10 @@
      portainer_image: "portainer/portainer:{{ PORTAINER_VERSION }}"
   when: ansible_architecture in ["aarch64", "amd64", "x86_64"]
 
+- name: "Generate portainer password"
+  shell: 'htpasswd -nb -B admin {{ PORTAINER_PASS }} | cut -d ":" -f 2'
+  register: portainer_password
+
 - name: "Launch portainer container {{ PORTAINER_VERSION }}"
   docker_container:
     name: "portainer"
@@ -24,6 +28,7 @@
     #restart_policy: always
     #recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
+    command: ["-H", "unix:///var/run/docker.sock", "--admin-password='{{ portainer_password.stdout }}'"]
 #    ports:
 #      - "{{ PORTAINER_PORT }}:9000"
     volumes:

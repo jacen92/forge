@@ -8,7 +8,7 @@
 
 - name: "Install python and python-pip"
   apt:
-    pkg: [python2.7, python3-pip, apt-transport-https, ca-certificates, software-properties-common, curl, nano, tree, htop]
+    pkg: [python2.7, python3-pip, apt-transport-https, ca-certificates, apache2-utils, software-properties-common, curl, nano, tree, htop]
     state: present
     update_cache: true
     cache_valid_time: 3600
