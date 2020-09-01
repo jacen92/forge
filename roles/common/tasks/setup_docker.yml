@@ -35,3 +35,6 @@
     state: restarted
     daemon_reload : yes
   when: docker_update.changed
+
+- name: "Set ulimit to unlimited"
+  shell: "ulimit -c unlimited"
