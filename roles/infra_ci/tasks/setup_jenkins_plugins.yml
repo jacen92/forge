@@ -109,18 +109,58 @@
     timeout: 600
     validate_certs: "{{ JENKINS_VALIDATE_PLUGIN_CERTS }}"
   with_items:
+    - ansicolor
+    - active-directory
+    - badge
+    - blueocean
+    - build-environment
+    - build-monitor-plugin
+    - build-user-vars-plugin
+    - build-name-setter
+    - claim
+    - code-coverage-api
+    - conditional-buildstep
+    - copyartifact
+    - cppcheck
+    - docker-plugin
+    - downstream-ext
+    - description-setter
+    - diskcheck
+    - disk-usage
+    - extended-choice-parameter
+    - extensible-choice-parameter
+    - envinject
+    - flexible-publish
+    - gerrit-trigger
+    - gerrit-code-review
+    - git-parameter
+    - gitlab-plugin
+    - global-build-stats
+    - gogs-webhook
+    - groovy-postbuild
+    - javadoc
+    - junit-attachments
+    - jobConfigHistory
+    - maven-plugin
+    - matrix-project
+    - matrix-auth
+    - multiple-scms
+    - monitoring
+    - nodelabelparameter
+    - nexus-jenkins-plugin
+    - parameterized-trigger
+    - pipeline-utility-steps
+    - purge-job-history
+    - progress-bar-column-plugin
+    - pyenv-pipeline
     - python
     - rebuild
-    - global-build-stats
-    - parameterized-trigger
-    - conditional-buildstep
-    - maven-plugin
-    - javadoc
     - run-condition
-    - tool-labels-plugin
-    - progress-bar-column-plugin
     - simple-theme-plugin
-    - purge-job-history
+    - systemloadaverage-monitor
+    - test-stability
+    - tool-labels-plugin
+    - warnings-ng
     - windows-slaves
 
 - name: "Reset ansible interpreter to use python3"
