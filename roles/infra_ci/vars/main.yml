@@ -5,8 +5,8 @@ GOGS_EXTERNAL_URL: "git.{{ DOMAIN_NAME }}"
 GOGS_DEFAULT_STATE: stopped
 
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
-JENKINS_VERSION: "2.252"
-JENKINS_SHA_256: "00a1b953586523d71496b468478eae0bc69d34b4ff71b3507065db6c9d49edac"
+JENKINS_VERSION: "2.255"
+JENKINS_SHA_256: "fde80b0f9c98e54ed5ed3d7bbb72e003043e014beb1739e8b81d4e1d5f788169"
 JENKINS_PORT: "8023"
 JENKINS_EXTERNAL_URL: "ci.{{ DOMAIN_NAME }}"
 JENKINS_DEFAULT_STATE: stopped
