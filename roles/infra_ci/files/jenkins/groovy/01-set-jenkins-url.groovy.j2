@@ -1,0 +1,34 @@
+#!groovy
+
+// imports
+import jenkins.model.Jenkins
+import jenkins.model.JenkinsLocationConfiguration
+import hudson.security.csrf.DefaultCrumbIssuer
+
+// parameters
+def jenkinsParameters = [
+  email:  'Jenkins Admin <{{ USER_MAIL }}>',
+  url:    "https://{{ inventory_hostname }}:{{ JENKINS_PORT }}/"
+]
+
+// get Jenkins location configuration
+def jenkinsLocationConfiguration = JenkinsLocationConfiguration.get()
+
+// set Jenkins URL
+jenkinsLocationConfiguration.setUrl(jenkinsParameters.url)
+
+// set Jenkins admin email address
+jenkinsLocationConfiguration.setAdminAddress(jenkinsParameters.email)
+
+if(!Jenkins.instance.isQuietingDown()) {
+    def j = Jenkins.instance
+    j.setCrumbIssuer(new DefaultCrumbIssuer(false))
+    j.save()
+    println 'CSRF Protection configuration has changed. Enabled CSRF Protection.'
+}
+else {
+    println "Shutdown mode enabled. Configure CSRF protection SKIPPED."
+}
+
+// save current Jenkins state to disk
+jenkinsLocationConfiguration.save()

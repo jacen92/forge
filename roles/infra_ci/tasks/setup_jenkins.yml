@@ -92,11 +92,15 @@
     path: "/{{ DATACORE }}/jenkins/init.groovy.d"
     state: directory
 
-- name: "Copy basic configuration for admin credentials"
+- name: "Copy all groovy files to customize jenkins installation"
   template:
-    src: "files/jenkins/config/basic-security.groovy"
-    dest: "/{{ DATACORE }}/jenkins/init.groovy.d/basic-security.groovy"
+    src: "files/jenkins/groovy/{{ item }}.j2"
+    dest: "/{{ DATACORE }}/jenkins/init.groovy.d/{{ item }}"
     mode: u=rw,g=r,o=r
+  with_items:
+    - "00-basic-security.groovy"
+    - "01-set-jenkins-url.groovy"
+    - "02-disable-usage-stats.groovy"
 
 - name: "Set isSetupComplete to avoid getting started wizard"
   lineinfile:

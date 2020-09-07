@@ -7,6 +7,7 @@ def instance = Jenkins.getInstance()
 
 println "--> creating local user '{{ JENKINS_USER }}'"
 
+// Create the first admin user before anything else
 def hudsonRealm = new HudsonPrivateSecurityRealm(false)
 hudsonRealm.createAccount('{{ JENKINS_USER }}','{{ JENKINS_PASS }}')
 instance.setSecurityRealm(hudsonRealm)
