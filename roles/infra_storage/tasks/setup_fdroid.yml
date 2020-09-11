@@ -47,6 +47,7 @@
 - name: "Launch fdroid container {{ FDROID_VERSION }}"
   docker_container:
     name: "fdroid"
+    hostname: "fdroid"
     image: "{{ fdroid_image }}"
     state: "{{FDROID_DEFAULT_STATE }}"
     restart_policy: always

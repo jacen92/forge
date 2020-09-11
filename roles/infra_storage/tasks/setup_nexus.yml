@@ -138,6 +138,7 @@
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
   docker_container:
     name: "nexus"
+    hostname: "nexus"
     image: "nexus:{{ NEXUS_VERSION }}"
     state: "{{ NEXUS_DEFAULT_STATE }}"
     restart_policy: always

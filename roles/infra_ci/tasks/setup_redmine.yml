@@ -39,6 +39,7 @@
 - name: "Launch redmine container"
   docker_container:
     name: "redmine"
+    hostname: "redmine"
     image: "redmine:{{ REDMINE_VERSION }}"
     state: "{{ REDMINE_DEFAULT_STATE }}"
     restart_policy: always

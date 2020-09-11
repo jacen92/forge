@@ -144,7 +144,6 @@
     - maven-plugin
     - matrix-project
     - matrix-auth
-    - multiple-scms
     - monitoring
     - nodelabelparameter
     - nexus-jenkins-plugin
@@ -181,7 +180,8 @@
 
 - name: "set jenkins container final state ({{ JENKINS_DEFAULT_STATE }})"
   docker_container:
-    name: jenkins
+    name: "jenkins"
+    hostname: "jenkins"
     image: "jenkins:{{ JENKINS_VERSION }}"
     state: "{{ JENKINS_DEFAULT_STATE }}"
     timeout: "{{ DOCKER_TIMEOUT }}"
