@@ -1,0 +1,35 @@
+#!groovy
+
+import jenkins.model.Jenkins
+
+for (plugin in [
+  "ansicolor",
+  "build-name-setter",
+  "copyartifact",
+  "credentials-binding",
+  "credentials",
+  "description-setter",
+  "disk-usage",
+  "docker-plugin",
+  "git",
+  "global-build-stats",
+  "gogs-webhook",
+  "jobConfigHistory",
+  "python",
+  "nodelabelparameter",
+  "parameterized-trigger",
+  "rebuild",
+  "ssh-slaves",
+  "ssh-credentials",
+  "simple-theme-plugin",
+  "timestamper",
+  "ws-cleanup",
+])
+{
+  println "--> insstalling plugin: '" + plugin + "'"
+  e = Jenkins.instance.updateCenter.getPlugin(plugin).deploy(true).get().getError()
+  if (e != null)
+  {
+    println e.message
+  }
+ }

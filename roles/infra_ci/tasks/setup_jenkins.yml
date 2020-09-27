@@ -101,6 +101,7 @@
     - "00-basic-security.groovy"
     - "01-set-jenkins-url.groovy"
     - "02-disable-usage-stats.groovy"
+    - "03-install-plugins.groovy"
 
 - name: "Set isSetupComplete to avoid getting started wizard"
   lineinfile:
@@ -148,6 +149,11 @@
   shell: "mv /{{ DATACORE }}/jenkins/secrets/initialAdminPassword /root"
   when: jenkinsAdminPassword.stat.exists == True
 
+- name: "Copy theme configuration file"
+  template:
+    src: files/jenkins/config/theme-config.xml
+    dest: /{{ DATACORE }}/jenkins/org.codefirst.SimpleThemeDecorator.xml
+
 - name: "Set correct owner of full jenkins data directory for x86_64 image"
   file:
     path: "/{{DATACORE}}/jenkins"
@@ -175,3 +181,33 @@
   until: >
      'status' in jenkins_service_status and
      jenkins_service_status['status'] == 200 or jenkins_service_status['status'] == 403
+
+- name: "set jenkins container final state ({{ JENKINS_DEFAULT_STATE }})"
+  docker_container:
+    name: "jenkins"
+    hostname: "jenkins"
+    image: "jenkins:{{ JENKINS_VERSION }}"
+    state: "{{ JENKINS_DEFAULT_STATE }}"
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    recreate: yes
+    restart_policy: always
+    volumes:
+      - "/{{ DATACORE }}/jenkins:/var/jenkins_home"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.jenkins.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.jenkins_http.middlewares: "https_redirect"
+      traefik.http.routers.jenkins_http.rule: "Host(`{{ JENKINS_EXTERNAL_URL }}`)"
+      traefik.http.routers.jenkins_http.service: jenkins
+      traefik.http.routers.jenkins_https.rule: "Host(`{{ JENKINS_EXTERNAL_URL }}`)"
+      traefik.http.routers.jenkins_https.service: jenkins
+      traefik.http.routers.jenkins_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.jenkins_proxy.loadbalancer.server.port: "8080"
+      traefik.http.routers.jenkins_proxy.service: jenkins_proxy
+      traefik.http.routers.jenkins_proxy.entrypoints: jenkins
+      traefik.http.routers.jenkins_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.jenkins_proxy.tls: "true"
+  become: true
+  become_user: "{{ USER_NAME }}"
