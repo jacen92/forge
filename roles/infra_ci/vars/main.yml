@@ -6,15 +6,13 @@ GOGS_URL: "https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['addr
 GOGS_DEFAULT_STATE: stopped
 
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
-JENKINS_VERSION: "2.258"
-JENKINS_SHA_256: "28ba2418affd46f86e8acdf4ee44db7791e79263bd6e0c005ad1a8923e4bf45e"
+JENKINS_VERSION: "2.260"
+JENKINS_SHA_256: "c8c49f02aef947f3862cdbfa58d55e4a82d38945c55f3a822ed398c2e57b9677"
+JENKINS_PORT_CONFIG: 9000
 JENKINS_PORT: "8023"
 JENKINS_EXTERNAL_URL: "ci.{{ DOMAIN_NAME }}"
 JENKINS_DEFAULT_STATE: stopped
-JENKINS_VALIDATE_PLUGIN_CERTS: false
 JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
-JENKINS_PORT_CONFIG: 9000
-JENKINS_URL: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ JENKINS_PORT_CONFIG }}"
 JENKINS_THEME_COLOR: "blue-grey"
 JENKINS_RESTART_DELAY: 100
 
