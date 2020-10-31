@@ -14,21 +14,21 @@
 - name: "Get repository information (url)"
   shell: "git remote get-url origin"
   register: git_url
-  delegate_to: 127.0.0.1
+  delegate_to: localhost
   vars:
     ansible_python_interpreter: python
 
 - name: "Get repository information (branch)"
   shell: "git rev-parse --abbrev-ref HEAD"
   register: git_branch
-  delegate_to: 127.0.0.1
+  delegate_to: localhost
   vars:
     ansible_python_interpreter: python
 
 - name: "Get repository information (commit)"
   shell: "git rev-parse HEAD"
   register: git_commit
-  delegate_to: 127.0.0.1
+  delegate_to: localhost
   vars:
     ansible_python_interpreter: python
 

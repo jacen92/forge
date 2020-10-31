@@ -15,7 +15,7 @@ FDROID_EXTERNAL_URL: "fdroid.{{ DOMAIN_NAME }}"
 FDROID_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 FDROID_DEFAULT_STATE: stopped
 
-NEXTCLOUD_VERSION: "19.0.0"
+NEXTCLOUD_VERSION: "20.0.1"
 NEXTCLOUD_PORT: "8055"
 NEXTCLOUD_EXTERNAL_URL: "drive.{{ DOMAIN_NAME }}"
 NEXTCLOUD_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"

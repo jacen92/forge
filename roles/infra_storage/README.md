@@ -10,4 +10,4 @@ Content
 Notes:
 ======
 
-To update nexus go to https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile adn copy the sha256 of the selected version
+To update nexus go to https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile and copy the sha256 of the selected version
