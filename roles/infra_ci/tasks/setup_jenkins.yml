@@ -102,6 +102,7 @@
     - "01-set-jenkins-url.groovy"
     - "02-disable-usage-stats.groovy"
     - "03-install-plugins.groovy"
+    - "04-add-credentials.groovy"
 
 - name: "Set isSetupComplete to avoid getting started wizard"
   lineinfile:

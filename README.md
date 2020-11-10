@@ -167,6 +167,17 @@ Vault file parameters
 | NEXUS_ADMIN_PASS        |   storage  | Default nexus admin user password        |
 | ODOO_DB_PASS            |   storage  | Default database password for odoo       |
 
+Vault for jenkins secrets
+-------------------------
+
+| Parameter                |Description                              |
+| ------------------------ |---------------------------------------- |
+| master2slave_private_key | Key used to connect slaves throught SSH |
+| git_deploy_private_key   | Key used to clone git repositories      |
+| nexus_deploy_username    | credential to upload artifacts on nexus |
+| nexus_deploy_password    | credential to upload artifacts on nexus |
+
+
 Notes:
 ======
 
