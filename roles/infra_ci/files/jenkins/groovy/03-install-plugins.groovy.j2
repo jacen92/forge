@@ -24,7 +24,7 @@ for (plugin in [
   "ws-cleanup",
 ])
 {
-  println "--> insstalling plugin: '" + plugin + "'"
+  println "--> installing plugin: '" + plugin + "'"
   e = Jenkins.instance.updateCenter.getPlugin(plugin).deploy(true).get().getError()
   if (e != null)
   {

@@ -5,6 +5,15 @@ GOGS_EXTERNAL_URL: "git.{{ DOMAIN_NAME }}"
 GOGS_URL: "https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ GOGS_FRONT_PORT }}"
 GOGS_DEFAULT_STATE: stopped
 
+REDMINE_VERSION: "4.1.1"
+REDMINE_DB_VERSION: "10-alpine"
+REDMINE_DB_USER: "redmine_user"
+REDMINE_DB_PASS: "redmine_pass"
+REDMINE_DB_NAME: "redmine"
+REDMINE_FRONT_PORT: "8024"
+REDMINE_EXTERNAL_URL: "redmine.{{ DOMAIN_NAME }}"
+REDMINE_DEFAULT_STATE: stopped
+
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
 JENKINS_VERSION: "2.264"
 JENKINS_SHA_256: "91688e75025a999af2b91bcc3c5a1c8376214d26a1e7f63fa9e822d2ea0c9011"
@@ -15,12 +24,16 @@ JENKINS_DEFAULT_STATE: stopped
 JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
 JENKINS_THEME_COLOR: "blue-grey"
 JENKINS_RESTART_DELAY: 100
-
-REDMINE_VERSION: "4.1.1"
-REDMINE_DB_VERSION: "10-alpine"
-REDMINE_DB_USER: "redmine_user"
-REDMINE_DB_PASS: "redmine_pass"
-REDMINE_DB_NAME: "redmine"
-REDMINE_FRONT_PORT: "8024"
-REDMINE_EXTERNAL_URL: "redmine.{{ DOMAIN_NAME }}"
-REDMINE_DEFAULT_STATE: stopped
+JENKINS_CREDENTIALS:
+  master2slaves_key: "{{ master2slave_private_key }}"
+  git_deploy_key: "{{ git_deploy_private_key }}"
+  fdroid_deploy_key: "{{ git_deploy_private_key }}"
+  nexus_docker_credentials:
+    username: "{{ nexus_deploy_username }}"
+    password: "{{ nexus_deploy_password }}"
+  nexus_pip_credentials:
+    username: "{{ nexus_deploy_username }}"
+    password: "{{ nexus_deploy_password }}"
+  nexus_raw_credentials:
+    username: "{{ nexus_deploy_username }}"
+    password: "{{ nexus_deploy_password }}"
