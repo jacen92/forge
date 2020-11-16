@@ -1,6 +1,6 @@
 ---
 - import_tasks: prepare_facts.yml
-- import_tasks: setup_host_dependencies.yml
+- import_tasks: setup_dependencies.yml
 - import_tasks: setup_docker.yml
 - import_tasks: setup_security.yml
 - import_tasks: setup_user.yml

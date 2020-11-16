@@ -15,22 +15,16 @@
   shell: "git remote get-url origin"
   register: git_url
   delegate_to: localhost
-  vars:
-    ansible_python_interpreter: python
 
 - name: "Get repository information (branch)"
   shell: "git rev-parse --abbrev-ref HEAD"
   register: git_branch
   delegate_to: localhost
-  vars:
-    ansible_python_interpreter: python
 
 - name: "Get repository information (commit)"
   shell: "git rev-parse HEAD"
   register: git_commit
   delegate_to: localhost
-  vars:
-    ansible_python_interpreter: python
 
 - name: "Get the apt package facts"
   package_facts:

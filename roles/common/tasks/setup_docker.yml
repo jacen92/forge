@@ -9,25 +9,16 @@
     - "DOCKER_TIMEOUT={{ DOCKER_TIMEOUT }}"
   register: docker_update
 
-- name: "get location"
-  shell: pip3 show docker-py
-  register: python_location
-
-- name: "set python location"
-  set_fact:
-    python_location: "{{ python_location.stdout | regex_search(regexp,'\\1') | first }}"
-  vars:
-    regexp: 'Location: ([^"]+)'
-
-- set_fact:
-    python_location: "{{ python_location.split()[0] }}"
-
 - name: "Ensure docker.io is installed"
   apt:
     pkg: [docker.io]
     state: present
     update_cache: true
     cache_valid_time: 3600
+
+- name: "Ensure docker lib for python is installed"
+  pip:
+    name: [docker]
 
 - name: "Reload and restart service docker"
   service:
