@@ -37,7 +37,7 @@ When your access is set up you just have to do (it will ask for the vault file p
 ```
 time ansible-playbook -i hosts --ask-vault-pass setup_forge.yml
 # or with a file containing the passwords
-time ansible-playbook -i hosts --vault-password-file ~/.ansible-vault/test setup_forge.yml
+time ansible-playbook -i hosts --vault-password-file ~/.ansible-vault/forge setup_forge.yml
 ```
 
 All available services will be installed and configured to be ready to use but, except the infra core (traefik, portainer, ...), all services will be stopped by default and you will need to use portainer to start them.
