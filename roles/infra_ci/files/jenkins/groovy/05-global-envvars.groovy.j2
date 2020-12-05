@@ -1,0 +1,43 @@
+#!groovy
+import jenkins.model.Jenkins;
+
+def globalEnvironmentVariables = { instance, added_vars, removed_vars ->
+    def globalNodeProperties = instance.getGlobalNodeProperties()
+    def envVarsNodePropertyList = globalNodeProperties.getAll(hudson.slaves.EnvironmentVariablesNodeProperty.class)
+
+    def newEnvVarsNodeProperty = null
+    def envVars = null
+
+    if (envVarsNodePropertyList == null || envVarsNodePropertyList.size() == 0) {
+        newEnvVarsNodeProperty = new hudson.slaves.EnvironmentVariablesNodeProperty();
+        globalNodeProperties.add(newEnvVarsNodeProperty)
+        envVars = newEnvVarsNodeProperty.getEnvVars()
+    } else {
+        envVars = envVarsNodePropertyList.get(0).getEnvVars()
+    }
+
+    added_vars.each { k, v ->
+        println "  * Adding global environment variable " + k
+        envVars.put(k, v)
+    }
+    removed_vars.each { k ->
+        println "  * Removing global environment variable " + k
+        envVars.remove(k)
+    }
+};
+
+println "--> Configuring global environment variables";
+def added_vars = [:];
+{% for var, value in JENKINS_GLOBAL_ENV.items() %}
+added_vars.put('{{ var }}', '{{ value }}');
+{% endfor %}
+def removed_vars = [];
+
+def instance = Jenkins.getInstance();
+globalEnvironmentVariables(
+    instance = instance,
+    added_vars = added_vars,
+    removed_vars = removed_vars
+);
+
+instance.save();

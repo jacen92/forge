@@ -103,6 +103,7 @@
     - "02-disable-usage-stats.groovy"
     - "03-install-plugins.groovy"
     - "04-add-credentials.groovy"
+    - "05-global-envvars.groovy"
 
 - name: "Set isSetupComplete to avoid getting started wizard"
   lineinfile:
