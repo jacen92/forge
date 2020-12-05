@@ -15,7 +15,13 @@ To update jenkins go to https://updates.jenkins-ci.org/download/war/ adn copy th
 All required secrets are in the vaulted file.
 
 To use git repository you need:
-* to make a RSA key pair and add the private key in the vault_test.yml file in git_deploy_private_key.
+* to make a RSA key pair and add the private key in the vault_test.yml file in git_deploy_private_key and master2slave_private_key:.
+
+```
+ssh-keygen -t rsa -C "git@deploy" -f git_deploy -P ""
+ssh-keygen -t rsa -C "ssh@slave" -f ssh_slave -P ""
+```
+
 * to set the public key to an user able to deploy the projet.
 * to use the gogs provided ssh url to clone
 
