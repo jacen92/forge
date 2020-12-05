@@ -37,3 +37,9 @@ JENKINS_CREDENTIALS:
   nexus_raw_credentials:
     username: "{{ nexus_deploy_username }}"
     password: "{{ nexus_deploy_password }}"
+JENKINS_GLOBAL_ENV:
+  gogs_repositories_url: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ GOGS_SSH_PORT }}"
+  nexus_repositories_url: "https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ NEXUS_PORT }}"
+  nexus_docker_pull_url: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ NEXUS_DOCKER_PULL_PORT }}"
+  nexus_docker_push_url: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
+  fdroid_apk_push_url: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ FDROID_SSH_PORT }}"
