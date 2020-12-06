@@ -151,6 +151,7 @@
   #      - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
     volumes:
       - "/{{ DATACORE }}/nexus:/nexus-data"
+      - "/usr/local/share/ca-certificates:/usr/local/share/ca-certificates/"
     labels:
       traefik.enable: "true"
       traefik.http.services.nexus.loadbalancer.server.port: "8081"

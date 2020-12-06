@@ -195,6 +195,7 @@
     restart_policy: always
     volumes:
       - "/{{ DATACORE }}/jenkins:/var/jenkins_home"
+      - "/usr/local/share/ca-certificates:/usr/local/share/ca-certificates/"
     labels:
       traefik.enable: "true"
       traefik.http.services.jenkins.loadbalancer.server.port: "8080"
