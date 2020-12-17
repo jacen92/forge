@@ -93,6 +93,7 @@
     - "03-install-plugins.groovy"
     - "04-add-credentials.groovy"
     - "05-global-envvars.groovy"
+    - "06-configure-mailer.groovy"
 
 - name: "Set isSetupComplete to avoid getting started wizard"
   lineinfile:
