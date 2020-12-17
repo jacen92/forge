@@ -97,8 +97,11 @@
     force_basic_auth: yes
     status_code: 204,404,405
   with_items:
-    - setup_repositories
     - bypass_wizard
+    - setup_realm
+    - setup_repositories
+    - setup_role
+    - setup_user
 
 - name: "Declaring up-to-date Groovy scripts"
   uri:
@@ -114,8 +117,11 @@
       type: 'groovy'
       content: "{{ lookup('file', 'files/nexus/' + item + '.groovy') }}"
   with_items:
-    - setup_repositories
     - bypass_wizard
+    - setup_realm
+    - setup_repositories
+    - setup_role
+    - setup_user
 
 - name: "Execute Groovy scripts"
   uri:
@@ -133,8 +139,44 @@
       docker_push_port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
       docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
   with_items:
-    - setup_repositories
     - bypass_wizard
+    - setup_realm
+    - setup_repositories
+
+- name: "Execute Groovy script for roles"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_role/run"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 200,204
+    body: "{{ item }}"
+  with_items:
+    - {
+        state: "present",
+        id: "deployment",
+        name: "deployment",
+        description: "rRles to deploy on custom repositories",
+        privileges: ["nx-repository-view-docker-docker-internal-*",
+                     "nx-repository-view-raw-artifacts-*"],
+        roles: []
+      }
+
+- name: "Execute Groovy script for users"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_user/run"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 200,204
+    body: "{{ item }}"
+  no_log: true
+  with_items:
+    - { state: "present", username: "{{ nexus_deploy_username }}", first_name: "nexus", last_name: "deploy", email: "deploy@{{ DOMAIN_NAME }}", password: "{{ nexus_deploy_password }}", roles: ["deployment"]}
 
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
   docker_container:
