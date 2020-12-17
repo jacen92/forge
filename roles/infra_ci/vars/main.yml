@@ -24,6 +24,9 @@ JENKINS_DEFAULT_STATE: stopped
 JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
 JENKINS_THEME_COLOR: "blue-grey"
 JENKINS_RESTART_DELAY: 100
+JENKINS_CONFIGURATION:
+  jenkins_smtp_host: ""
+  jenkins_email_suffix: ""
 JENKINS_CREDENTIALS:
   master2slaves_key: "{{ master2slave_private_key }}"
   git_deploy_key: "{{ git_deploy_private_key }}"

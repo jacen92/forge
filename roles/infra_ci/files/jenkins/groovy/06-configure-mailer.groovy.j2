@@ -1,0 +1,11 @@
+#!groovy
+import jenkins.model.Jenkins;
+
+def instance = Jenkins.getInstance();
+
+def mailer = instance.getDescriptor('hudson.tasks.Mailer');
+
+println "--> Configure mailer";
+mailer.setSmtpHost("{{ JENKINS_CONFIGURATION.jenkins_smtp_host | default("") }}");
+mailer.setDefaultSuffix("{{ JENKINS_CONFIGURATION.jenkins_email_suffix | default("") }}");
+mailer.save();
