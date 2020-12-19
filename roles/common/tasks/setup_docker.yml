@@ -16,9 +16,17 @@
     update_cache: true
     cache_valid_time: 3600
 
+- name: "Ensure obselete docker lib for python is removed"
+  pip:
+    executable: pip3
+    state: absent
+    name: [docker]
+
 - name: "Ensure docker lib for python is installed"
   pip:
-    name: [docker]
+    executable: pip3
+    state: present
+    name: [docker-py]
 
 - name: "Reload and restart service docker"
   service:
