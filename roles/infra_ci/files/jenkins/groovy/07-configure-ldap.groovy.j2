@@ -1,0 +1,48 @@
+#!groovy
+
+import jenkins.model.*
+import hudson.security.*
+
+import hudson.plugins.active_directory.*
+
+def instance = Jenkins.getInstance();
+
+println "--> Configure ldap";
+
+def adrealm = new ActiveDirectorySecurityRealm("{{ ldap_domain }}", "", "{{ ldap_username }}", "{{ ldap_password }}", "{{ ldap_remotes }}")
+// hack to persist bind password
+adrealm.getDomains().each({
+    it.bindName = adrealm.bindName
+    it.bindPassword = adrealm.bindPassword
+})
+// End of hack
+instance.setSecurityRealm(adrealm)
+
+println "--> Configure Global Matrix strategy"
+def strategy = new GlobalMatrixAuthorizationStrategy()
+def replay_perm = Permission.fromId('hudson.model.Run.Replay')
+
+println "--> Configure strategy for anonymous and authenticated"
+{% for group in ["anonymous", "authenticated"] %}
+strategy.add(Jenkins.READ, "{{ group }}")
+strategy.add(hudson.model.Item.READ, "{{ group }}")
+strategy.add(hudson.model.Item.WORKSPACE, "{{ group }}")
+strategy.add(hudson.model.View.READ, "{{ group }}")
+{% endfor %}
+
+{% for group in ["authenticated"] %}
+if (replay_perm) {
+  strategy.add(replay_perm, "{{ group }} ")
+}
+strategy.add(hudson.model.Item.BUILD, "{{ group }}")
+strategy.add(hudson.model.Item.CANCEL, "{{ group }}")
+{% endfor %}
+
+println "--> Configure strategy for admin"
+strategy.add(Jenkins.ADMINISTER, "admin")
+{% for group in [ldap_admin_group] %}
+strategy.add(Jenkins.ADMINISTER, "{{ group }}")
+{% endfor %}
+
+instance.setAuthorizationStrategy(strategy)
+instance.save()

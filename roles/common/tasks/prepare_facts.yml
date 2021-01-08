@@ -53,3 +53,14 @@
 - name: "Define global_proxy_rule"
   set_fact:
      global_proxy_rule: "Host(`{{ inventory_hostname }}`) || Host(`{{ DOMAIN_NAME }}`) || Host(`{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}`)"
+
+- name: "Check if ldap need to be configured"
+  block:
+    - name: "Ensure all ldap settings are available"
+      set_fact:
+        configure_ldap: "ready"
+      when: ldap_remotes | length > 0 and ldap_username | length > 0 and ldap_password | length > 0 and ldap_search | length > 0 and ldap_access_group | length > 0 and ldap_admin_group | length > 0
+    - name: "Show ldap configuration status"
+      debug:
+        var: configure_ldap
+  when: ldap_domain | length > 0

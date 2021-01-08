@@ -102,6 +102,7 @@
     - setup_repositories
     - setup_role
     - setup_user
+    - setup_ldap
 
 - name: "Declaring up-to-date Groovy scripts"
   uri:
@@ -122,6 +123,7 @@
     - setup_repositories
     - setup_role
     - setup_user
+    - setup_ldap
 
 - name: "Execute Groovy scripts"
   uri:
@@ -139,7 +141,6 @@
       docker_push_port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
       docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
   with_items:
-    - bypass_wizard
     - setup_realm
     - setup_repositories
 
@@ -153,16 +154,55 @@
     force_basic_auth: yes
     status_code: 200,204
     body: "{{ item }}"
+  when: item.id | length > 0
   with_items:
     - {
         state: "present",
         id: "deployment",
         name: "deployment",
-        description: "rRles to deploy on custom repositories",
+        description: "Internal roles to deploy on custom repositories",
         privileges: ["nx-repository-view-docker-docker-internal-*",
                      "nx-repository-view-raw-artifacts-*"],
         roles: []
       }
+    - {
+        state: "present",
+        id: "{{ ldap_access_group }}",
+        name: "{{ ldap_access_group }}",
+        description: "External roles to access custom repositories",
+        privileges: ["nx-repository-view-docker-docker-internal-*",
+                     "nx-repository-view-raw-artifacts-*"],
+        roles: []
+      }
+    - {
+        state: "present",
+        id: "{{ ldap_admin_group }}",
+        name: "{{ ldap_admin_group }}",
+        description: "External roles to administrate Nexus",
+        privileges: [],
+        roles: ["nx-admin"]
+      }
+
+- name: "Execute Groovy script for ldap"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_ldap/run"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 200,204
+    body: "{{ item }}"
+  no_log: true
+  with_items:
+    - {
+        host: "{{ ldap_remotes.split(',')[0] }}",
+        bind_name: "{{ ldap_username }}",
+        bind_password: "{{ ldap_password }}",
+        search_base: "{{ ldap_search }}",
+        ldap_secure: "{{ ldap_secure }}",
+      }
+  when: configure_ldap is defined
 
 - name: "Execute Groovy script for users"
   uri:
@@ -176,7 +216,33 @@
     body: "{{ item }}"
   no_log: true
   with_items:
-    - { state: "present", username: "{{ nexus_deploy_username }}", first_name: "nexus", last_name: "deploy", email: "deploy@{{ DOMAIN_NAME }}", password: "{{ nexus_deploy_password }}", roles: ["deployment"]}
+    - {
+        state: "present",
+        username: "{{ nexus_deploy_username }}",
+        first_name: "nexus",
+        last_name: "deploy",
+        email: "deploy@{{ DOMAIN_NAME }}",
+        password: "{{ nexus_deploy_password }}",
+        roles: ["deployment"]
+    }
+
+- name: "Execute last groovy script"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/{{ item }}/run"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 200,204
+    body:
+      admin_name: "{{ DEFAULT_ADMIN_NAME }}"
+      admin_email: "{{ USER_MAIL }}"
+      admin_password: "{{ NEXUS_ADMIN_PASS }}"
+      docker_push_port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
+      docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
+  with_items:
+    - bypass_wizard
 
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
   docker_container:
