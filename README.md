@@ -18,7 +18,7 @@ Host
 ----
 
 Install ansible and edit the hosts file to set the correct IP of your target(s).  
-Edit the setup_forge.yml file to add required features and some information about the new forge like the user, your mail and domain, ...  
+Edit the setup_forge.yml file to skip features and to add some information about the new forge like the user, your mail and domain, ...  
 Edit the vault_test.yml file to set your passwords (the default password to edit it is "password", remember to change it)
 
 ```
@@ -167,16 +167,23 @@ Vault file parameters
 | NEXUS_ADMIN_PASS        |   storage  | Default nexus admin user password        |
 | ODOO_DB_PASS            |   storage  | Default database password for odoo       |
 
-Vault for jenkins secrets
+Vault for groovy secrets
 -------------------------
 
 | Parameter                |Description                              |
 | ------------------------ |---------------------------------------- |
+| ldap_domain              | ldap domain name (if set enable ldap)   |
+| ldap_secure              | ldap switch to use ldaps                |
+| ldap_remotes             | ldap remote url (comma separated list)  |
+| ldap_username            | ldap user name                          |
+| ldap_password            | ldap user passwords                     |
+| ldap_search              | ldap base search string                 |
+| ldap_admin_group         | ldap group used to get admin rights     |
+| ldap_access_group        | ldap group used to get acces rights     |
 | master2slave_private_key | Key used to connect slaves throught SSH |
 | git_deploy_private_key   | Key used to clone git repositories      |
 | nexus_deploy_username    | credential to upload artifacts on nexus |
 | nexus_deploy_password    | credential to upload artifacts on nexus |
-
 
 Notes:
 ======
@@ -202,6 +209,7 @@ By default it will keep the 3 latest backups.
 About docker registry
 ---------------------
 To login to the docker registry if there is no https (https://github.com/docker/distribution/issues/1874)  
+Should not happen now with traefik.
 Edit /etc/docker/daemon.json on your host and write:
 ```
 {
@@ -215,8 +223,8 @@ Restart docker daemon:
 ```
 
 
-About passwords in vault_test.yml
----------------------------------
+About passwords in the provided vault_test.yml file
+---------------------------------------------------
 
 All password are 'test' except for root and the user created by ansible.
 
@@ -239,9 +247,19 @@ WARNING: admin user password is shown only in the docker logs (Keep in mind to c
 About arm variant
 ------------------
 
-Some services are not available on Raspberry (armv7l):
+Some services are not available on Arm 32bits (armv7l):
 
 * Wordpress: mariadb is not compatible so the service become deactivated.
 * Peertube: The arm image is build on an aarch64 machine so it is not compatible with armv7l now (maybe later).
 * Jenkins: Ressources consumption is really high for this service, is is disabled on armv7.
 * Nexus: Ressources consumption is really high for this service, is is disabled on armv7.
+
+
+About ldap
+----------
+
+Nexus and Jenkins contains groovy scripts to connect them to an external active directory.
+ldap_* variables must all be set to be able to use it in these services.
+ldap_secure is used only for Nexus (not tested yet).
+ldap_admin_group is used on Nexus and Jenkins but ldap_access_group is only used on Nexus.
+Local account stay enabled only on Nexus.

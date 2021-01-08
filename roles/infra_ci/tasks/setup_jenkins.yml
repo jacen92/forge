@@ -95,6 +95,15 @@
     - "05-global-envvars.groovy"
     - "06-configure-mailer.groovy"
 
+- name: "Copy ldap groovy files to customize jenkins installation"
+  template:
+    src: "files/jenkins/groovy/{{ item }}.j2"
+    dest: "/{{ DATACORE }}/jenkins/init.groovy.d/{{ item }}"
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "07-configure-ldap.groovy"
+  when: configure_ldap is defined
+
 - name: "Set isSetupComplete to avoid getting started wizard"
   lineinfile:
     path: /{{ DATACORE }}/jenkins/config.xml
