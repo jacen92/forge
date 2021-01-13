@@ -1,6 +1,6 @@
 import groovy.json.JsonSlurper
 import org.sonatype.nexus.repository.Repository
-import org.sonatype.nexus.repository.storage.WritePolicy
+import org.sonatype.nexus.repository.config.WritePolicy
 import org.sonatype.nexus.blobstore.api.BlobStoreManager
 
 parsed_args = new JsonSlurper().parseText(args)

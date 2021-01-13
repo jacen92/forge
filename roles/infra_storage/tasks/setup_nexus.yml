@@ -59,11 +59,40 @@
   delay: 30
   until: nexus_service_status['status'] == 200 or nexus_service_status['status'] == 403
 
+- name: "Ensure script engine is enabled"
+  lineinfile:
+    path: "/{{ DATACORE }}/nexus/etc/nexus.properties"
+    line: "nexus.scripts.allowCreation=true"
+
 - name: "Read nexus admin password file content"
   shell: cat /{{ DATACORE }}/nexus/admin.password
   register: admin_password_file_content
   ignore_errors: yes
   no_log: true
+
+- name: "Launch nexus container {{ NEXUS_VERSION }}"
+  docker_container:
+    name: "nexus"
+    image: "nexus:{{ NEXUS_VERSION }}"
+    state: started
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    ports:
+      - "{{ NEXUS_PORT_CONFIG }}:8081"
+    volumes:
+      - "/{{ DATACORE }}/nexus:/nexus-data"
+
+- name: "Wait for Nexus to start up"
+  uri:
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}"
+    status_code: "200,403"
+    timeout: 40
+  register: nexus_service_status
+  # Keep trying for 5 mins in 5 sec intervals
+  retries: "{{ NEXUS_RESTART_DELAY }}"
+  delay: 30
+  until: nexus_service_status['status'] == 200 or nexus_service_status['status'] == 403
 
 - name: "Use default password if by default"
   set_fact:
@@ -193,7 +222,7 @@
     force_basic_auth: yes
     status_code: 200,204
     body: "{{ item }}"
-  no_log: true
+  #no_log: true
   with_items:
     - {
         host: "{{ ldap_remotes.split(',')[0] }}",

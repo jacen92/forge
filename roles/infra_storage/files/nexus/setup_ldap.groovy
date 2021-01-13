@@ -17,7 +17,7 @@ String host = parsed_args.host.split(":")[0]
 String port = parsed_args.host.split(":")[1]
 def ldapManager = container.lookup(LdapConfigurationManager.class.name)
 
-def ldapConfig = new LdapConfiguration()
+def ldapConfig = ldapManager.newConfiguration()
 ldapConfig.setName(host)
 log.info('new connection...')
 
