@@ -40,7 +40,7 @@
     exposedbydefault = false
     watch = true
 
-{% if TRAEFIK_CERT_NAME|length > 0 %}
+{% if DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0 %}
   [providers.file]
     filename = "/etc/traefik/tls-certs.toml"
     watch = true

@@ -7,8 +7,12 @@
   debug:
     var: hostvars[inventory_hostname].ansible_architecture
 
-- name: "Import secret variables from vault file ({{ FORGE_MODE }})"
-  include_vars: "vault_{{ FORGE_MODE }}.yml"
+- name: "Import default variables from identity file ({{ IDENTITY }})"
+  include_vars: "identity/{{ IDENTITY }}/vars_{{ IDENTITY }}.yml"
+  #no_log: true
+
+- name: "Import secret variables from identity file ({{ IDENTITY }})"
+  include_vars: "identity/{{ IDENTITY }}/vault_{{ IDENTITY }}.yml"
   no_log: true
 
 - name: "Get repository information (url)"
@@ -40,7 +44,7 @@
     dest: "/root/ansible.info"
     line: "{{ item }}"
   with_items:
-    - "* FORGE_MODE: {{ FORGE_MODE }}"
+    - "* IDENTITY: {{ IDENTITY }}"
     - "* DATACORE: {{ DATACORE }}"
     - "* USER_NAME: {{ USER_NAME }}"
     - "* USER_MAIL: {{ USER_MAIL }}"

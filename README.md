@@ -128,25 +128,27 @@ Port listing (exposed from all docker containers)
 Playbooks parameters
 ====================
 
-| Parameter           | Role    | Values                 | Description                                                    |
-| ------------------- |:-------:|:----------------------:| -------------------------------------------------------------- |
-| FORGE_MODE          |  common |    test or forge       | Installation mode (a file vault_${FORGE_MODE} should exists)   |
-| DATACORE            |  common |      $HOME/data        | Infrastructure data directory, it will be backuped if enabled  |
-| USER_NAME           |  common |          pi            | Default user name (will be created if doesn't exists)          |
-| USER_MAIL           |  infra  |    username@domain     | Default user email (for SSL certificate)                       |
-| DOMAIN_NAME         |  infra  |          ""            | HTTPS and reverse proxy domain name                            |
-| SKIP_SERVICES       |  common |         All            | List of service installation to skip                           |
+| Parameter           | Role    | Values          | Description                                                    |
+| ------------------- |:-------:|:---------------:| -------------------------------------------------------------- |
+| IDENTITY            |  common |       dev       | See identity description                                       |
+| SKIP_SERVICES       |  common |       All       | List of service installation to skip                           |
 
 
-Services description
-====================
+Identity
+========
 
-Some services are not skipable like https, homepage and portainer.  
-MQTT and nodered services can be skipped by adding "domotic" in SKIP_SERVICES.  
-Odoo is known as "erp" in the SKIP_SERVICES list.  
-All others use the main container name (nexus, gogs, jenkins, peertube, wordpress, insolante, ...).  
-Some services like jenkins, nexus, wordpress, peertube and odoo are not available on armv7.
+An identity is a directory where to store all specific variables. By default the identity is 'dev' and contains a vault file
+and a vars file. A certs directory is also available for presentation purpose. Use the parameter IDENTITY to switch between them.
 
+| Parameter           | Role    | Values              | Description                                                    |
+| ------------------- |:-------:|:-------------------:| -------------------------------------------------------------- |
+| DATACORE            |  common |      $HOME/data     | Infrastructure data directory, it will be backuped if enabled  |
+| USER_NAME           |  common |       forge         | Default user name (will be created if doesn't exists)          |
+| USER_MAIL           |  infra  | username@domain.tld | Default user email (for SSL certificate)                       |
+| DOMAIN_NAME         |  infra  |          ""         | HTTPS and reverse proxy domain name                            |
+| DEFAULT_ADMIN_NAME  |  infra  |          ""         | HTTPS and reverse proxy domain name                            |
+| DOMAIN_CERT_NAME    |  infra  |          ""         | HTTPS and reverse proxy domain name                            |
+| DOMAIN_CERT_KEY_NAME|  infra  |          ""         | HTTPS and reverse proxy domain name                            |
 
 Vault file parameters
 =====================
@@ -184,6 +186,17 @@ Vault for groovy secrets
 | git_deploy_private_key   | Key used to clone git repositories      |
 | nexus_deploy_username    | credential to upload artifacts on nexus |
 | nexus_deploy_password    | credential to upload artifacts on nexus |
+
+
+Services description
+====================
+
+Some services are not skipable like https, homepage and portainer.  
+MQTT and nodered services can be skipped by adding "domotic" in SKIP_SERVICES.  
+Odoo is known as "erp" in the SKIP_SERVICES list.  
+All others use the main container name (nexus, gogs, jenkins, peertube, wordpress, insolante, ...).  
+Some services like jenkins, nexus, wordpress, peertube and odoo are not available on armv7.
+
 
 Notes:
 ======

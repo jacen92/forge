@@ -1,6 +1,6 @@
 {
   "forge": {
-    "mode": "{{FORGE_MODE}}",
+    "mode": "{{IDENTITY}}",
     "address": "{{ inventory_hostname }}",
     "domain": "{{ DOMAIN_NAME }}",
     "backup": {

@@ -4,13 +4,8 @@
   max_fail_percentage: 0
   serial: 100%
   vars:
-  - FORGE_MODE: "test"
-  - DOMAIN_NAME: "maison-gargaud.info"
+  - IDENTITY: "dev"
   - SKIP_SERVICES: []
-  - USER_NAME: "forge"
-  - USER_MAIL: "jacen92@gmail.com"
-  - DATACORE: "home/{{ USER_NAME }}/data"
-  - DEFAULT_ADMIN_NAME: "admin"
   roles:
     - common
     - infra

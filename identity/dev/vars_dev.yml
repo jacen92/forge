@@ -1,0 +1,8 @@
+---
+DOMAIN_NAME: ""
+DATACORE: "home/{{ USER_NAME }}/data"
+DOMAIN_CERT_NAME: ""
+DOMAIN_CERT_KEY_NAME: ""
+DEFAULT_ADMIN_NAME: "admin"
+USER_NAME: "forge"
+USER_MAIL: "{{ USER_NAME }}@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, 'exemple.org') }}"

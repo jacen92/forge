@@ -22,15 +22,15 @@
 
 - name: "Copy traefik certificates in traefik directory"
   copy:
-    src: "files/traefik/ssl/{{ item.file }}"
+    src: "identity/{{ IDENTITY }}/certs/{{ item.file }}"
     dest: "/{{ DATACORE }}/traefik/certs/{{ item.file }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     mode: "{{ item.mode }}"
   with_items:
-    - {file: "{{ TRAEFIK_CERT_NAME }}-key.pem", mode: 600}
-    - {file: "{{ TRAEFIK_CERT_NAME }}.pem", mode: 644}
-  when: "TRAEFIK_CERT_NAME | length > 0"
+    - {file: "{{ DOMAIN_CERT_KEY_NAME }}", mode: 600}
+    - {file: "{{ DOMAIN_CERT_NAME }}", mode: 644}
+  when: "DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0"
 
 - name: "Define traefik_image armv7l?"
   set_fact:
