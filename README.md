@@ -182,7 +182,9 @@ Vault for groovy secrets
 | ldap_search              | ldap base search string                 |
 | ldap_admin_group         | ldap group used to get admin rights     |
 | ldap_access_group        | ldap group used to get acces rights     |
+| master2slave_username    | username used to connect slaves         |
 | master2slave_private_key | Key used to connect slaves throught SSH |
+| git_deploy_username      | username used to connect slaves         |
 | git_deploy_private_key   | Key used to clone git repositories      |
 | nexus_deploy_username    | credential to upload artifacts on nexus |
 | nexus_deploy_password    | credential to upload artifacts on nexus |
