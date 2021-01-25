@@ -33,7 +33,7 @@
         "version": "{{ PORTAINER_VERSION | default('unknown') }}",
         "external": "https://{{ PORTAINER_EXTERNAL_URL | default('unknown') }}",
         "description": "Docker images manager.",
-        "dockerhub": "https://hub.docker.com/r/portainer/portainer/",
+        "dockerhub": "https://hub.docker.com/r/portainer/portainer-ce/",
         "source": "https://github.com/portainer/portainer"
       },
       {
