@@ -6,16 +6,6 @@
     group: "{{ USER_NAME }}"
     state: directory
 
-- name: "Define portainer_image Arm?"
-  set_fact:
-     portainer_image: "portainer/portainer:linux-arm-{{ PORTAINER_VERSION }}"
-  when: ansible_architecture in ["armv7l"]
-
-- name: "Define portainer_image 64bits?"
-  set_fact:
-     portainer_image: "portainer/portainer:{{ PORTAINER_VERSION }}"
-  when: ansible_architecture in ["aarch64", "amd64", "x86_64"]
-
 - name: "Generate portainer password"
   shell: 'htpasswd -nb -B admin {{ PORTAINER_PASS }} | cut -d ":" -f 2'
   register: portainer_password
@@ -23,7 +13,7 @@
 - name: "Launch portainer container {{ PORTAINER_VERSION }}"
   docker_container:
     name: "portainer"
-    image: "{{ portainer_image }}"
+    image: "portainer/portainer-ce:{{ PORTAINER_VERSION }}"
     state: started
     #restart_policy: always
     #recreate: yes
@@ -51,4 +41,3 @@
       traefik.http.routers.portainer_proxy.entrypoints: portainer
       traefik.http.routers.portainer_proxy.rule: "{{ global_proxy_rule }}"
       traefik.http.routers.portainer_proxy.tls: "true"
-  when: portainer_image is defined
