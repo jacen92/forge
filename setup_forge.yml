@@ -1,4 +1,4 @@
-- hosts: test
+- hosts: forge
   gather_facts: yes
   any_errors_fatal: true
   max_fail_percentage: 0
