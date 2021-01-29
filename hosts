@@ -1,14 +1,5 @@
-[test]
-192.168.0.21
-#192.168.0.24
-#192.168.0.30
-#linux64-1804-forge
-
-[prod_arm]
-192.168.0.1
-
-[prod_x64]
-192.168.0.2
+[forge]
+192.168.0.20
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
