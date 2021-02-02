@@ -36,7 +36,7 @@ JENKINS_CREDENTIALS:
     username: "{{ master2slave_username | default('builder') }}"
   fdroid_deploy_key:
     private_key: "{{ git_deploy_private_key }}"
-    username: "root"
+    username: "fdroid"
   nexus_docker_credentials:
     username: "{{ nexus_deploy_username }}"
     password: "{{ nexus_deploy_password }}"
