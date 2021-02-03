@@ -1,4 +1,8 @@
 ---
+- name: "Check for authorized_keys"
+  local_action: stat path=files/authorized_keys
+  register: stat_authorized_keys
+
 - name: "Copy authorized_keys for root"
   copy:
     src: "files/authorized_keys"
@@ -6,6 +10,7 @@
     owner: "root"
     group: "root"
     mode: u=rw,g=r,o=r
+  when: stat_authorized_keys.stat.exists
 
 - name: "Copy authorized_keys for regular user"
   copy:
@@ -14,6 +19,7 @@
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     mode: u=rw,g=r,o=r
+  when: stat_authorized_keys.stat.exists
 
 - name: "Reset root password"
   user:

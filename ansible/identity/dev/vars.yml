@@ -1,5 +1,5 @@
 ---
-DOMAIN_NAME: ""
+DOMAIN_NAME: "forge.local"
 DATACORE: "home/{{ USER_NAME }}/data"
 DOMAIN_CERT_NAME: ""
 DOMAIN_CERT_KEY_NAME: ""
