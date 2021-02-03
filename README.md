@@ -1,48 +1,71 @@
-Ansible roles to setup infrastructure on the Raspberry Pi, the rock64 or any x86_64 computer running Debian or Ubuntu.
+Ansible roles to setup infrastructure on computer running Debian or Ubuntu via docker.
+
+Concept
+=======
 
 This projects aims to create a full software forge with all required services for development, home automation, storage, etc.
 All services are available throught traefik which act as a TLS proxy. If no certificate is provided for the local network then traefik
 will create it's own certificates for all services (you will need to accept each of them on your browser).
-Only traefik is not exposed with TLS and will be acccessible with HTTP.
-You can provide a custom CA for your local network and prevent traefik to create a lot of untrusted certificates by following [this](/roles/infra/files/traefik/ssl/NOTES.md).
+Only traefik's frontend is not exposed with TLS and will be acccessible with HTTP (a switch will be added in a next version to disable this frontend).
 
-Preparation
-===========
+A docker image contains all requirements to deploy a forge in a TARGET with the private key to access the root user throught SSh.
+An identity archive should be provided to customize the installation else a dev identity will be set up.
 
-Two type of certificates are used by the forge:
+You should have at least 20Go of free storage, Less if you skip some services.
 
-* Let's encrypt: When you server is exposed to the internet a let's encrypt certificate can be generated for all exposed routes.
-* Local CA: On your local network you should make a certificate authority for the forge target. For testing purpose you can use mkcert tool.
+How to make an identity
+-----------------------
 
-Host
-----
-
-Install ansible and edit the hosts file to set the correct IP of your target(s).  
-Edit the setup_forge.yml file to skip features and to add some information about the new forge like the user, your mail and domain, ...  
-Edit the vault_test.yml file to set your passwords (the default password to edit it is "password", remember to change it)
+An identity is a compressed folder containing some files and secrets. Protected archive are not supported yet.
+The folder structure exemple can be found in `ansible/identity/dev` so you can copy this directory and customize your own then archive it.
 
 ```
-EDITOR=nano ansible-vault edit vault_test.yml
+# Name your new identity (without spaces).
+export IDENTITY=myIdentity
+git clone <this repo>
+cd forge
+
+# create a directory where to store your identities (not mandatory to be in the repository)
+mkdir shared
+
+# Copy the dev identity
+cp -R ansible/identity/dev shared/$IDENTITY
+cd shared
+
+# To add certificate read the NOTES.md in identity/dev.
+# edit $IDENTITY/vars
+nano $IDENTITY/vars
+
+# edit the secrets then change the password for your new identity with ansible-vault rekey (the default password is "password")
+EDITOR=nano ansible-vault edit $IDENTITY/vault.yml
+ansible-vault rekey $IDENTITY/vault.yml
+
+# create the archive
+zip -r $IDENTITY.zip $IDENTITY
 ```
 
-Target
-------
-
-Flash your image or install an OS on the target.  
-The default image may not authorize access to root from ssh so we need to update the sshd_config.  
-Add your public key inside /root/.ssh/authorized_keys (this playbook is using root access by default).  
-Some roles are not available for ARM 32 bits (see the table below).  
-When your access is set up you just have to do (it will ask for the vault file password):
-
-```
-time ansible-playbook -i hosts --ask-vault-pass setup_forge.yml
-# or with a file containing the passwords
-time ansible-playbook -i hosts --vault-password-file ~/.ansible-vault/forge setup_forge.yml
-```
+You can provide a custom CA for your local network and prevent traefik to create a lot of untrusted certificates by following [this](/identity/dev/certs/NOTES.md).
 
 All available services will be installed and configured to be ready to use but, except the infra core (traefik, portainer, ...), all services will be stopped by default and you will need to use portainer to start them.
 This behavior depends on the parameter SERVICE_DEFAULT_STATE for each services in the vars/main.yml files of each roles.
 
+How to use configure a forge
+----------------------------
+
+```
+# Copy the private key to access the remote host in the shared directory:
+cp ~/.ssh/id_rsa shared/ansible_key
+
+# Build the image (or use the official one):
+docker build --rm -t forge -f Dockerfile .
+
+# Run the image (it will configure the TARGET)
+docker run -ti --rm -v $(pwd)/shared:/opt/shared -e TARGET=192.168.0.404 -e IDENTITY=$IDENTITY -e VAULT_PASSWORD=<new_password> forge
+```
+
+The vault password can be provided in the shared directory in a file $IDENTITY_vault_password.
+You can also customize authorized_keys for users and fdroid service.
+For more information about custom parameters read the entrypoint.sh file.
 
 Services
 ========
@@ -134,8 +157,8 @@ Playbooks parameters
 | SKIP_SERVICES       |  common |       All       | List of service installation to skip                           |
 
 
-Identity
-========
+Identity vars
+=============
 
 An identity is a directory where to store all specific variables. By default the identity is 'dev' and contains a vault file
 and a vars file. A certs directory is also available for presentation purpose. Use the parameter IDENTITY to switch between them.
@@ -238,8 +261,8 @@ Restart docker daemon:
 ```
 
 
-About passwords in the provided vault_test.yml file
----------------------------------------------------
+About passwords in the provided vault.yml file of dev identity
+---------------------------------------------------------------
 
 All password are 'test' except for root and the user created by ansible.
 
@@ -248,7 +271,7 @@ About fdroid
 ------------
 
 Even if fdroid-server image allows to set a password for fdroid user we will use authorized_keys system.  
-So update the file in `roles/infra_storage/tasks/files/fdroid/authorized_keys` with your public keys.
+So create the file in `shared/fdroid_authorized_keys` with your public keys.
 
 
 About Peertube
@@ -277,4 +300,4 @@ Nexus and Jenkins contains groovy scripts to connect them to an external active 
 ldap_* variables must all be set to be able to use it in these services.
 ldap_secure is used only for Nexus (not tested yet).
 ldap_admin_group is used on Nexus and Jenkins but ldap_access_group is only used on Nexus.
-Local account stay enabled only on Nexus.
+Local account stay enabled only on Nexus (please use a strong password).

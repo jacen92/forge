@@ -8,11 +8,11 @@
     var: hostvars[inventory_hostname].ansible_architecture
 
 - name: "Import default variables from identity file ({{ IDENTITY }})"
-  include_vars: "identity/{{ IDENTITY }}/vars_{{ IDENTITY }}.yml"
+  include_vars: "identity/{{ IDENTITY }}/vars.yml"
   #no_log: true
 
 - name: "Import secret variables from identity file ({{ IDENTITY }})"
-  include_vars: "identity/{{ IDENTITY }}/vault_{{ IDENTITY }}.yml"
+  include_vars: "identity/{{ IDENTITY }}/vault.yml"
   no_log: true
 
 - name: "Get repository information (url)"
