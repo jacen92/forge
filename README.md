@@ -11,7 +11,7 @@ Only traefik's frontend is not exposed with TLS and will be acccessible with HTT
 A docker image contains all requirements to deploy a forge in a TARGET with the private key to access the root user throught SSh.
 An identity archive should be provided to customize the installation else a dev identity will be set up.
 
-You should have at least 20Go of free storage, Less if you skip some services.
+The full installation take 60minutes on my Rpi4 and 10Go of storage, Less if you skip some services.
 
 How to make an identity
 -----------------------
