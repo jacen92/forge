@@ -18,7 +18,17 @@
     mode: 0644
   with_items:
     - traefik.toml
+
+- name: "Copy traefik configurations in traefik directory"
+  template:
+    src: "files/traefik/{{ item }}"
+    dest: "/{{ DATACORE }}/traefik/{{ item }}"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    mode: 0644
+  with_items:
     - tls-certs.toml
+  when: "DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0"
 
 - name: "Copy traefik certificates in traefik directory"
   copy:
