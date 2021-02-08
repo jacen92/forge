@@ -8,6 +8,7 @@
 # required secrets
 # $SHARED_DIRECTORY/ansible_key: will be used to connect to the remote system.
 # $SHARED_DIRECTORY/vault_password: in some case the password must be provided in a file instead of an env var.
+# $SHARED_DIRECTORY/identity_password: In the case the identity archive is encrypted
 # $SHARED_DIRECTORY/$IDENTITY.zip: zip archive of an identity folder, should not be a flat archive.
 # $SHARED_DIRECTORY/forge_authorized_keys; keys allowed to connect to the forge.
 # $SHARED_DIRECTORY/fdroid_authorized_keys: keys allowed to send files to fdroid.
@@ -33,8 +34,13 @@ fi
 
 if [ ! -z "$IDENTITY" ]; then
   if [ -f "$SHARED_DIRECTORY/$IDENTITY.zip" ]; then
-    echo "Use provided identity $IDENTITY"
-    unzip "$SHARED_DIRECTORY/$IDENTITY.zip" -d /home/$USER_NAME/forge/identity
+    if [ -f "$SHARED_DIRECTORY/identity_password" ]; then
+      echo "Use provided identity $IDENTITY with password"
+      unzip -P "$(cat $SHARED_DIRECTORY/identity_password)" "$SHARED_DIRECTORY/$IDENTITY.zip" -d /home/$USER_NAME/forge/identity
+    else
+      echo "Use provided identity $IDENTITY"
+      unzip "$SHARED_DIRECTORY/$IDENTITY.zip" -d /home/$USER_NAME/forge/identity
+    fi
     echo "Replace identity name in setup_forge.yml"
     sed -i 's+IDENTITY: "dev"+IDENTITY: "'$IDENTITY'"+' /home/$USER_NAME/forge/setup_forge.yml
   else
