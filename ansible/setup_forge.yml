@@ -5,7 +5,6 @@
   serial: 100%
   vars:
   - IDENTITY: "dev"
-  - SKIP_SERVICES: []
   roles:
     - common
     - infra
