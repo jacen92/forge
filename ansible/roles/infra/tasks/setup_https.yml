@@ -82,7 +82,6 @@
       - "{{ INSOLANTE_PORT }}:{{ INSOLANTE_PORT }}"
       - "{{ WORDPRESS_FRONT_PORT }}:{{ WORDPRESS_FRONT_PORT }}"
       - "{{ PEERTUBE_PORT }}:{{ PEERTUBE_PORT }}"
-      - "{{ MSTREAM_PORT }}:{{ MSTREAM_PORT }}"
       - "{{ NEXUS_PORT }}:{{ NEXUS_PORT }}"
       - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
       - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"

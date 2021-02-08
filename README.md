@@ -105,7 +105,6 @@ Social and media:
 
 * Wordpress: The WordPress rich content management system [https://hub.docker.com/_/wordpress/].
 * Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
-* mStream: The easiest music streaming server available [https://hub.docker.com/r/linuxserver/mstream].
 
 ![Renderer screenshot](/documents/screenshots/social.png)
 
@@ -139,7 +138,6 @@ Port listing (exposed from all docker containers)
 | Octoprint         | 8033 |   http   | Hard    |        no        | printers. |
 | Wordpress         | 8040 |   http   | Social  |        no        |   blog.   |
 | Peertube          | 8041 |   http   | Social  |        no        |   video.  |
-| mStream           | 8042 |   http   | Social  |        no        |   music.  |
 | Nexus             | 8050 |   http   | Storage |        no        |  nexus.   |
 | Nexus docker pull | 8051 |   http   | Storage |        no        |  nexus.   |
 | Nexus docker push | 8052 |   http   | Storage |        no        |  nexus.   |
@@ -183,7 +181,6 @@ Vault file parameters
 | ROOT_PASS               |   common   | Default root password                    |
 | BACKUP_PASS             |   infra    | Default backup password                  |
 | BACKUP_REMOTE_PASS      |   infra    | Default remote FTP password for backup   |
-| MSTREAM_PASS            |   social   | Default mStream admin user password      |
 | PEERTUBE_DB_PASS        |   social   | Default database password for peertube   |
 | WORDPRESS_DB_PASS       |   social   | Default database password for wordpress  |
 | MQTT_READER_PASS        |   hard     | Default password for user with read acl  |

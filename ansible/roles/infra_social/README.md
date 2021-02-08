@@ -3,6 +3,5 @@ Ansible role for the Infrastructure to manage media file storage and distributio
 Content
 =======
 
-* mStream: Music streaming service (Spotify alternative).
 * Peertube: Video streaming service (Youtube alternative).
 * Wordpress: Blogging service (Most used CMS).
