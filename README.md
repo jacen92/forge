@@ -16,7 +16,8 @@ You should have at least 20Go of free storage, Less if you skip some services.
 How to make an identity
 -----------------------
 
-An identity is a compressed folder containing some files and secrets. Protected archive are not supported yet.
+An identity is a compressed folder containing some files and secrets.
+Password protected archive are supported, add a file with the password in `shared/identity_password`.
 The folder structure exemple can be found in `ansible/identity/dev` so you can copy this directory and customize your own then archive it.
 
 ```
