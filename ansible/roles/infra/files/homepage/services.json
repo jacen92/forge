@@ -131,15 +131,6 @@
         "description": "Federated video streaming platform.",
         "dockerhub": "https://hub.docker.com/r/ngargaud/peertube",
         "source": ""
-      },
-      {
-        "name": "MStream",
-        "port": "{{ MSTREAM_PORT | default('unknown') }}",
-        "version": "{{ MSTREAM_VERSION | default('unknown') }}",
-        "external": "https://{{ MSTREAM_EXTERNAL_URL | default('unknown') }}",
-        "description": "The easiest music streaming server available.",
-        "dockerhub": "https://hub.docker.com/r/linuxserver/mstream",
-        "source": ""
       }
     ],
     "Storage": [

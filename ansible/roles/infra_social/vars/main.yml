@@ -12,9 +12,3 @@ PEERTUBE_IS_HTTPS: "false"
 PEERTUBE_TMP_PATH: "/tmp/peertube"
 PEERTUBE_DB_USER: "peertube"
 PEERTUBE_DEFAULT_STATE: stopped
-
-MSTREAM_VERSION: "v4.7.0-ls38"
-MSTREAM_PORT: "8042"
-MSTREAM_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-MSTREAM_EXTERNAL_URL: "music.{{ DOMAIN_NAME }}"
-MSTREAM_DEFAULT_STATE: stopped
