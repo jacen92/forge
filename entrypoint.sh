@@ -36,7 +36,7 @@ if [ ! -z "$IDENTITY" ]; then
     echo "Use provided identity $IDENTITY"
     unzip "$SHARED_DIRECTORY/$IDENTITY.zip" -d /home/$USER_NAME/forge/identity
     echo "Replace identity name in setup_forge.yml"
-    sed -i 's+IDENTITY: "dev"+IDENTITY: "$IDENTITY"+' /home/$USER_NAME/forge/setup_forge.yml
+    sed -i 's+IDENTITY: "dev"+IDENTITY: "'$IDENTITY'"+' /home/$USER_NAME/forge/setup_forge.yml
   else
     echo "ERROR: $IDENTITY.zip not found in $SHARED_DIRECTORY/"
     exit 2
