@@ -7,3 +7,9 @@ DEFAULT_ADMIN_NAME: "admin"
 USER_NAME: "forge"
 USER_MAIL: "{{ USER_NAME }}@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, 'exemple.org') }}"
 SKIP_SERVICES: []
+
+# Select the color of jenkins theme here
+# grey, ed, pink, purple, deep-purple, indigo,
+# blue, light-blue, cyan, teal, green, light-green,
+# lime, yellow, amber, orange, deep-orange, brown, blue-grey
+# JENKINS_THEME_COLOR: "blue-grey"
