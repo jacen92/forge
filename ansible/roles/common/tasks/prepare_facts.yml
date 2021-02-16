@@ -48,7 +48,7 @@
     - "* DATACORE: {{ DATACORE }}"
     - "* USER_NAME: {{ USER_NAME }}"
     - "* USER_MAIL: {{ USER_MAIL }}"
-    - "* DOMAIN_NAME: {{ DOMAIN_NAME }}"
+    - "* DOMAIN_NAME: {{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
     - "* DEFAULT_ADMIN_NAME: {{ DEFAULT_ADMIN_NAME }}"
     - "* git url: {{ git_url.stdout }}"
     - "* git branch: {{ git_branch.stdout }}"
@@ -56,7 +56,7 @@
 
 - name: "Define global_proxy_rule"
   set_fact:
-     global_proxy_rule: "Host(`{{ inventory_hostname }}`) || Host(`{{ DOMAIN_NAME }}`) || Host(`{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}`)"
+     global_proxy_rule: "Host(`{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}`)"
 
 - name: "Check if ldap need to be configured"
   block:
