@@ -250,7 +250,7 @@
         username: "{{ nexus_deploy_username }}",
         first_name: "nexus",
         last_name: "deploy",
-        email: "deploy@{{ DOMAIN_NAME }}",
+        email: "deploy@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}",
         password: "{{ nexus_deploy_password }}",
         roles: ["deployment"]
     }

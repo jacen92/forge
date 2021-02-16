@@ -1,8 +1,8 @@
 {
   "forge": {
     "mode": "{{IDENTITY}}",
-    "address": "{{ inventory_hostname }}",
-    "domain": "{{ DOMAIN_NAME }}",
+    "address": "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, inventory_hostname) }}",
+    "domain": "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}",
     "backup": {
       "url": "{{ BACKUP_REMOTE_URL }}"
     }

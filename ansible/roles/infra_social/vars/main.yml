@@ -1,13 +1,13 @@
 WORDPRESS_VERSION: "5.6.0-php7.4"
 WORDPRESS_DB_VERSION: "10.4.10"
 WORDPRESS_FRONT_PORT: "8040"
-WORDPRESS_EXTERNAL_URL: "blog.{{ DOMAIN_NAME }}"
+WORDPRESS_EXTERNAL_URL: "blog.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 WORDPRESS_DEFAULT_STATE: stopped
 
 PEERTUBE_VERSION: "v1.4.0-stretch"
 PEERTUBE_PORT: "8041"
-PEERTUBE_URL: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-PEERTUBE_EXTERNAL_URL: "video.{{ DOMAIN_NAME }}"
+PEERTUBE_URL: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}"
+PEERTUBE_EXTERNAL_URL: "video.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 PEERTUBE_IS_HTTPS: "false"
 PEERTUBE_TMP_PATH: "/tmp/peertube"
 PEERTUBE_DB_USER: "peertube"
