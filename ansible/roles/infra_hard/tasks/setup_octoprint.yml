@@ -6,6 +6,21 @@
     group: "1000"
     state: directory
 
+- name: "List devices in /dev"
+  shell: "ls /dev"
+  ignore_errors: True
+  register: ttyACMx
+
+- name: "Define OCTOPRINT_DEVICE_0 to /dev/ttyACM0"
+  set_fact:
+     OCTOPRINT_DEVICE_0: "/dev/ttyACM0"
+  when: "'ttyACM0' in ttyACMx.stdout_lines"
+
+- name: "Define OCTOPRINT_DEVICE_1 to /dev/ttyACM1"
+  set_fact:
+     OCTOPRINT_DEVICE_1: "/dev/ttyACM1"
+  when: "'ttyACM1' in ttyACMx.stdout_lines"
+
 - name: "Launch octoprint container {{ OCTOPRINT_VERSION }}"
   docker_container:
     name: "octoprint"
@@ -20,7 +35,7 @@
       - "{{ OCTOPRINT_DEVICE_0 }}:/dev/ttyACM0"
       - "{{ OCTOPRINT_DEVICE_1 }}:/dev/ttyACM1"
     volumes:
-      - "/{{ DATACORE }}/octoprint:/home/octoprint/.octoprint"
+      - "/{{ DATACORE }}/octoprint:/config"
     labels:
       traefik.enable: "true"
       traefik.http.services.octoprint.loadbalancer.server.port: "5000"
