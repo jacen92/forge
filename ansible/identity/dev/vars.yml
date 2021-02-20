@@ -7,6 +7,12 @@ DEFAULT_ADMIN_NAME: "admin"
 USER_NAME: "forge"
 USER_MAIL: "{{ USER_NAME }}@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, 'exemple.org') }}"
 SKIP_SERVICES: []
+BACKUP_CONFIGURATION:
+  BACKUP_TO_KEEP: 3
+  BACKUP_DRIVE: ""
+  REMOTE_SERVER: ""
+  REMOTE_PATH: ""
+  REMOTE_USER: ""
 
 # Select the color of jenkins theme here
 # grey, ed, pink, purple, deep-purple, indigo,
