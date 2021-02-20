@@ -15,7 +15,7 @@
     name: "portainer"
     image: "portainer/portainer-ce:{{ PORTAINER_VERSION }}"
     state: started
-    #restart_policy: always
+    restart_policy: always
     #recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
     command: ["-H", "unix:///var/run/docker.sock", "--admin-password='{{ portainer_password.stdout }}'"]
