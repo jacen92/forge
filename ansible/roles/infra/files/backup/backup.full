@@ -1,0 +1,35 @@
+#!/bin/bash
+
+test -x "$(which duplicity)" || exit 0
+export PASSPHRASE='{{ BACKUP_PASS | default("") }}'
+
+# Use duplicity as described here: https://www.howtoforge.com/creating-encrypted-ftp-backups-with-duplicity-and-duply-on-debian-squeeze
+export FTP_USERNAME="{{ BACKUP_REMOTE_USER | default("") }}"
+export FTP_PASSWORD="{{ BACKUP_REMOTE_PASS | default("") }}"
+if [[ ! -z "${FTP_USERNAME}" ]]; then
+  if [[ ! -z "${FTP_PASSWORD}" ]]; then
+    export FULL_REMOTE_PATH='ftp://{{ BACKUP_REMOTE_USER }}@{{ BACKUP_REMOTE_URL }}/{{ BACKUP_REMOTE_PATH }}/{{ IDENTITY }}'
+    echo "Backup to {{ BACKUP_REMOTE_URL }}/{{ BACKUP_REMOTE_PATH }}/{{ IDENTITY }}"
+    duplicity full -v 9 --rsync-options='-p' /{{ DATACORE }} '$FULL_REMOTE_PATH'
+    duplicity remove-all-but-n-full {{ BACKUP_TO_KEEP }} --force '$FULL_REMOTE_PATH'
+  else
+    echo "Skip backup to ftp with duplicity (no password provided)"
+  fi
+else
+  echo "Skip backup to ftp with duplicity (no username provided)"
+fi
+
+export BACKUP_DRIVE="{{ BACKUP_DRIVE | default("") }}"
+if [[ ! -z "${BACKUP_DRIVE}" ]]; then
+  export BACKUP_DRIVE_TOKEN="{{ BACKUP_DRIVE_TOKEN | default("") }}"
+  if [[ ! -z "${BACKUP_DRIVE_TOKEN}" ]]; then
+    echo "(TODO) Backup to external drive"
+    echo "* Ensure drive is available"
+    echo "* Ensure the drive contains the backup token"
+    echo "* Start backup"
+  else
+    echo "Skip backup to external drive (token not provided)"
+  fi
+else
+  echo "Skip backup to external drive (drive name not provided)"
+fi
