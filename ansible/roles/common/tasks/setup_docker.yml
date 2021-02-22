@@ -1,14 +1,4 @@
 ---
-- name: "Ensure docker timeouts are long enough (108000 = 30min)"
-  lineinfile:
-    path: '/etc/environment'
-    line: "{{ item }}"
-  loop:
-    - "COMPOSE_HTTP_TIMEOUT={{ DOCKER_TIMEOUT }}"
-    - "DOCKER_CLIENT_TIMEOUT={{ DOCKER_TIMEOUT }}"
-    - "DOCKER_TIMEOUT={{ DOCKER_TIMEOUT }}"
-  register: docker_update
-
 - name: "Ensure docker.io is installed"
   apt:
     pkg: [docker.io]
@@ -28,6 +18,16 @@
     state: present
     name: [docker-py]
 
+- name: "Ensure docker timeouts are long enough (108000 = 30min)"
+  lineinfile:
+    path: '/etc/environment'
+    line: "{{ item }}"
+  loop:
+    - "COMPOSE_HTTP_TIMEOUT={{ DOCKER_TIMEOUT }}"
+    - "DOCKER_CLIENT_TIMEOUT={{ DOCKER_TIMEOUT }}"
+    - "DOCKER_TIMEOUT={{ DOCKER_TIMEOUT }}"
+  register: docker_update
+
 - name: "Reload and restart service docker"
   service:
     name: docker
@@ -37,3 +37,9 @@
 
 - name: "Set ulimit to unlimited"
   shell: "ulimit -c unlimited"
+
+- name: "HACK: add a cron job to force docker to start after a reboot"
+  cron:
+    name: "Force docker to start after reboot"
+    special_time: reboot
+    job: "docker ps -a"
