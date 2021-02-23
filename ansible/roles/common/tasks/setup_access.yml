@@ -4,7 +4,7 @@
   register: stat_authorized_keys
 
 - name: "Copy authorized_keys for root"
-  copy:
+  ansible.builtin.copy:
     src: "files/authorized_keys"
     dest: "/root/.ssh/authorized_keys"
     owner: "root"
@@ -13,7 +13,7 @@
   when: stat_authorized_keys.stat.exists
 
 - name: "Copy authorized_keys for regular user"
-  copy:
+  ansible.builtin.copy:
     src: "files/authorized_keys"
     dest: "/home/{{ USER_NAME }}/.ssh/authorized_keys"
     owner: "{{ USER_NAME }}"
@@ -22,7 +22,7 @@
   when: stat_authorized_keys.stat.exists
 
 - name: "Reset root password"
-  user:
+  ansible.builtin.user:
     name: "root"
     password: "{{ ROOT_PASS | password_hash('sha512') }}"
     shell: /bin/bash

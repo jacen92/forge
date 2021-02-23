@@ -1,14 +1,14 @@
 ---
 - name: "Get user ID"
-  shell: "id -u {{ USER_NAME }}"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
   register: user_id
 
 - name: "Get group ID"
-  shell: "id -g {{ USER_NAME }}"
+  ansible.builtin.shell: "id -g {{ USER_NAME }}"
   register: group_id
 
 - name: "Set correct owner of full jenkins data directory"
-  file:
+  ansible.builtin.file:
     path: "/{{DATACORE}}/jenkins"
     owner: "{{ user_id.stdout }}"
     group: "{{ group_id.stdout }}"
@@ -16,12 +16,12 @@
     recurse: yes
 
 - name: "Remove previous jenkins tmp directory"
-  file:
+  ansible.builtin.file:
      path: "/tmp/jenkins"
      state: absent
 
 - name: "Clone jenkinsci"
-  git:
+  ansible.builtin.git:
     repo: "https://github.com/jenkinsci/docker.git"
     dest: "/tmp/jenkins"
     accept_hostkey: yes
@@ -30,14 +30,14 @@
     version: "0d3c2a3a9442fb34e86426ea556ba5cf2a09ff45"
 
 - name: "Use the correct base image for ARM arch"
-  replace:
+  ansible.builtin.replace:
     path: "/tmp/jenkins/Dockerfile"
     regexp: 'FROM (.*)'
     replace: 'FROM arm64v8/openjdk:8-jre-stretch'
   when: ansible_architecture in ["aarch64"]
 
 - name: "Build jenkins image and with buildargs"
-  docker_image:
+  community.general.docker_image:
      name: "jenkins"
      tag: "{{ JENKINS_VERSION }}"
      source: "build"
@@ -54,7 +54,7 @@
   become_user: "{{ USER_NAME }}"
 
 - name: "Launch jenkins container {{ JENKINS_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "jenkins"
     image: "jenkins:{{ JENKINS_VERSION }}"
     state: started
@@ -69,7 +69,7 @@
   become_user: "{{ USER_NAME }}"
 
 - name: "Wait for Jenkins to start up"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ JENKINS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
@@ -82,12 +82,12 @@
      jenkins_service_status['status'] == 200 or jenkins_service_status['status'] == 403
 
 - name: "Create jenkins init.groovy directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/jenkins/init.groovy.d"
     state: directory
 
 - name: "Copy all groovy files to customize jenkins installation"
-  template:
+  ansible.builtin.template:
     src: "files/jenkins/groovy/{{ item }}.j2"
     dest: "/{{ DATACORE }}/jenkins/init.groovy.d/{{ item }}"
     mode: u=rw,g=r,o=r
@@ -101,7 +101,7 @@
     - "06-configure-mailer.groovy"
 
 - name: "Copy ldap groovy files to customize jenkins installation"
-  template:
+  ansible.builtin.template:
     src: "files/jenkins/groovy/{{ item }}.j2"
     dest: "/{{ DATACORE }}/jenkins/init.groovy.d/{{ item }}"
     mode: u=rw,g=r,o=r
@@ -110,65 +110,65 @@
   when: configure_ldap is defined
 
 - name: "Set isSetupComplete to avoid getting started wizard"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /{{ DATACORE }}/jenkins/config.xml
     regexp: "(.*)<isSetupComplete>false</isSetupComplete>(.*)"
     line: "<isSetupComplete>true</isSetupComplete>"
 
 - name: "Set status name to avoid getting started wizard"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /{{ DATACORE }}/jenkins/config.xml
     regexp: "(.*)<name>NEW</name>"
     line: "<name>RUNNING</name>"
 
 - name: "Set status name to avoid getting started wizard"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /{{ DATACORE }}/jenkins/config.xml
     regexp: "(.*)<installStateName>(.*)</installStateName>(.*)"
     line: "<installStateName>RUNNING</installStateName>"
 
 - name: "Create file to avoid getting started wizard"
-  copy:
+  ansible.builtin.copy:
     content: "{{ JENKINS_VERSION }}"
     dest: "/{{ DATACORE }}/jenkins/jenkins.install.UpgradeWizard.state"
     mode: u=rw,g=r,o=r
 
 - name: "Set master executors to 1"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /{{ DATACORE }}/jenkins/config.xml
     regexp: "(.*)<numExecutors>(.*)</numExecutors>(.*)"
     line: "<numExecutors>1</numExecutors>"
 
 - name: "Bypass - jenkins.install.InstallUtil.lastExecVersion (Hack)"
-  copy:
+  ansible.builtin.copy:
     src: "/{{ DATACORE }}/jenkins/jenkins.install.UpgradeWizard.state"
     dest: "/{{ DATACORE }}/jenkins/jenkins.install.InstallUtil.lastExecVersion"
     remote_src: true
     mode: u=rw,g=r,o=r
 
 - name: "Register - initialAdminPassword"
-  stat:
+  ansible.builtin.stat:
     path: "/{{ DATACORE }}/jenkins/secrets/initialAdminPassword"
   register: jenkinsAdminPassword
 
 - name: "Bypass - initialAdminPassword"
-  shell: "mv /{{ DATACORE }}/jenkins/secrets/initialAdminPassword /root"
+  ansible.builtin.shell: "mv /{{ DATACORE }}/jenkins/secrets/initialAdminPassword /root"
   when: jenkinsAdminPassword.stat.exists == True
 
 - name: "Copy theme configuration file"
-  template:
+  ansible.builtin.template:
     src: files/jenkins/config/theme-config.xml
     dest: /{{ DATACORE }}/jenkins/org.codefirst.SimpleThemeDecorator.xml
 
 - name: "Set correct owner of full jenkins data directory for x86_64 image"
-  file:
+  ansible.builtin.file:
     path: "/{{DATACORE}}/jenkins"
     owner: "{{ user_id.stdout }}"
     group: "{{ group_id.stdout }}"
     recurse: yes
 
 - name: "Restart jenkins container"
-  docker_container:
+  community.general.docker_container:
     name: jenkins
     state: started
     restart: yes
@@ -176,7 +176,7 @@
   become_user: "{{ USER_NAME }}"
 
 - name: "Wait for Jenkins to start up"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ JENKINS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
@@ -189,7 +189,7 @@
      jenkins_service_status['status'] == 200 or jenkins_service_status['status'] == 403
 
 - name: "set jenkins container final state ({{ JENKINS_DEFAULT_STATE }})"
-  docker_container:
+  community.general.docker_container:
     name: "jenkins"
     hostname: "jenkins"
     image: "jenkins:{{ JENKINS_VERSION }}"

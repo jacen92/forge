@@ -1,6 +1,6 @@
 ---
 - name: "Setup odoo directory"
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
@@ -12,7 +12,7 @@
     - "/{{ DATACORE }}/odoo/db"
 
 - name: "Launch odoo database container"
-  docker_container:
+  community.general.docker_container:
     name: "odoo_postgres"
     image: postgres:10-alpine
     state: started
@@ -29,7 +29,7 @@
       traefik.enable: "false"
 
 - name: "Launch odoo container {{ ODOO_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "odoo"
     image: "odoo:{{ ODOO_VERSION }}"
     state: "{{ ODOO_DEFAULT_STATE }}"

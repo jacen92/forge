@@ -1,20 +1,20 @@
 ---
 - name: "Get docker group ID"
-  shell: "grep docker /etc/group | cut -d ':' -f 3"
+  ansible.builtin.shell: "grep docker /etc/group | cut -d ':' -f 3"
   register: docker_id
 
 - name: "Define netdata_image Arm?"
-  set_fact:
+  ansible.builtin.set_fact:
      netdata_image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Define netdata_image amd64?"
-  set_fact:
+  ansible.builtin.set_fact:
      netdata_image: "netdata/netdata:{{ NETDATA_VERSION }}"
   when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch netdata container {{ NETDATA_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "netdata"
     image: "{{ netdata_image }}"
     state: "{{ NETDATA_DEFAULT_STATE }}"

@@ -1,6 +1,6 @@
 ---
 - name: "Setup traefik directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
@@ -10,7 +10,7 @@
     - traefik/certs
 
 - name: "Copy traefik configurations in traefik directory"
-  template:
+  ansible.builtin.template:
     src: "files/traefik/{{ item }}"
     dest: "/{{ DATACORE }}/traefik/{{ item }}"
     owner: "{{ USER_NAME }}"
@@ -20,7 +20,7 @@
     - traefik.toml
 
 - name: "Copy traefik configurations in traefik directory"
-  template:
+  ansible.builtin.template:
     src: "files/traefik/{{ item }}"
     dest: "/{{ DATACORE }}/traefik/{{ item }}"
     owner: "{{ USER_NAME }}"
@@ -31,7 +31,7 @@
   when: "DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0"
 
 - name: "Copy traefik certificates in traefik directory"
-  copy:
+  ansible.builtin.copy:
     src: "identity/{{ IDENTITY }}/certs/{{ item.file }}"
     dest: "/{{ DATACORE }}/traefik/certs/{{ item.file }}"
     owner: "{{ USER_NAME }}"
@@ -43,23 +43,23 @@
   when: "DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0"
 
 - name: "Define traefik_image armv7l?"
-  set_fact:
+  ansible.builtin.set_fact:
      traefik_image: "arm32v6/traefik:{{ TRAEFIK_VERSION }}"
   when: ansible_architecture in ["armv7l"]
 
 - name: "Define traefik_image aarch64?"
-  set_fact:
+  ansible.builtin.set_fact:
      traefik_image: "arm64v8/traefik:{{ TRAEFIK_VERSION }}"
   when: ansible_architecture in ["aarch64"]
 
 - name: "Define traefik_image amd64?"
-  set_fact:
+  ansible.builtin.set_fact:
      traefik_image: "traefik:{{ TRAEFIK_VERSION }}"
   when: ansible_architecture in ["amd64", "x86_64"]
 
 # from: https://www.sheevaboite.fr/articles/traefik-reverse-proxy-https-containers-docker
 - name: "Launch traefik container version {{ TRAEFIK_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "traefik"
     image: "{{ traefik_image }}"
     state: started
@@ -103,11 +103,11 @@
   when: traefik_image is defined
 
 - name: "Sleep for 30 seconds to let traefik starts"
-  wait_for: timeout=30
+  ansible.builtin.wait_for: timeout=30
   delegate_to: 127.0.0.1
 
 - name: "Make sure the certificate file has the correct rights"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/traefik/certs/acme.json"
     owner: "root"
     group: "root"

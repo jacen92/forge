@@ -1,28 +1,28 @@
 ---
 - name: "Setup datacore directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/octoprint"
     owner: "1000"
     group: "1000"
     state: directory
 
 - name: "List devices in /dev"
-  shell: "ls /dev"
+  ansible.builtin.shell: "ls /dev"
   ignore_errors: True
   register: ttyACMx
 
 - name: "Define OCTOPRINT_DEVICE_0 to /dev/ttyACM0"
-  set_fact:
+  ansible.builtin.set_fact:
      OCTOPRINT_DEVICE_0: "/dev/ttyACM0"
   when: "'ttyACM0' in ttyACMx.stdout_lines"
 
 - name: "Define OCTOPRINT_DEVICE_1 to /dev/ttyACM1"
-  set_fact:
+  ansible.builtin.set_fact:
      OCTOPRINT_DEVICE_1: "/dev/ttyACM1"
   when: "'ttyACM1' in ttyACMx.stdout_lines"
 
 - name: "Launch octoprint container {{ OCTOPRINT_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "octoprint"
     image: "octoprint/octoprint:{{ OCTOPRINT_VERSION }}"
     state: "{{ OCTOPRINT_DEFAULT_STATE }}"

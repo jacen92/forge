@@ -1,25 +1,25 @@
 ---
 - name: "Ensure docker.io is installed"
-  apt:
+  ansible.builtin.apt:
     pkg: [docker.io]
     state: present
     update_cache: true
     cache_valid_time: 3600
 
 - name: "Ensure obselete docker lib for python is removed"
-  pip:
+  ansible.builtin.pip:
     executable: pip3
     state: absent
     name: [docker]
 
 - name: "Ensure docker lib for python is installed"
-  pip:
+  ansible.builtin.pip:
     executable: pip3
     state: present
     name: [docker-py]
 
 - name: "Ensure docker timeouts are long enough (108000 = 30min)"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '/etc/environment'
     line: "{{ item }}"
   loop:
@@ -29,17 +29,17 @@
   register: docker_update
 
 - name: "Reload and restart service docker"
-  service:
+  ansible.builtin.service:
     name: docker
     state: restarted
     daemon_reload : yes
   when: docker_update.changed
 
 - name: "Set ulimit to unlimited"
-  shell: "ulimit -c unlimited"
+  ansible.builtin.shell: "ulimit -c unlimited"
 
 - name: "HACK: add a cron job to force docker to start after a reboot"
-  cron:
+  ansible.builtin.cron:
     name: "Force docker to start after reboot"
     special_time: reboot
     job: "docker ps -a"

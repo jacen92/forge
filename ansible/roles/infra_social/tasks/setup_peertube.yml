@@ -1,13 +1,13 @@
 ---
 - name: "Setup peertube directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/peertube"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Launch peertube database container"
-  docker_container:
+  community.general.docker_container:
     name: "peertube_postgres"
     image: postgres:10-alpine
     state: started
@@ -24,7 +24,7 @@
       traefik.enable: "false"
 
 - name: "Launch peertube redis container"
-  docker_container:
+  community.general.docker_container:
     name: "peertube_redis"
     image: redis:4-alpine
     state: started
@@ -37,17 +37,17 @@
       traefik.enable: "false"
 
 - name: "Define peertube_image ARM?"
-  set_fact:
+  ansible.builtin.set_fact:
      peertube_image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}-arm64"
   when: ansible_architecture in ["aarch64"]
 
 - name: "Define peertube_image amd64?"
-  set_fact:
+  ansible.builtin.set_fact:
      peertube_image: "ngargaud/peertube:{{ PEERTUBE_VERSION }}"
   when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch peertube container {{ PEERTUBE_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "peertube"
     image: "{{ peertube_image }}"
     state: "{{ PEERTUBE_DEFAULT_STATE }}"

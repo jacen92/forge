@@ -1,16 +1,16 @@
 ---
 - name: "Define gogs_image ARM?"
-  set_fact:
+  ansible.builtin.set_fact:
      gogs_image: "gogs/gogs-rpi:{{ GOGS_VERSION }}"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Define gogs_image amd64?"
-  set_fact:
+  ansible.builtin.set_fact:
      gogs_image: "gogs/gogs:{{ GOGS_VERSION }}"
   when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch gogs container {{ GOGS_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "gogs"
     hostname: "gogs"
     image: "{{ gogs_image }}"
@@ -47,12 +47,12 @@
   when: gogs_image is defined
 
 - name: "Check for gogs configuration file"
-  stat:
+  ansible.builtin.stat:
     path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
   register: stat_gogs_config
 
 - name: "Ensure SSH_PORT is correct (first configuration is required before)"
-  ini_file:
+  community.general.ini_file:
     path: "/{{ DATACORE }}/gogs/gogs/conf/app.ini"
     section: server
     option: SSH_PORT

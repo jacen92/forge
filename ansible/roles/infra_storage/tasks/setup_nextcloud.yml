@@ -1,6 +1,6 @@
 ---
 - name: "Setup nextcloud directory"
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     owner: "33"
     group: "33"
@@ -12,7 +12,7 @@
     - "/{{ DATACORE }}/nextcloud/data"
 
 - name: "start nextcloud container {{ NEXTCLOUD_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "nextcloud"
     image: "nextcloud:{{ NEXTCLOUD_VERSION }}"
     state: "started"
@@ -31,17 +31,17 @@
       - "/{{ DATACORE }}/nextcloud/data:/var/www/html/data"
 
 - name: "wait"
-  pause:
+  ansible.builtin.pause:
     minutes: 3
 
 - name: "Ensure the redirection from https to http is removed"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/{{ DATACORE }}/nextcloud/config/config.php"
     insertafter: "'htaccess.RewriteBase' => '/',"
     line: "'overwriteprotocol' => 'https',"
 
 - name: "Launch nextcloud container {{ NEXTCLOUD_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "nextcloud"
     image: "nextcloud:{{ NEXTCLOUD_VERSION }}"
     state: "{{NEXTCLOUD_DEFAULT_STATE }}"

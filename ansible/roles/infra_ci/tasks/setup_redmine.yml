@@ -1,20 +1,20 @@
 ---
 - name: "Setup redmine database directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/redmine_db"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Setup redmine directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/redmine"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Launch redmine database container"
-  docker_container:
+  community.general.docker_container:
     name: "redmine_postgres"
     image: "postgres:{{ REDMINE_DB_VERSION }}"
     state: started
@@ -33,11 +33,11 @@
   become_user: "{{ USER_NAME }}"
 
 - name: "wait"
-  pause:
+  ansible.builtin.pause:
     minutes: 3
 
 - name: "Launch redmine container"
-  docker_container:
+  community.general.docker_container:
     name: "redmine"
     hostname: "redmine"
     image: "redmine:{{ REDMINE_VERSION }}"

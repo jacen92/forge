@@ -1,6 +1,6 @@
 ---
 - name: "Set regular user parameters"
-  user:
+  ansible.builtin.user:
     name: "{{ USER_NAME }}"
     password: "{{ USER_PASS | password_hash('sha512') }}"
     shell: /bin/bash
@@ -9,20 +9,20 @@
     ssh_key_file: .ssh/id_rsa
 
 - name: "Adding existing user '{{ USER_NAME }}' to group sudo and docker"
-  user:
+  ansible.builtin.user:
     name: '{{ USER_NAME }}'
     groups: sudo,docker
     append: yes
 
 - name: "Setup datacore directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Ensure aliases are present in users profile"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '/home/{{ USER_NAME }}/.profile'
     line: "{{ item }}"
   with_items:

@@ -1,20 +1,20 @@
 ---
 - name: "Setup datacore directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/fdroid"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Setup fdroid apk directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/fdroid/apk"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Setup fdroid config directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/fdroid/config"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
@@ -25,7 +25,7 @@
   register: stat_authorized_keys
 
 - name: "Copy authorized_keys for root"
-  copy:
+  ansible.builtin.copy:
     src: "files/fdroid/authorized_keys"
     dest: "/{{ DATACORE }}/fdroid/config/authorized_keys"
     owner: "root"
@@ -34,23 +34,23 @@
   when: stat_authorized_keys.stat.exists
 
 - name: "Copy basic configuration for admin credentials"
-  template:
+  ansible.builtin.template:
     src: "files/fdroid/config.in.py"
     dest: "/{{ DATACORE }}/fdroid/config/config.in.py"
     mode: u=rw,g=r,o=r
 
 - name: "Define fdroid_image ARM?"
-  set_fact:
+  ansible.builtin.set_fact:
      fdroid_image: "ngargaud/fdroid-server:arm-{{ FDROID_VERSION }}"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Define fdroid_image amd64?"
-  set_fact:
+  ansible.builtin.set_fact:
      fdroid_image: "ngargaud/fdroid-server:{{ FDROID_VERSION }}"
   when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch fdroid container {{ FDROID_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "fdroid"
     hostname: "fdroid"
     image: "{{ fdroid_image }}"

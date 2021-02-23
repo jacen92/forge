@@ -1,13 +1,13 @@
 ---
 - name: "Setup home page directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/homepage"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Install page template"
-  template:
+  ansible.builtin.template:
     src: files/homepage/{{ item }}
     dest: "/{{ DATACORE }}/homepage/{{ item }}"
     owner: "{{ USER_NAME }}"
@@ -18,7 +18,7 @@
     - services.json
 
 - name: "Launch homepage nginx container {{ NGINX_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "homepage"
     image: "nginx:{{ NGINX_VERSION }}"
     state: started

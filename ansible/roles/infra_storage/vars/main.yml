@@ -4,6 +4,7 @@ NEXUS_PORT: "8050"
 NEXUS_DOCKER_PULL_PORT: "8051"
 NEXUS_DOCKER_PUSH_PORT: "8052"
 NEXUS_PORT_CONFIG: 9001
+NEXTCLOUD_URL_IN_CONFIG: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}"
 NEXUS_EXTERNAL_URL: "nexus.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 NEXUS_RESTART_DELAY: 40
 NEXUS_DEFAULT_STATE: stopped
