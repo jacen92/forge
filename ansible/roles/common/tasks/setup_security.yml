@@ -1,6 +1,6 @@
 ---
 - name: "Install security dependencies"
-  apt:
+  ansible.builtin.apt:
     pkg: [fail2ban, ufw, iptables, python3-systemd]
     state: present
     update_cache: true
@@ -8,19 +8,19 @@
 
 # NOTE: Used to make sure the ban list is working after a reboot
 - name: "Ensure fail2ban start after docker"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /lib/systemd/system/fail2ban.service
     regexp: '^After='
     line: 'After=network.target iptables.service firewalld.service docker.service'
 
 - name: "Enable UFW and close all ports"
-  ufw:
+  community.general.ufw:
     state: enabled
     policy: deny
 
 # NOTE: allow ssh port for ansible in the case something went wront
 - name: "Allow all access to tcp port SSH port"
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp
@@ -30,7 +30,7 @@
 # fail2ban configuration
 # https://www.the-lazy-dev.com/en/install-fail2ban-with-docker/
 - name: "Copy fail2ban actions"
-  template:
+  ansible.builtin.template:
     src: files/fail2ban/actions/{{ item }}
     dest: /etc/fail2ban/action.d/{{ item }}
   with_items:
@@ -38,7 +38,7 @@
   register: fail2ban_action_update
 
 - name: "Copy fail2ban filters"
-  template:
+  ansible.builtin.template:
     src: files/fail2ban/filters/{{ item }}
     dest: /etc/fail2ban/filter.d/{{ item }}
   with_items:
@@ -47,13 +47,13 @@
   register: fail2ban_filter_update
 
 - name: "Copy basic jail configuration for custom edition"
-  copy:
+  ansible.builtin.copy:
     src: /etc/fail2ban/jail.conf
     dest: /etc/fail2ban/jail.d/jail.conf
     remote_src: yes
 
 - name: "Add scanner filter in custom jail configuration"
-  ini_file:
+  community.general.ini_file:
     path: "/etc/fail2ban/jail.d/jail.local"
     section: "git_ssh_scan"
     option: "{{ item.option }}"
@@ -70,7 +70,7 @@
   register: fail2ban_scanner_config_update
 
 - name: "Add git_ssh filter in custom jail configuration"
-  ini_file:
+  community.general.ini_file:
     path: "/etc/fail2ban/jail.d/jail.local"
     section: "git_ssh"
     option: "{{ item.option }}"
@@ -88,7 +88,7 @@
 
 ## TODO: restart at the end of the playbook
 - name: "Reload and restart service fail2ban"
-  service:
+  ansible.builtin.service:
     name: fail2ban
     state: restarted
     daemon_reload : yes
@@ -96,7 +96,7 @@
 
 # NOTE: reopen forge other ports only when security is configured and running
 - name: "Allow all access to tcp port SSH port git, 80 and 443"
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp

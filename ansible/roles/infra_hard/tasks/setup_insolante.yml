@@ -1,23 +1,23 @@
 ---
 - name: "Setup insolante directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/insolante"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Define insolante_image Arm?"
-  set_fact:
+  ansible.builtin.set_fact:
      insolante_image: "ngargaud/insolante:arm-{{ INSOLANTE_VERSION }}"
   when: ansible_architecture in ["armv7l", "aarch64"]
 
 - name: "Define insolante_image amd64?"
-  set_fact:
+  ansible.builtin.set_fact:
      insolante_image: "ngargaud/insolante:{{ INSOLANTE_VERSION }}"
   when: ansible_architecture in ["amd64", "x86_64"]
 
 - name: "Launch insolante container {{ INSOLANTE_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "insolante"
     image: "{{ insolante_image }}"
     state: "{{ INSOLANTE_DEFAULT_STATE }}"

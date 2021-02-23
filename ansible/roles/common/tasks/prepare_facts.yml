@@ -1,46 +1,46 @@
 ---
 - name: "Display lsb_release informations"
-  debug:
+  ansible.builtin.debug:
     var: hostvars[inventory_hostname].ansible_lsb
 
 - name: "Display architecture"
-  debug:
+  ansible.builtin.debug:
     var: hostvars[inventory_hostname].ansible_architecture
 
 - name: "Import default variables from identity file ({{ IDENTITY }})"
-  include_vars: "identity/{{ IDENTITY }}/vars.yml"
+  ansible.builtin.include_vars: "identity/{{ IDENTITY }}/vars.yml"
   #no_log: true
 
 - name: "Import secret variables from identity file ({{ IDENTITY }})"
-  include_vars: "identity/{{ IDENTITY }}/vault.yml"
+  ansible.builtin.include_vars: "identity/{{ IDENTITY }}/vault.yml"
   no_log: true
 
 - name: "Get repository information (url)"
-  shell: "git remote get-url origin"
+  ansible.builtin.shell: "git remote get-url origin"
   register: git_url
   delegate_to: localhost
 
 - name: "Get repository information (branch)"
-  shell: "git rev-parse --abbrev-ref HEAD"
+  ansible.builtin.shell: "git rev-parse --abbrev-ref HEAD"
   register: git_branch
   delegate_to: localhost
 
 - name: "Get repository information (commit)"
-  shell: "git rev-parse HEAD"
+  ansible.builtin.shell: "git rev-parse HEAD"
   register: git_commit
   delegate_to: localhost
 
 - name: "Get the apt package facts"
-  package_facts:
+  ansible.builtin.package_facts:
     manager: "auto"
 
 - name: "Add playbook run information on the guest"
-  copy:
+  ansible.builtin.copy:
     content: "Ansible informations about the last run\n\n"
     dest: "/root/ansible.info"
 
 - name: "Add playbook information on the guest file"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/root/ansible.info"
     line: "{{ item }}"
   with_items:
@@ -55,16 +55,16 @@
     - "* git commit: {{ git_commit.stdout }}"
 
 - name: "Define global_proxy_rule"
-  set_fact:
+  ansible.builtin.set_fact:
      global_proxy_rule: "Host(`{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}`)"
 
 - name: "Check if ldap need to be configured"
   block:
     - name: "Ensure all ldap settings are available"
-      set_fact:
+      ansible.builtin.set_fact:
         configure_ldap: "ready"
       when: ldap_remotes | length > 0 and ldap_username | length > 0 and ldap_password | length > 0 and ldap_search | length > 0 and ldap_access_group | length > 0 and ldap_admin_group | length > 0
     - name: "Show ldap configuration status"
-      debug:
+      ansible.builtin.debug:
         var: configure_ldap
   when: ldap_domain | length > 0

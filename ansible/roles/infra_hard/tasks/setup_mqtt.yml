@@ -1,20 +1,20 @@
 ---
 - name: "Setup mqtt directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/mqtt"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Setup mqtt directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/mqtt/config"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Copy basic configuration files"
-  template:
+  ansible.builtin.template:
     src: "files/mqtt/{{ item }}"
     dest: "/{{ DATACORE }}/mqtt/config/{{ item }}"
     mode: u=r,g=r,o=r
@@ -23,7 +23,7 @@
     - mosquitto.conf
 
 - name: "Launch mqtt container {{ MQTT_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "mqtt"
     image: "eclipse-mosquitto:{{ MQTT_VERSION }}"
     state: "{{ MQTT_DEFAULT_STATE }}"

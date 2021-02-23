@@ -1,17 +1,17 @@
 ---
 - name: "Setup portainer directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/portainer"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Generate portainer password"
-  shell: 'htpasswd -nb -B admin {{ PORTAINER_PASS }} | cut -d ":" -f 2'
+  ansible.builtin.shell: 'htpasswd -nb -B admin {{ PORTAINER_PASS }} | cut -d ":" -f 2'
   register: portainer_password
 
 - name: "Launch portainer container {{ PORTAINER_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "portainer"
     image: "portainer/portainer-ce:{{ PORTAINER_VERSION }}"
     state: started

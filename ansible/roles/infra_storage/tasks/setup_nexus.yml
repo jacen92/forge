@@ -1,18 +1,18 @@
 ---
 - name: "Set correct owner of full nexus data directory"
-  file:
+  ansible.builtin.file:
     path: "/{{DATACORE}}/nexus"
     owner: "200"
     group: "200"
     recurse: yes
 
 - name: "Remove previous nexus tmp directory"
-  file:
+  ansible.builtin.file:
      path: "/tmp/nexus"
      state: absent
 
 - name: "Clone Nexus repository"
-  git:
+  ansible.builtin.git:
     repo: "https://github.com/sonatype/docker-nexus3.git"
     dest: "/tmp/nexus"
     accept_hostkey: yes
@@ -23,7 +23,7 @@
   become_user: "{{ USER_NAME }}"
 
 - name: "Build nexus image and with buildargs"
-  docker_image:
+  community.general.docker_image:
      name: "nexus"
      tag: "{{ NEXUS_VERSION }}"
      source: "build"
@@ -36,7 +36,7 @@
          NEXUS_DOWNLOAD_SHA256_HASH: "{{ NEXUS_SHA }}"
 
 - name: "Launch nexus container {{ NEXUS_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "nexus"
     image: "nexus:{{ NEXUS_VERSION }}"
     state: started
@@ -49,7 +49,7 @@
       - "/{{ DATACORE }}/nexus:/nexus-data"
 
 - name: "Wait for Nexus to start up"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
@@ -60,18 +60,18 @@
   until: nexus_service_status['status'] == 200 or nexus_service_status['status'] == 403
 
 - name: "Ensure script engine is enabled"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/{{ DATACORE }}/nexus/etc/nexus.properties"
     line: "nexus.scripts.allowCreation=true"
 
 - name: "Read nexus admin password file content"
-  shell: cat /{{ DATACORE }}/nexus/admin.password
+  ansible.builtin.shell: cat /{{ DATACORE }}/nexus/admin.password
   register: admin_password_file_content
   ignore_errors: yes
   no_log: true
 
 - name: "Launch nexus container {{ NEXUS_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "nexus"
     image: "nexus:{{ NEXUS_VERSION }}"
     state: started
@@ -84,7 +84,7 @@
       - "/{{ DATACORE }}/nexus:/nexus-data"
 
 - name: "Wait for Nexus to start up"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}"
     status_code: "200,403"
     timeout: 40
@@ -95,13 +95,13 @@
   until: nexus_service_status['status'] == 200 or nexus_service_status['status'] == 403
 
 - name: "Use default password if by default"
-  set_fact:
+  ansible.builtin.set_fact:
     current_nexus_admin_password: "{{ admin_password_file_content.stdout }}"
   no_log: true
   when: admin_password_file_content.failed == false
 
 - name: "Check nexus connection with status API and defaut password"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/status"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -112,13 +112,13 @@
   ignore_errors: yes
 
 - name: "Use new password if needed if default one doesn't works"
-  set_fact:
+  ansible.builtin.set_fact:
     current_nexus_admin_password: "{{ NEXUS_ADMIN_PASS }}"
   no_log: true
   when: nexus_api_status.failed == true
 
 - name: "Removing (potential) previously declared Groovy scripts"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/{{ item }}"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -134,7 +134,7 @@
     - setup_ldap
 
 - name: "Declaring up-to-date Groovy scripts"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -155,7 +155,7 @@
     - setup_ldap
 
 - name: "Execute Groovy scripts"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/{{ item }}/run"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -174,7 +174,7 @@
     - setup_repositories
 
 - name: "Execute Groovy script for roles"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_role/run"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -213,7 +213,7 @@
       }
 
 - name: "Execute Groovy script for ldap"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_ldap/run"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -234,7 +234,7 @@
   when: configure_ldap is defined
 
 - name: "Execute Groovy script for users"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_user/run"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -256,7 +256,7 @@
     }
 
 - name: "Execute last groovy script"
-  uri:
+  ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/{{ item }}/run"
     user: 'admin'
     password: "{{ current_nexus_admin_password }}"
@@ -274,7 +274,7 @@
     - bypass_wizard
 
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
-  docker_container:
+  community.general.docker_container:
     name: "nexus"
     hostname: "nexus"
     image: "nexus:{{ NEXUS_VERSION }}"

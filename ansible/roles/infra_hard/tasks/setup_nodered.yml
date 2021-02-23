@@ -1,17 +1,17 @@
 ---
 - name: "Setup nodered directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/nodered"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Get user ID"
-  shell: "id -u {{ USER_NAME }}"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
   register: user_id
 
 - name: "Launch nodered container {{ NODERED_VERSION }}"
-  docker_container:
+  community.general.docker_container:
     name: "nodered"
     image: "nodered/node-red:{{ NODERED_VERSION }}"
     state: "{{ NODERED_DEFAULT_STATE }}"

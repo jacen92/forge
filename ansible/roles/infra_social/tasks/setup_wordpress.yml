@@ -1,20 +1,20 @@
 ---
 - name: "Setup wordpress database directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/wordpress_db"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Setup wordpress directory"
-  file:
+  ansible.builtin.file:
     path: "/{{ DATACORE }}/wordpress"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
 
 - name: "Launch mysql container for wordpress"
-  docker_container:
+  community.general.docker_container:
     name: "wordpress_db"
     image: "mariadb:{{ WORDPRESS_DB_VERSION }}"
     state: started
@@ -31,11 +31,11 @@
       - "/{{ DATACORE }}/wordpress_db:/var/lib/mysql"
 
 - name: "wait"
-  pause:
+  ansible.builtin.pause:
     minutes: 5
 
 - name: "Create wordpress container"
-  docker_container:
+  community.general.docker_container:
     name: "wordpress"
     image: "wordpress:{{ WORDPRESS_VERSION }}"
     state: "{{ WORDPRESS_DEFAULT_STATE }}"
