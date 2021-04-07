@@ -3,20 +3,10 @@
   ansible.builtin.shell: "grep docker /etc/group | cut -d ':' -f 3"
   register: docker_id
 
-- name: "Define netdata_image Arm?"
-  ansible.builtin.set_fact:
-     netdata_image: "netdata/netdata:{{ NETDATA_VERSION }}-armhf"
-  when: ansible_architecture in ["armv7l", "aarch64"]
-
-- name: "Define netdata_image amd64?"
-  ansible.builtin.set_fact:
-     netdata_image: "netdata/netdata:{{ NETDATA_VERSION }}"
-  when: ansible_architecture in ["amd64", "x86_64"]
-
 - name: "Launch netdata container {{ NETDATA_VERSION }}"
   community.general.docker_container:
     name: "netdata"
-    image: "{{ netdata_image }}"
+    image: "netdata/netdata:{{ NETDATA_VERSION }}"
     state: "{{ NETDATA_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
