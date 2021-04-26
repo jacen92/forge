@@ -200,6 +200,8 @@
     volumes:
       - "/{{ DATACORE }}/jenkins:/var/jenkins_home"
       - "/usr/local/share/ca-certificates:/usr/local/share/ca-certificates/"
+    ports:
+      - "{{ JENKINS_JNLP_PORT }}:50000"
     labels:
       traefik.enable: "true"
       traefik.http.services.jenkins.loadbalancer.server.port: "8080"

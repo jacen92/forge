@@ -60,7 +60,7 @@
     value: "{{ item.value }}"
   loop:
     - { option: "enabled", value: "true"}
-    - { option: "port", value: "{{ GIT_SSH_PORT }},80,443,22"}
+    - { option: "port", value: "{{ GIT_SSH_PORT }}, {{ JENKINS_JNLP_PORT }},80,443,22"}
     - { option: "backend", value: "systemd"}
     - { option: "filter", value: "git-sshd-scan"}
     - { option: "action", value: "docker-action"}
