@@ -2,8 +2,14 @@ import groovy.json.JsonSlurper
 
 parsed_args = new JsonSlurper().parseText(args)
 
-security.setAnonymousAccess(false)
-log.info('Anonymous access disabled')
+if(parsed_args.anonymous_access) {
+  security.setAnonymousAccess(true)
+  log.info('Anonymous access enabled')
+}
+else {
+  security.setAnonymousAccess(false)
+  log.info('Anonymous access disabled')
+}
 
 def user = security.securitySystem.getUser(parsed_args.get('admin_name'))
 user.setEmailAddress(parsed_args.get('admin_email'))

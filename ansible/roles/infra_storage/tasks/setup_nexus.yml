@@ -191,6 +191,7 @@
         name: "deployment",
         description: "Internal roles to deploy on custom repositories",
         privileges: ["nx-repository-view-docker-docker-internal-*",
+                     "nx-repository-view-npm-npm-internal-*",
                      "nx-repository-view-raw-artifacts-*"],
         roles: []
       }
@@ -200,6 +201,7 @@
         name: "{{ ldap_access_group }}",
         description: "External roles to access custom repositories",
         privileges: ["nx-repository-view-docker-docker-internal-*",
+                     "nx-repository-view-npm-npm-internal-*",
                      "nx-repository-view-raw-artifacts-*"],
         roles: []
       }
@@ -265,11 +267,10 @@
     force_basic_auth: yes
     status_code: 200,204
     body:
-      admin_name: "{{ DEFAULT_ADMIN_NAME }}"
       admin_email: "{{ USER_MAIL }}"
+      admin_name: "{{ DEFAULT_ADMIN_NAME }}"
       admin_password: "{{ NEXUS_ADMIN_PASS }}"
-      docker_push_port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
-      docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
+      anonymous_access: true
   with_items:
     - bypass_wizard
 
