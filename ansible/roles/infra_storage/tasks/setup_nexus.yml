@@ -128,7 +128,10 @@
   with_items:
     - bypass_wizard
     - setup_realm
-    - setup_repositories
+    - setup_repositories_clean
+    - setup_repositories_docker
+    - setup_repositories_raw
+    - setup_repositories_npm
     - setup_role
     - setup_user
     - setup_ldap
@@ -149,7 +152,10 @@
   with_items:
     - bypass_wizard
     - setup_realm
-    - setup_repositories
+    - setup_repositories_clean
+    - setup_repositories_docker
+    - setup_repositories_raw
+    - setup_repositories_npm
     - setup_role
     - setup_user
     - setup_ldap
@@ -171,7 +177,10 @@
       docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
   with_items:
     - setup_realm
-    - setup_repositories
+    - setup_repositories_clean
+    - setup_repositories_docker
+    - setup_repositories_raw
+    - setup_repositories_npm
 
 - name: "Execute Groovy script for roles"
   ansible.builtin.uri:
