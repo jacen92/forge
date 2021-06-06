@@ -17,7 +17,7 @@ OCTOPRINT_DEVICE_0: "/dev/null"
 OCTOPRINT_DEVICE_1: "/dev/null"
 OCTOPRINT_DEFAULT_STATE: stopped
 
-INSOLANTE_VERSION: "1.1.0-beta"
+INSOLANTE_VERSION: "1.4.1"
 INSOLANTE_PORT: "8032"
 INSOLANTE_URL: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}"
 INSOLANTE_EXTERNAL_URL: "pcb.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
