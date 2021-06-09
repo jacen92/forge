@@ -54,6 +54,7 @@ fi
 if [ -f "$SHARED_DIRECTORY/ansible_key" ]; then
   echo "Use provided ssh private key"
   cp $SHARED_DIRECTORY/ansible_key /home/$USER_NAME/.ssh/id_rsa
+  chmod 400 /home/$USER_NAME/.ssh/id_rsa
 else
   echo "ERROR: An ssh private key must be provided in $SHARED_DIRECTORY/ansible_key"
   exit 3
