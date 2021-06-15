@@ -130,6 +130,7 @@
     - setup_realm
     - setup_repositories_clean
     - setup_repositories_docker
+    - setup_repositories_pypi
     - setup_repositories_raw
     - setup_repositories_npm
     - setup_role
@@ -154,6 +155,7 @@
     - setup_realm
     - setup_repositories_clean
     - setup_repositories_docker
+    - setup_repositories_pypi
     - setup_repositories_raw
     - setup_repositories_npm
     - setup_role
@@ -179,6 +181,7 @@
     - setup_realm
     - setup_repositories_clean
     - setup_repositories_docker
+    - setup_repositories_pypi
     - setup_repositories_raw
     - setup_repositories_npm
 
@@ -200,6 +203,7 @@
         name: "deployment",
         description: "Internal roles to deploy on custom repositories",
         privileges: ["nx-repository-view-docker-docker-internal-*",
+                     "nx-repository-view-pypi-pypi-internal-*",
                      "nx-repository-view-npm-npm-internal-*",
                      "nx-repository-view-raw-artifacts-*"],
         roles: []
@@ -210,6 +214,7 @@
         name: "{{ ldap_access_group }}",
         description: "External roles to access custom repositories",
         privileges: ["nx-repository-view-docker-docker-internal-*",
+                     "nx-repository-view-pypi-pypi-internal-*",
                      "nx-repository-view-npm-npm-internal-*",
                      "nx-repository-view-raw-artifacts-*"],
         roles: []
