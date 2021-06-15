@@ -31,6 +31,13 @@ def added_vars = [:];
 {% for var, value in JENKINS_GLOBAL_ENV.items() %}
 added_vars.put('{{ var }}', '{{ value }}');
 {% endfor %}
+
+{% if JENKINS_EXTRA_GLOBAL_ENV is defined %}
+  {% for var, value in JENKINS_EXTRA_GLOBAL_ENV.items() %}
+  println "  * Adding extra global env {{ var }}"
+  added_vars.put('{{ var }}', '{{ value }}');
+  {% endfor %}
+{% endif %}
 def removed_vars = [];
 
 def instance = Jenkins.getInstance();

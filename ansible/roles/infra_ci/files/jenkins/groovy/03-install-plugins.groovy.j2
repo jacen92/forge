@@ -2,7 +2,7 @@
 
 import jenkins.model.Jenkins
 
-for (plugin in [
+plugins = [
   "active-directory",
   "ansicolor",
   "build-name-setter",
@@ -25,7 +25,17 @@ for (plugin in [
   "simple-theme-plugin",
   "timestamper",
   "ws-cleanup",
-])
+]
+
+{% if JENKINS_EXTRA_PLUGINS is defined %}
+  {% for plugin in JENKINS_EXTRA_PLUGINS %}
+  println "  * Adding extra plugin {{ plugin }}"
+  plugins.add("{{ plugin }}")
+  {% endfor %}
+{% endif %}
+
+
+for (plugin in plugins)
 {
   println "--> installing plugin: '" + plugin + "'"
   e = Jenkins.instance.updateCenter.getPlugin(plugin).deploy(true).get().getError()

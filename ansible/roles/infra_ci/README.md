@@ -35,3 +35,9 @@ git clone ssh://git@192.168.0.1:8022/tools/builders.git
 
 The alias can be defined in your slave profile with a condition to set it if SSH_KEY_PATH is present.
 To add a secret in credential add something in vars/main.yml to JENKINS_CREDENTIALS.
+
+You can add some extra stuff inside identities like:
+
+* JENKINS_EXTRA_PLUGINS: a list of plugins to install
+* JENKINS_EXTRA_GLOBAL_ENV: a list of key/value representing the extra global environment variable
+* JENKINS_EXTRA_CREDENTIALS: a list of key/value representing the extra credentials to set (username/password, username/private_key)
