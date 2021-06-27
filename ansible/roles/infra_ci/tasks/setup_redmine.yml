@@ -1,17 +1,13 @@
 ---
 - name: "Setup redmine database directory"
   ansible.builtin.file:
-    path: "/{{ DATACORE }}/redmine_db"
+    path: "/{{ DATACORE }}/{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
-
-- name: "Setup redmine directory"
-  ansible.builtin.file:
-    path: "/{{ DATACORE }}/redmine"
-    owner: "{{ USER_NAME }}"
-    group: "{{ USER_NAME }}"
-    state: directory
+  with_items:
+    - redmine
+    - redmine_db
 
 - name: "Launch redmine database container"
   community.general.docker_container:

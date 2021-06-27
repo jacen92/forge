@@ -1,17 +1,13 @@
 ---
 - name: "Setup wordpress database directory"
   ansible.builtin.file:
-    path: "/{{ DATACORE }}/wordpress_db"
+    path: "/{{ DATACORE }}/{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
-
-- name: "Setup wordpress directory"
-  ansible.builtin.file:
-    path: "/{{ DATACORE }}/wordpress"
-    owner: "{{ USER_NAME }}"
-    group: "{{ USER_NAME }}"
-    state: directory
+  with_items:
+    - wordpress
+    - wordpress_db
 
 - name: "Launch mysql container for wordpress"
   community.general.docker_container:

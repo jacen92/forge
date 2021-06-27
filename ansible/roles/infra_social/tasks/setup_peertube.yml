@@ -1,10 +1,14 @@
 ---
 - name: "Setup peertube directory"
   ansible.builtin.file:
-    path: "/{{ DATACORE }}/peertube"
+    path: "/{{ DATACORE }}/{{ item }}"
     owner: "{{ USER_NAME }}"
     group: "{{ USER_NAME }}"
     state: directory
+  with_items:
+    - peertube
+    - peertube_db
+    - peertube_redis
 
 - name: "Launch peertube database container"
   community.general.docker_container:
@@ -19,7 +23,7 @@
       POSTGRES_PASSWORD: "{{ PEERTUBE_DB_PASS }}"
       POSTGRES_DB: peertube
     volumes:
-      - "/{{ DATACORE }}/peertube/db:/var/lib/postgresql/data"
+      - "/{{ DATACORE }}/peertube_db:/var/lib/postgresql/data"
     labels:
       traefik.enable: "false"
 
@@ -32,7 +36,7 @@
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
     volumes:
-      - '/{{ DATACORE }}/peertube/redis:/data'
+      - '/{{ DATACORE }}/peertube_redis:/data'
     labels:
       traefik.enable: "false"
 
