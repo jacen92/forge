@@ -22,6 +22,13 @@
   become: true
   become_user: "{{ USER_NAME }}"
 
+- name: "Alter dockerfile for arm (since java is downloaded for chef)"
+  ansible.builtin.replace:
+    path: "/tmp/nexus/Dockerfile"
+    regexp: 'x86_64'
+    replace: 'aarch64'
+  when: ansible_architecture in ["armv7l", "aarch64"]
+
 - name: "Build nexus image and with buildargs"
   community.general.docker_image:
      name: "nexus"
