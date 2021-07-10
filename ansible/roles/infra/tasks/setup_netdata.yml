@@ -38,4 +38,3 @@
       traefik.http.routers.netdata_proxy.entrypoints: netdata
       traefik.http.routers.netdata_proxy.rule: "{{ global_proxy_rule }}"
       traefik.http.routers.netdata_proxy.tls: "true"
-  when: netdata_image is defined
