@@ -14,8 +14,17 @@ BACKUP_CONFIGURATION:
   REMOTE_PATH: ""
   REMOTE_USER: ""
 
-# Select the color of jenkins theme here
-# grey, ed, pink, purple, deep-purple, indigo,
-# blue, light-blue, cyan, teal, green, light-green,
-# lime, yellow, amber, orange, deep-orange, brown, blue-grey
-# JENKINS_THEME_COLOR: "blue-grey"
+# ==============================================================================
+# Jenkins specific configuration
+JENKINS_CONFIGURATION:
+  # Select the color of jenkins theme here
+  # grey, ed, pink, purple, deep-purple, indigo,
+  # blue, light-blue, cyan, teal, green, light-green,
+  # lime, yellow, amber, orange, deep-orange, brown, blue-grey
+  jenkins_theme_color: "blue-grey"
+  jenkins_smtp_host: ""
+  jenkins_email_suffix: ""
+
+# You can also specify some global environment variables in jenkins.
+JENKINS_EXTRA_GLOBAL_ENV:
+    FORGE_MODE: "development"

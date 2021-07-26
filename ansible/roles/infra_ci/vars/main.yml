@@ -23,19 +23,16 @@ JENKINS_EXTERNAL_URL: "ci.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DE
 JENKINS_DEFAULT_STATE: stopped
 JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
 JENKINS_RESTART_DELAY: 100
-JENKINS_CONFIGURATION:
-  jenkins_smtp_host: ""
-  jenkins_email_suffix: ""
-JENKINS_CREDENTIALS:
+JENKINS_FORGE_CREDENTIALS:
+  master2slaves_key:
+    private_key: "{{ master2slave_private_key }}"
+    username: "{{ master2slave_username | default('builder') }}"
   git_deploy_key:
     private_key: "{{ git_deploy_private_key }}"
     username: "{{ git_deploy_username | default('builder') }}"
   fdroid_deploy_key:
     private_key: "{{ git_deploy_private_key }}"
     username: "{{ fdroid_deploy_username | default('fdroid_deploy') }}"
-  master2slaves_key:
-    private_key: "{{ master2slave_private_key }}"
-    username: "{{ master2slave_username | default('builder') }}"
   nexus_docker_credentials:
     username: "{{ nexus_deploy_username }}"
     password: "{{ nexus_deploy_password }}"
@@ -45,7 +42,7 @@ JENKINS_CREDENTIALS:
   nexus_raw_credentials:
     username: "{{ nexus_deploy_username }}"
     password: "{{ nexus_deploy_password }}"
-JENKINS_GLOBAL_ENV:
+JENKINS_FORGE_GLOBAL_ENV:
   gogs_repositories_url: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ GOGS_SSH_PORT }}"
   nexus_repositories_url: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ NEXUS_PORT }}"
   nexus_docker_pull_url: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ NEXUS_DOCKER_PULL_PORT }}"

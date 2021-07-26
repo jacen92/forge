@@ -28,7 +28,7 @@ def globalEnvironmentVariables = { instance, added_vars, removed_vars ->
 
 println "--> Configuring global environment variables";
 def added_vars = [:];
-{% for var, value in JENKINS_GLOBAL_ENV.items() %}
+{% for var, value in JENKINS_FORGE_GLOBAL_ENV.items() %}
 added_vars.put('{{ var }}', '{{ value }}');
 {% endfor %}
 
