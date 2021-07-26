@@ -270,11 +270,11 @@
   with_items:
     - {
         state: "present",
-        username: "{{ nexus_deploy_username }}",
+        username: "{{ NEXUS_DEPLOY.username }}",
         first_name: "nexus",
         last_name: "deploy",
         email: "deploy@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}",
-        password: "{{ nexus_deploy_password }}",
+        password: "{{ NEXUS_DEPLOY.password }}",
         roles: ["deployment"]
     }
 
