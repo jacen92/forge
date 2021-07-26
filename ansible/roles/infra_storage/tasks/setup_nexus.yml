@@ -217,8 +217,8 @@
       }
     - {
         state: "present",
-        id: "{{ ldap_access_group }}",
-        name: "{{ ldap_access_group }}",
+        id: "{{ LDAP_CONFIGURATION.ldap_access_group }}",
+        name: "{{ LDAP_CONFIGURATION.ldap_access_group }}",
         description: "External roles to access custom repositories",
         privileges: ["nx-repository-view-docker-docker-internal-*",
                      "nx-repository-view-pypi-pypi-internal-*",
@@ -228,8 +228,8 @@
       }
     - {
         state: "present",
-        id: "{{ ldap_admin_group }}",
-        name: "{{ ldap_admin_group }}",
+        id: "{{ LDAP_CONFIGURATION.ldap_admin_group }}",
+        name: "{{ LDAP_CONFIGURATION.ldap_admin_group }}",
         description: "External roles to administrate Nexus",
         privileges: [],
         roles: ["nx-admin"]
@@ -248,11 +248,11 @@
   #no_log: true
   with_items:
     - {
-        host: "{{ ldap_remotes.split(',')[0] }}",
-        bind_name: "{{ ldap_username }}",
-        bind_password: "{{ ldap_password }}",
-        search_base: "{{ ldap_search }}",
-        ldap_secure: "{{ ldap_secure }}",
+        host: "{{ LDAP_CONFIGURATION.ldap_remotes.split(',')[0] }}",
+        bind_name: "{{ LDAP_CONFIGURATION.ldap_username }}",
+        bind_password: "{{ LDAP_CONFIGURATION.ldap_password }}",
+        search_base: "{{ LDAP_CONFIGURATION.ldap_search }}",
+        ldap_secure: "{{ LDAP_CONFIGURATION.ldap_secure }}",
       }
   when: configure_ldap is defined
 

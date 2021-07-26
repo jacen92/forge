@@ -63,8 +63,8 @@
     - name: "Ensure all ldap settings are available"
       ansible.builtin.set_fact:
         configure_ldap: "ready"
-      when: ldap_remotes | length > 0 and ldap_username | length > 0 and ldap_password | length > 0 and ldap_search | length > 0 and ldap_access_group | length > 0 and ldap_admin_group | length > 0
+      when: LDAP_CONFIGURATION.ldap_remotes | length > 0 and LDAP_CONFIGURATION.ldap_username | length > 0 and LDAP_CONFIGURATION.ldap_password | length > 0 and LDAP_CONFIGURATION.ldap_search | length > 0 and LDAP_CONFIGURATION.ldap_access_group | length > 0 and LDAP_CONFIGURATION.ldap_admin_group | length > 0
     - name: "Show ldap configuration status"
       ansible.builtin.debug:
         var: configure_ldap
-  when: ldap_domain | length > 0
+  when: LDAP_CONFIGURATION is defined and LDAP_CONFIGURATION.ldap_domain | length > 0

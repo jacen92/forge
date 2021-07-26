@@ -9,7 +9,7 @@ def instance = Jenkins.getInstance();
 
 println "--> Configure ldap";
 
-def adrealm = new ActiveDirectorySecurityRealm("{{ ldap_domain }}", "", "{{ ldap_username }}", "{{ ldap_password }}", "{{ ldap_remotes }}")
+def adrealm = new ActiveDirectorySecurityRealm("{{ LDAP_CONFIGURATION.ldap_domain }}", "", "{{ LDAP_CONFIGURATION.ldap_username }}", "{{ LDAP_CONFIGURATION.ldap_password }}", "{{ LDAP_CONFIGURATION.ldap_remotes }}")
 // hack to persist bind password
 adrealm.getDomains().each({
     it.bindName = adrealm.bindName
@@ -40,7 +40,7 @@ strategy.add(hudson.model.Item.CANCEL, "{{ group }}")
 
 println "--> Configure strategy for admin"
 strategy.add(Jenkins.ADMINISTER, "admin")
-{% for group in [ldap_admin_group] %}
+{% for group in [LDAP_CONFIGURATION.ldap_admin_group] %}
 strategy.add(Jenkins.ADMINISTER, "{{ group }}")
 {% endfor %}
 
