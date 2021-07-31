@@ -162,6 +162,15 @@
         "source": ""
       },
       {
+        "name": "Grocy",
+        "port": "{{ GROCY_PORT | default('unknown') }}",
+        "version": "{{ GROCY_VERSION | default('unknown') }}",
+        "external": "https://{{ GROCY_EXTERNAL_URL | default('unknown') }}",
+        "description": "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home.",
+        "dockerhub": "https://hub.docker.com/r/linuxserver/grocy",
+        "source": "https://github.com/grocy/grocy"
+      },
+      {
         "name": "Odoo",
         "port": "{{ ODOO_PORT | default('unknown') }}",
         "version": "{{ ODOO_VERSION | default('unknown') }}",

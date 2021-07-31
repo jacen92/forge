@@ -114,6 +114,7 @@ Storage:
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
 * nextcloud: Google drive alternative [https://hub.docker.com/_/nextcloud/].
+* Grocy: RP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home. [https://hub.docker.com/r/linuxserver/grocy].
 * Odoo: (formerly known as OpenERP) is a suite of open-source business apps [https://hub.docker.com/_/odoo].
 
 ![Renderer screenshot](/documents/screenshots/storage.png)
@@ -144,7 +145,8 @@ Port listing (exposed from all docker containers)
 | F-droid server    | 8053 |   http   | Storage |        no        |  fdroid.  |
 | F-droid scp       | 8054 |   ssh    | Storage |        no        |  fdroid.  |
 | Nextcloud         | 8055 |   http   | Storage |        no        |  drive.   |
-| Odoo              | 8056 |   http   | Storage |        no        |  erp.   |
+| Grocy             | 8056 |   http   | Storage |        no        |  stock.   |
+| Odoo              | 8057 |   http   | Storage |        no        |  erp.     |
 
 
 Playbooks parameters

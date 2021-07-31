@@ -1,0 +1,46 @@
+---
+- name: "Setup grocy directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+  with_items:
+    - "/{{ DATACORE }}/grocy"
+    - "/{{ DATACORE }}/grocy/config"
+
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Launch grocy container {{ GROCY_VERSION }}"
+  community.general.docker_container:
+    name: "grocy"
+    image: "linuxserver/grocy:{{ GROCY_VERSION }}"
+    state: "{{ GROCY_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+#    ports:
+#      - "{{ GROCY_PORT }}:80"
+    env:
+      PUID: "{{ user_id.stdout }}"
+      PGID: "{{ user_id.stdout }}"
+    volumes:
+      - "/{{ DATACORE }}/grocy/config:/config"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.grocy.loadbalancer.server.port: "80"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.grocy_http.middlewares: "https_redirect"
+      traefik.http.routers.grocy_http.rule: "Host(`{{ GROCY_EXTERNAL_URL }}`)"
+      traefik.http.routers.grocy_http.service: grocy
+      traefik.http.routers.grocy_https.rule: "Host(`{{ GROCY_EXTERNAL_URL }}`)"
+      traefik.http.routers.grocy_https.service: grocy
+      traefik.http.routers.grocy_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.grocy_proxy.loadbalancer.server.port: "80"
+      traefik.http.routers.grocy_proxy.service: grocy_proxy
+      traefik.http.routers.grocy_proxy.entrypoints: grocy
+      traefik.http.routers.grocy_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.grocy_proxy.tls: "true"
