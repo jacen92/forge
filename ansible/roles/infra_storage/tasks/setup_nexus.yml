@@ -89,6 +89,7 @@
       - "{{ NEXUS_PORT_CONFIG }}:8081"
     volumes:
       - "/{{ DATACORE }}/nexus:/nexus-data"
+      - "/usr/local/share/ca-certificates:/usr/local/share/ca-certificates/"
 
 - name: "Wait for Nexus to start up"
   ansible.builtin.uri:
@@ -135,6 +136,7 @@
   with_items:
     - bypass_wizard
     - setup_realm
+    - setup_truststore
     - setup_repositories_clean
     - setup_repositories_docker
     - setup_repositories_pypi
@@ -160,6 +162,7 @@
   with_items:
     - bypass_wizard
     - setup_realm
+    - setup_truststore
     - setup_repositories_clean
     - setup_repositories_docker
     - setup_repositories_pypi
@@ -186,6 +189,7 @@
       docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
   with_items:
     - setup_realm
+    - setup_truststore
     - setup_repositories_clean
     - setup_repositories_docker
     - setup_repositories_pypi

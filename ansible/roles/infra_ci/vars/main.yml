@@ -15,8 +15,8 @@ REDMINE_EXTERNAL_URL: "redmine.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAM
 REDMINE_DEFAULT_STATE: stopped
 
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
-JENKINS_VERSION: "2.320"
-JENKINS_SHA_256: "b847cf68825f2b81bd41981177b87e8e8ffa18a708085901c38f7ed2518f9027"
+JENKINS_VERSION: "2.332"
+JENKINS_SHA_256: "d3bacf4ef0be984e7bea690077bd3afd36f9933d0b62ce29b5e8afcdc0692dbe"
 JENKINS_PORT_CONFIG: 9000
 JENKINS_PORT: "8023"
 JENKINS_EXTERNAL_URL: "ci.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"

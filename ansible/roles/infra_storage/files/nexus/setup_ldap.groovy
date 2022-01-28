@@ -36,6 +36,7 @@ connection.setSearchBase(parsed_args.search_base)
 connection.setAuthScheme("simple")
 connection.setSystemUsername(parsed_args.bind_name)
 connection.setSystemPassword(parsed_args.bind_password)
+connection.setUseTrustStore(true)
 ldapConfig.setConnection(connection)
 
 // Mapping

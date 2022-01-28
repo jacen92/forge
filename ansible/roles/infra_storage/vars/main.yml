@@ -1,5 +1,6 @@
-NEXUS_VERSION: "3.32.0-03"
-NEXUS_SHA: "f5b8021d26b4faa9b56fc79fc342656640dbdb60f80ac2c65d8fb418f65d8f9d"
+# To update nexus go to https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile and copy the sha256 of the selected version
+NEXUS_VERSION: "3.37.3-02"
+NEXUS_SHA: "c1db431908c5a76b44015c555d6ef4517abf0a86844faffee0f5d6c62359312d"
 NEXUS_PORT: "8050"
 NEXUS_DOCKER_PULL_PORT: "8051"
 NEXUS_DOCKER_PUSH_PORT: "8052"

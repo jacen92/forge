@@ -4,12 +4,16 @@ import jenkins.model.*
 import hudson.security.*
 
 import hudson.plugins.active_directory.*
-
+import org.jenkinsci.plugins.matrixauth.*
 def instance = Jenkins.getInstance();
 
 println "--> Configure ldap";
 
-def adrealm = new ActiveDirectorySecurityRealm("{{ LDAP_CONFIGURATION.ldap_domain }}", "", "{{ LDAP_CONFIGURATION.ldap_username }}", "{{ LDAP_CONFIGURATION.ldap_password }}", "{{ LDAP_CONFIGURATION.ldap_remotes }}")
+def adrealm = new ActiveDirectorySecurityRealm("{{ LDAP_CONFIGURATION.ldap_domain }}",
+                                               "",
+                                               "{{ LDAP_CONFIGURATION.ldap_username }}",
+                                               "{{ LDAP_CONFIGURATION.ldap_password }}",
+                                               "{{ LDAP_CONFIGURATION.ldap_remotes }}")
 // hack to persist bind password
 adrealm.getDomains().each({
     it.bindName = adrealm.bindName
@@ -24,24 +28,28 @@ def replay_perm = Permission.fromId('hudson.model.Run.Replay')
 
 println "--> Configure strategy for anonymous and authenticated"
 {% for group in ["anonymous", "authenticated"] %}
-strategy.add(Jenkins.READ, "{{ group }}")
-strategy.add(hudson.model.Item.READ, "{{ group }}")
-strategy.add(hudson.model.Item.WORKSPACE, "{{ group }}")
-strategy.add(hudson.model.View.READ, "{{ group }}")
+  entry_group = new PermissionEntry(AuthorizationType.GROUP, "{{ group }}")
+  strategy.add(Jenkins.READ, entry_group)
+  strategy.add(hudson.model.Item.READ, entry_group)
+  strategy.add(hudson.model.Item.WORKSPACE, entry_group)
+  strategy.add(hudson.model.View.READ, entry_group)
 {% endfor %}
 
 {% for group in ["authenticated"] %}
-if (replay_perm) {
-  strategy.add(replay_perm, "{{ group }} ")
-}
-strategy.add(hudson.model.Item.BUILD, "{{ group }}")
-strategy.add(hudson.model.Item.CANCEL, "{{ group }}")
+  entry_group = new PermissionEntry(AuthorizationType.GROUP, "{{ group }}")
+  if (replay_perm) {
+    strategy.add(replay_perm, entry_group)
+  }
+  strategy.add(hudson.model.Item.BUILD, entry_group)
+  strategy.add(hudson.model.Item.CANCEL, entry_group)
 {% endfor %}
 
 println "--> Configure strategy for admin"
-strategy.add(Jenkins.ADMINISTER, "admin")
+admin_group = new PermissionEntry(AuthorizationType.GROUP, "admin")
+strategy.add(Jenkins.ADMINISTER, admin_group)
 {% for group in [LDAP_CONFIGURATION.ldap_admin_group] %}
-strategy.add(Jenkins.ADMINISTER, "{{ group }}")
+  entry_group = new PermissionEntry(AuthorizationType.GROUP, "{{ group }}")
+  strategy.add(Jenkins.ADMINISTER, entry_group)
 {% endfor %}
 
 instance.setAuthorizationStrategy(strategy)
