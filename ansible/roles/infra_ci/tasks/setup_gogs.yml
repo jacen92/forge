@@ -1,19 +1,9 @@
 ---
-- name: "Define gogs_image ARM?"
-  ansible.builtin.set_fact:
-     gogs_image: "gogs/gogs-rpi:{{ GOGS_VERSION }}"
-  when: ansible_architecture in ["armv7l", "aarch64"]
-
-- name: "Define gogs_image amd64?"
-  ansible.builtin.set_fact:
-     gogs_image: "gogs/gogs:{{ GOGS_VERSION }}"
-  when: ansible_architecture in ["amd64", "x86_64"]
-
 - name: "Launch gogs container {{ GOGS_VERSION }}"
   community.general.docker_container:
     name: "gogs"
     hostname: "gogs"
-    image: "{{ gogs_image }}"
+    image: "gogs/gogs:{{ GOGS_VERSION }}"
     state: "{{ GOGS_DEFAULT_STATE }}"
     restart_policy: always
     recreate: yes
