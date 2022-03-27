@@ -23,6 +23,7 @@ JENKINS_EXTERNAL_URL: "ci.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DE
 JENKINS_DEFAULT_STATE: stopped
 JENKINS_USER: "{{ DEFAULT_ADMIN_NAME }}"
 JENKINS_RESTART_DELAY: 100
+JENKINS_ENABLE_THEME: false
 JENKINS_FORGE_GLOBAL_ENV:
   gogs_repositories_url: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ GOGS_SSH_PORT }}"
   nexus_repositories_url: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ NEXUS_PORT }}"

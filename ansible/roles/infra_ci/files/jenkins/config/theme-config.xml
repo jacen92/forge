@@ -1,6 +1,6 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin@0.4">
-  <cssUrl>https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-{{ JENKINS_CONFIGURATION.jenkins_theme_color | default("blue-grey") }}.css</cssUrl>
+<org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin">
+  <cssUrl>https://raw.githack.com/Jorg3Lucas/jenkins-modern-themes/main/dist/modern-{{ JENKINS_CONFIGURATION.jenkins_theme_color | default("blue-grey") }}.css</cssUrl>
   <cssRules></cssRules>
   <jsUrl></jsUrl>
   <faviconUrl></faviconUrl>

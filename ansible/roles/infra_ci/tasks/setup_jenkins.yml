@@ -159,6 +159,7 @@
   ansible.builtin.template:
     src: files/jenkins/config/theme-config.xml
     dest: /{{ DATACORE }}/jenkins/org.codefirst.SimpleThemeDecorator.xml
+  when: JENKINS_ENABLE_THEME == True
 
 - name: "Set correct owner of full jenkins data directory for x86_64 image"
   ansible.builtin.file:
