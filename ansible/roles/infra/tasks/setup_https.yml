@@ -85,7 +85,6 @@
       traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
       traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
       traefik.http.routers.traefik_https.tls: "true"
-  when: traefik_image is defined
 
 - name: "Sleep for 30 seconds to let traefik starts"
   ansible.builtin.wait_for: timeout=30
