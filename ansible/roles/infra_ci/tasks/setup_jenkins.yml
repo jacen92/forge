@@ -15,44 +15,6 @@
     mode: 0777
     recurse: yes
 
-- name: "Remove previous jenkins tmp directory"
-  ansible.builtin.file:
-     path: "/tmp/jenkins"
-     state: absent
-
-- name: "Clone jenkinsci"
-  ansible.builtin.git:
-    repo: "https://github.com/jenkinsci/docker.git"
-    dest: "/tmp/jenkins"
-    accept_hostkey: yes
-    force: yes
-    recursive: no
-    version: "0d3c2a3a9442fb34e86426ea556ba5cf2a09ff45"
-
-- name: "Use the correct base image for ARM arch"
-  ansible.builtin.replace:
-    path: "/tmp/jenkins/Dockerfile"
-    regexp: 'FROM (.*)'
-    replace: 'FROM arm64v8/openjdk:8-jre-stretch'
-  when: ansible_architecture in ["aarch64"]
-
-- name: "Build jenkins image and with buildargs"
-  community.general.docker_image:
-     name: "jenkins"
-     tag: "{{ JENKINS_VERSION }}"
-     source: "build"
-     build:
-       pull: yes
-       path: "/tmp/jenkins"
-       dockerfile: "Dockerfile"
-       args:
-         JENKINS_VERSION: "{{ JENKINS_VERSION }}"
-         JENKINS_SHA: "{{ JENKINS_SHA_256 }}"
-         uid: "{{ user_id.stdout }}"
-         gid: "{{ group_id.stdout }}"
-  become: true
-  become_user: "{{ USER_NAME }}"
-
 - name: "Launch jenkins container {{ JENKINS_VERSION }}"
   community.general.docker_container:
     name: "jenkins"
