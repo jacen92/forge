@@ -53,7 +53,7 @@
         "version": "{{ GOGS_VERSION | default('unknown') }}",
         "external": "https://{{ GOGS_EXTERNAL_URL | default('unknown') }}",
         "description": "Github like server, source storage (lighter than gitlab), git port on {{ GOGS_SSH_PORT | default('unknown') }}.",
-        "dockerhub": "https://hub.docker.com/r/gogs/gogs-rpi/",
+        "dockerhub": "https://hub.docker.com/r/gogs/gogs/",
         "source": ""
       },
       {

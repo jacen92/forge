@@ -1,11 +1,11 @@
-GOGS_VERSION: "0.12.5"
+GOGS_VERSION: "0.12.7"
 GOGS_FRONT_PORT: "8021"
 GOGS_SSH_PORT: "{{ GIT_SSH_PORT }}"
 GOGS_EXTERNAL_URL: "git.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 GOGS_URL: "https://{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ GOGS_FRONT_PORT }}"
 GOGS_DEFAULT_STATE: stopped
 
-REDMINE_VERSION: "4.2.4"
+REDMINE_VERSION: "5.0.1"
 REDMINE_DB_VERSION: "10-alpine"
 REDMINE_DB_USER: "redmine_user"
 REDMINE_DB_PASS: "redmine_pass"
@@ -15,8 +15,8 @@ REDMINE_EXTERNAL_URL: "redmine.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAM
 REDMINE_DEFAULT_STATE: stopped
 
 # Use https://updates.jenkins-ci.org/download/war/ to get the version package checksum
-JENKINS_VERSION: "2.338"
-JENKINS_SHA_256: "a9cd7cad00e887268e0a283ba6058e8f280368f31bc93af165281da191802f35"
+JENKINS_VERSION: "2.348"
+JENKINS_SHA_256: "5b2622ca85894010a76b6136e68d0ce85d5249e11f24571f03cf5f7cd7e7c569"
 JENKINS_PORT_CONFIG: 9000
 JENKINS_PORT: "8023"
 JENKINS_EXTERNAL_URL: "ci.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"

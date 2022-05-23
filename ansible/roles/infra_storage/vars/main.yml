@@ -1,6 +1,6 @@
 # To update nexus go to https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile and copy the sha256 of the selected version
-NEXUS_VERSION: "3.38.0-01"
-NEXUS_SHA: "d7ee5e2d7233ac8cfd4e9cc1e97d88313d24d662509d446784be5a50f677cc6f"
+NEXUS_VERSION: "3.39.0-01"
+NEXUS_SHA: "2a1b770d8ed17aa5e4bc30a1d7e2c095d3175f60e2146c1502a890576ee72edc"
 NEXUS_PORT: "8050"
 NEXUS_DOCKER_PULL_PORT: "8051"
 NEXUS_DOCKER_PUSH_PORT: "8052"
@@ -17,7 +17,7 @@ FDROID_EXTERNAL_URL: "fdroid.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME,
 FDROID_URL_IN_CONFIG: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 FDROID_DEFAULT_STATE: stopped
 
-NEXTCLOUD_VERSION: "23.0.2"
+NEXTCLOUD_VERSION: "24.0.1"
 NEXTCLOUD_PORT: "8055"
 NEXTCLOUD_EXTERNAL_URL: "drive.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 NEXTCLOUD_DEFAULT_STATE: stopped
