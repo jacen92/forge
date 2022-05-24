@@ -160,7 +160,9 @@
         "description": "Google drive alternative.",
         "dockerhub": "https://hub.docker.com/_/nextcloud/",
         "source": ""
-      },
+      }
+    ],
+    "Productivity": [
       {
         "name": "Grocy",
         "port": "{{ GROCY_PORT | default('unknown') }}",
