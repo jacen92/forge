@@ -34,7 +34,6 @@
       traefik.http.routers.gogs_proxy.tls: "true"
   become: true
   become_user: "{{ USER_NAME }}"
-  when: gogs_image is defined
 
 - name: "Check for gogs configuration file"
   ansible.builtin.stat:
