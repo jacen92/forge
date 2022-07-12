@@ -299,6 +299,11 @@
   with_items:
     - bypass_wizard
 
+- name: "Ensure script engine is disabled"
+  ansible.builtin.lineinfile:
+    path: "/{{ DATACORE }}/nexus/etc/nexus.properties"
+    line: "nexus.scripts.allowCreation=false"
+
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
   community.general.docker_container:
     name: "nexus"
