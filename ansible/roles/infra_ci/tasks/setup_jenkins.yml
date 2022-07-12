@@ -18,7 +18,7 @@
 - name: "Launch jenkins container {{ JENKINS_VERSION }}"
   community.general.docker_container:
     name: "jenkins"
-    image: "jenkins:{{ JENKINS_VERSION }}"
+    image: "jenkins/jenkins:{{ JENKINS_VERSION }}"
     state: started
     restart_policy: always
     recreate: no
@@ -155,7 +155,7 @@
   community.general.docker_container:
     name: "jenkins"
     hostname: "jenkins"
-    image: "jenkins:{{ JENKINS_VERSION }}"
+    image: "jenkins/jenkins:{{ JENKINS_VERSION }}"
     state: "{{ JENKINS_DEFAULT_STATE }}"
     timeout: "{{ DOCKER_TIMEOUT }}"
     recreate: yes
