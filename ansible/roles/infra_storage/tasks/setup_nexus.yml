@@ -18,7 +18,7 @@
     accept_hostkey: yes
     force: yes
     recursive: no
-    version: master
+    version: main
   become: true
   become_user: "{{ USER_NAME }}"
 
@@ -67,9 +67,10 @@
   until: nexus_service_status['status'] == 200 or nexus_service_status['status'] == 403
 
 - name: "Ensure script engine is enabled"
-  ansible.builtin.lineinfile:
+  ansible.builtin.replace:
     path: "/{{ DATACORE }}/nexus/etc/nexus.properties"
-    line: "nexus.scripts.allowCreation=true"
+    regexp: "nexus.scripts.allowCreation=false"
+    replace: "nexus.scripts.allowCreation=true"
 
 - name: "Read nexus admin password file content"
   ansible.builtin.shell: cat /{{ DATACORE }}/nexus/admin.password
@@ -299,10 +300,11 @@
   with_items:
     - bypass_wizard
 
-- name: "Ensure script engine is disabled"
-  ansible.builtin.lineinfile:
+- name: "Ensure script engine is enabled"
+  ansible.builtin.replace:
     path: "/{{ DATACORE }}/nexus/etc/nexus.properties"
-    line: "nexus.scripts.allowCreation=false"
+    regexp: "nexus.scripts.allowCreation=true"
+    replace: "nexus.scripts.allowCreation=false"
 
 - name: "set nexus container final state ({{ NEXUS_DEFAULT_STATE }})"
   community.general.docker_container:
