@@ -1,6 +1,6 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
-LABEL Version="2.0"
+LABEL Version="3.0"
 LABEL Maintainer="Nicolas Gargaud <jacen92@gmail.com>"
 LABEL Description="Environment to use the forge playbook"
 
