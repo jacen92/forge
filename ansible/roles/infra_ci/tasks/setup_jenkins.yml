@@ -23,6 +23,7 @@
     restart_policy: always
     recreate: no
     timeout: "{{ DOCKER_TIMEOUT }}"
+    user: "{{ user_id.stdout }}:{{ group_id.stdout }}"
     ports:
       - "{{ JENKINS_PORT_CONFIG }}:8080"
     volumes:
@@ -160,6 +161,7 @@
     timeout: "{{ DOCKER_TIMEOUT }}"
     recreate: yes
     restart_policy: always
+    user: "{{ user_id.stdout }}:{{ group_id.stdout }}"
     volumes:
       - "/{{ DATACORE }}/jenkins:/var/jenkins_home"
       - "/usr/local/share/ca-certificates:/usr/local/share/ca-certificates/"
