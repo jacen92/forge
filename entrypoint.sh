@@ -84,4 +84,4 @@ if [ -f "$SHARED_DIRECTORY/fdroid_authorized_keys" ]; then
 fi
 
 cd /home/$USER_NAME/forge
-time ansible-playbook -i hosts --vault-password-file $VAULT_PASSWORD_FILE setup_forge.yml
+time ansible-playbook --ssh-extra-args "-o ServerAliveInterval=50" -i hosts --vault-password-file $VAULT_PASSWORD_FILE setup_forge.yml
