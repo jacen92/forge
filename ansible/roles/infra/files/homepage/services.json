@@ -180,6 +180,15 @@
         "description": "(formerly known as OpenERP) is a suite of open-source business apps.",
         "dockerhub": "https://hub.docker.com/_/odoo",
         "source": ""
+      },
+      {
+        "name": "It-tools",
+        "port": "{{ IT_TOOLS_PORT | default('unknown') }}",
+        "version": "{{ IT_TOOLS_VERSION | default('unknown') }}",
+        "external": "https://{{ IT_TOOLS_EXTERNAL_URL | default('unknown') }}",
+        "description": "Useful tools for developer and people working in IT.",
+        "dockerhub": "https://hub.docker.com/r/corentinth/it-tools",
+        "source": ""
       }
     ]
   }

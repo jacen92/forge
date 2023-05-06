@@ -4,3 +4,6 @@
 
 - import_tasks: setup_odoo.yml
   when: ("erp" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]
+
+- import_tasks: setup_it_tools.yml
+  when: ("tools" not in SKIP_SERVICES) and ansible_architecture in ["aarch64", "amd64", "x86_64"]

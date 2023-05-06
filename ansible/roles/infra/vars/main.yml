@@ -31,6 +31,7 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ NEXTCLOUD_PORT }}", name: "nextcloud" }
   - { port: "{{ GROCY_PORT }}", name: "grocy" }
   - { port: "{{ ODOO_PORT }}", name: "odoo" }
+  - { port: "{{ IT_TOOLS_PORT }}", name: "it_tools" }
 
 NGINX_VERSION: "1.23.3"
 NGINX_FRONT_PORT: "8001"

@@ -120,6 +120,7 @@ Productivity:
 
 * Grocy: RP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home. [https://hub.docker.com/r/linuxserver/grocy].
 * Odoo: (formerly known as OpenERP) is a suite of open-source business apps [https://hub.docker.com/_/odoo].
+* It-tools: Useful tools for developer and people working in IT. [https://hub.docker.com/r/corentinth/it-tools].
 
 ![Renderer screenshot](/documents/screenshots/storage.png)
 
@@ -151,6 +152,7 @@ Port listing (exposed from all docker containers)
 | Nextcloud         | 8055 |   http   | Storage |        no        |  drive.   |
 | Grocy             | 8056 |   http   | Storage |        no        |  stock.   |
 | Odoo              | 8057 |   http   | Storage |        no        |  erp.     |
+| It-tools          | 8058 |   http   | Storage |        no        |  tools.   |
 
 
 Playbooks parameters

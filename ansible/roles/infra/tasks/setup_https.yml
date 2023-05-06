@@ -74,6 +74,7 @@
       - "{{ NEXTCLOUD_PORT }}:{{ NEXTCLOUD_PORT }}"
       - "{{ GROCY_PORT }}:{{ GROCY_PORT }}"
       - "{{ ODOO_PORT }}:{{ ODOO_PORT }}"
+      - "{{ IT_TOOLS_PORT }}:{{ IT_TOOLS_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"
