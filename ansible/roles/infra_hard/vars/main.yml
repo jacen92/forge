@@ -1,3 +1,4 @@
+# https://hub.docker.com/_/eclipse-mosquitto/tags
 MQTT_VERSION: "2.0.15"
 MQTT_FRONT_PORT: "8030"
 MQTT_EXTERNAL_URL: "mqtt.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
@@ -5,12 +6,14 @@ MQTT_READ_USER: "reader"
 MQTT_RW_USER: "writer"
 MQTT_DEFAULT_STATE: stopped
 
+# https://hub.docker.com/r/nodered/node-red/tags
 NODERED_VERSION: "2.2.3-16-minimal"
 NODERED_FRONT_PORT: "8031"
 NODERED_EXTERNAL_URL: "flows.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 NODERED_DEFAULT_STATE: stopped
 
-OCTOPRINT_VERSION: "1.8.6-minimal"
+# https://hub.docker.com/r/octoprint/octoprint/tags
+OCTOPRINT_VERSION: "1.8.7-minimal"
 OCTOPRINT_PORT: "8033"
 OCTOPRINT_EXTERNAL_URL: "printers.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 OCTOPRINT_DEVICE_0: "/dev/null"

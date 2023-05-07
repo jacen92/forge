@@ -1,5 +1,6 @@
-WORDPRESS_VERSION: "6.1.1-php8.1"
-WORDPRESS_DB_VERSION: "10.9.4" # https://hub.docker.com/_/mariadb?tab=tags
+# https://hub.docker.com/_/wordpress/tags
+WORDPRESS_VERSION: "6.2.0-php8.2"
+WORDPRESS_DB_VERSION: "10.9.5" # https://hub.docker.com/_/mariadb/tags
 WORDPRESS_FRONT_PORT: "8040"
 WORDPRESS_EXTERNAL_URL: "blog.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 WORDPRESS_DEFAULT_STATE: stopped

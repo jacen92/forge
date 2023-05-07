@@ -1,11 +1,13 @@
-GOGS_VERSION: "0.12.10"
+# https://hub.docker.com/r/gogs/gogs/tags
+GOGS_VERSION: "0.13.0"
 GOGS_FRONT_PORT: "8021"
 GOGS_SSH_PORT: "{{ GIT_SSH_PORT }}"
 GOGS_EXTERNAL_URL: "git.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 GOGS_URL: "https://{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}:{{ GOGS_FRONT_PORT }}"
 GOGS_DEFAULT_STATE: stopped
 
-REDMINE_VERSION: "5.0.4"
+# https://hub.docker.com/_/redmine/tags
+REDMINE_VERSION: "5.0.5"
 REDMINE_DB_VERSION: "10-alpine"
 REDMINE_DB_USER: "redmine_user"
 REDMINE_DB_PASS: "redmine_pass"
@@ -14,7 +16,8 @@ REDMINE_FRONT_PORT: "8024"
 REDMINE_EXTERNAL_URL: "redmine.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 REDMINE_DEFAULT_STATE: stopped
 
-JENKINS_VERSION: "2.391-jdk11"
+# https://hub.docker.com/r/jenkins/jenkins/tags
+JENKINS_VERSION: "2.403-jdk17"
 JENKINS_PORT_CONFIG: 9000
 JENKINS_PORT: "8023"
 JENKINS_EXTERNAL_URL: "ci.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"

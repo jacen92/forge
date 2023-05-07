@@ -1,8 +1,10 @@
-GROCY_VERSION: "v3.3.2-ls182"
+# https://hub.docker.com/r/linuxserver/grocy/tags
+GROCY_VERSION: "v3.3.2-ls192"
 GROCY_PORT: "8056"
 GROCY_EXTERNAL_URL: "stock.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 GROCY_DEFAULT_STATE: stopped
 
+# https://hub.docker.com/_/odoo/tags
 ODOO_VERSION: "16.0"
 ODOO_PORT: "8057"
 ODOO_EXTERNAL_URL: "erp.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
