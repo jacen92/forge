@@ -9,6 +9,7 @@
     - common
     - infra
     - infra_ci
+    - infra_ml
     - infra_hard
     - infra_social
     - infra_storage

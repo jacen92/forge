@@ -122,6 +122,12 @@ Productivity:
 * Odoo: (formerly known as OpenERP) is a suite of open-source business apps [https://hub.docker.com/_/odoo].
 * It-tools: Useful tools for developer and people working in IT. [https://hub.docker.com/r/corentinth/it-tools].
 
+Machine Learning:
+-----------------
+
+* Label Studio: Label Studio is a multi-type data labeling and annotation tool with standardized output format.[https://hub.docker.com/r/heartexlabs/label-studio].
+
+
 ![Renderer screenshot](/documents/screenshots/storage.png)
 
 Port listing (exposed from all docker containers)
@@ -153,6 +159,7 @@ Port listing (exposed from all docker containers)
 | Grocy             | 8056 |   http   | Storage |        no        |  stock.   |
 | Odoo              | 8057 |   http   | Storage |        no        |  erp.     |
 | It-tools          | 8058 |   http   | Storage |        no        |  tools.   |
+| Label-studio      | 8060 |   http   | ML      |        no        |  label.   |
 
 
 Playbooks parameters

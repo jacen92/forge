@@ -190,6 +190,17 @@
         "dockerhub": "https://hub.docker.com/r/corentinth/it-tools",
         "source": ""
       }
+    ],
+    "Machine Learning": [
+      {
+        "name": "Label Studio",
+        "port": "{{ LABEL_STUDIO_PORT | default('unknown') }}",
+        "version": "{{ LABEL_STUDIO_VERSION | default('unknown') }}",
+        "external": "https://{{ LABEL_STUDIO_EXTERNAL_URL | default('unknown') }}",
+        "description": "Label Studio is a multi-type data labeling and annotation tool with standardized output format.",
+        "dockerhub": "https://hub.docker.com/r/heartexlabs/label-studio",
+        "source": ""
+      }
     ]
   }
 }
