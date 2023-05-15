@@ -1,0 +1,22 @@
+layout:
+  Infrastructure:
+    style: row
+    columns: 4
+  Development:
+    style: row
+    columns: 3
+  Hardware:
+    style: row
+    columns: 2
+  Social:
+    style: row
+    columns: 2
+  Storage:
+    style: row
+    columns: 3
+  Productivity:
+    style: row
+    columns: 3
+  MachineLearning:
+    style: row
+    columns: 1

@@ -1,0 +1,127 @@
+- Infrastructure:
+    - Traefik:
+        container: traefik
+        icon: si-traefikproxy
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ TRAEFIK_FRONT_PORT}}
+        description: "HTTPS support and reverse proxy with domain name."
+        target: _blank
+    - Portainer:
+        container: portainer
+        icon: si-portainer
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ PORTAINER_PORT}}
+        description: "Docker images manager."
+        target: _blank
+    - Homepage:
+        container: traefik
+        icon: mdi-home-automation
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ HOMEPAGE_FRONT_PORT}}
+        description: "A highly customizable homepage (or startpage / application dashboard) with Docker and service API integrations."
+        target: _blank
+    - Netdata:
+        container: netdata
+        icon: si-grafana
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ NETDATA_PORT}}
+        description: "The open-source, real-time, performance and health monitoring."
+        target: _blank
+- Development:
+    - Gogs:
+        container: gogs
+        icon: si-git
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ GOGS_FRONT_PORT}}
+        description: "Github like server, source storage (lighter than gitlab), git port on {{ GOGS_SSH_PORT | default('unknown') }}."
+        target: _blank
+    - Jenkins:
+        container: jenkins
+        icon: si-jenkins
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ JENKINS_PORT}}
+        description: "The leading open source automation server."
+        target: _blank
+    - Redmine:
+        container: redmine
+        icon: si-redmine
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ REDMINE_FRONT_PORT}}
+        description: "A highly customizable homepage (or startpage / application dashboard) with Docker and service API integrations."
+        target: _blank
+- Hardware:
+    - MQTT:
+        container: mqtt
+        icon: si-mqtt
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ MQTT_FRONT_PORT}}
+        description: "Mosquitto broker for the Internet of Things (Using websocket)."
+        target: _blank
+    - Nodered:
+        container: nodered
+        icon: si-nodered
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ NODERED_FRONT_PORT}}
+        description: "Flow-based programming for the Internet of Things."
+        target: _blank
+    - Octoprint:
+        container: octoprint
+        icon: si-octoprint
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ OCTOPRINT_PORT}}
+        description: "The snappy web interface for your 3D printer."
+        target: _blank
+    - Insolante:
+        container: insolante
+        icon: mdi-printer-3d
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ INSOLANTE_PORT}}
+        description: "Gerber to gcode converter (wrapper to pcb2gcode)."
+        target: _blank
+- Social:
+    - WordPress:
+        container: wordpress
+        icon: si-wordpress
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ WORDPRESS_FRONT_PORT}}
+        description: "The WordPress rich content management system."
+        target: _blank
+    - Peertube:
+        container: peertube
+        icon: si-peertube
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ PEERTUBE_PORT}}
+        description: "Federated video streaming platform."
+        target: _blank
+- Storage:
+    - Nexus:
+        container: nexus
+        icon: mdi-nas
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ NEXUS_PORT}}
+        description: "Artifact manager and docker registry (push: {{ NEXUS_DOCKER_PUSH_PORT | default('unknown') }}, pull: {{ NEXUS_DOCKER_PULL_PORT | default('unknown') }})"
+        target: _blank
+    - F-droid:
+        container: fdroid
+        icon: si-fdroid
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ FDROID_PORT}}
+        description: "Android application server (with scp access through {{ FDROID_SSH_PORT | default('unknown') }})."
+        target: _blank
+    - NextCloud:
+        container: nextcloud
+        icon: si-nextcloud
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ NEXTCLOUD_PORT}}
+        description: "Google drive alternative."
+        target: _blank
+- Productivity:
+    - Grocy:
+        container: grocy
+        icon: si-grocy
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ GROCY_PORT}}
+        description: "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home."
+        target: _blank
+    - Odoo:
+        container: odoo
+        icon: si-odoo
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ ODOO_PORT}}
+        description: "(formerly known as OpenERP) is a suite of open-source business apps."
+        target: _blank
+    - It-tools:
+        container: tools
+        icon: mdi-tools
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ IT_TOOLS_PORT}}
+        description: "Useful tools for developer and people working in IT."
+        target: _blank
+- MachineLearning:
+    - Label-studio:
+        container: label_studio
+        icon: mdi-label-multiple
+        href: http://{{ HOMEPAGE_DOMAIN }}:{{ LABEL_STUDIO_PORT}}
+        description: "Label Studio is a multi-type data labeling and annotation tool with standardized output format."
+        target: _blank

@@ -55,7 +55,7 @@
       - "80:80"
       - "443:443"
       - "{{ TRAEFIK_FRONT_PORT }}:8080"
-      - "{{ NGINX_FRONT_PORT }}:{{ NGINX_FRONT_PORT }}"
+      - "{{ HOMEPAGE_FRONT_PORT }}:{{ HOMEPAGE_FRONT_PORT }}"
       - "{{ PORTAINER_PORT }}:{{ PORTAINER_PORT }}"
       - "{{ NETDATA_PORT }}:{{ NETDATA_PORT }}"
       - "{{ GOGS_FRONT_PORT }}:{{ GOGS_FRONT_PORT }}"

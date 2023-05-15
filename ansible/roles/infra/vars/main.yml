@@ -12,7 +12,7 @@ TRAEFIK_FRONT_PORT: "8000"
 TRAEFIK_EXTERNAL_URL: "traefik.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 TRAEFIK_USE_LETSENCRYPT: false
 TRAEFIK_ENTRYPOINT_MAP:
-  - { port: "{{ NGINX_FRONT_PORT }}", name: "homepage" }
+  - { port: "{{ HOMEPAGE_FRONT_PORT }}", name: "homepage" }
   - { port: "{{ PORTAINER_PORT }}", name: "portainer" }
   - { port: "{{ NETDATA_PORT }}", name: "netdata" }
   - { port: "{{ GOGS_FRONT_PORT }}", name: "gogs" }
@@ -34,9 +34,10 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ IT_TOOLS_PORT }}", name: "it_tools" }
   - { port: "{{ LABEL_STUDIO_PORT }}", name: "label_studio" }
 
-NGINX_VERSION: "1.23.3"
-NGINX_FRONT_PORT: "8001"
-NGINX_EXTERNAL_URL: "home.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
+HOMEPAGE_VERSION: "latest"
+HOMEPAGE_FRONT_PORT: "8001"
+HOMEPAGE_EXTERNAL_URL: "home.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
+HOMEPAGE_DOMAIN: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}"
 
 # https://hub.docker.com/r/portainer/portainer-ce/tags
 PORTAINER_VERSION: "2.18.2-alpine"
