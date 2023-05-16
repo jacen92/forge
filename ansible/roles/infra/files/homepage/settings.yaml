@@ -16,7 +16,7 @@ layout:
     columns: 3
   Productivity:
     style: row
-    columns: 3
+    columns: 4
   MachineLearning:
     style: row
     columns: 1

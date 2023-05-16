@@ -73,6 +73,7 @@
       - "{{ GROCY_PORT }}:{{ GROCY_PORT }}"
       - "{{ ODOO_PORT }}:{{ ODOO_PORT }}"
       - "{{ IT_TOOLS_PORT }}:{{ IT_TOOLS_PORT }}"
+      - "{{ ONLYOFFICE_PORT }}:{{ ONLYOFFICE_PORT }}"
       - "{{ LABEL_STUDIO_PORT }}:{{ LABEL_STUDIO_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"

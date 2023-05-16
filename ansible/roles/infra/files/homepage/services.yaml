@@ -118,6 +118,12 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ IT_TOOLS_PORT}}
         description: "Useful tools for developer and people working in IT."
         target: _blank
+    - Onlyoffice:
+        container: onlyoffice
+        icon: si-onlyoffice
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ ONLYOFFICE_PORT}}
+        description: "Feature-rich web-based office suite with a vast range of collaborative capabilities."
+        target: _blank
 - MachineLearning:
     - Label-studio:
         container: label_studio

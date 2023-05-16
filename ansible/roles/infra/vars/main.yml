@@ -32,6 +32,7 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ GROCY_PORT }}", name: "grocy" }
   - { port: "{{ ODOO_PORT }}", name: "odoo" }
   - { port: "{{ IT_TOOLS_PORT }}", name: "it_tools" }
+  - { port: "{{ ONLYOFFICE_PORT }}", name: "onlyoffice" }
   - { port: "{{ LABEL_STUDIO_PORT }}", name: "label_studio" }
 
 HOMEPAGE_VERSION: "latest"

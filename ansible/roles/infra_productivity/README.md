@@ -4,5 +4,6 @@ Content
 =======
 
 * Grocy: Inventory.
-* Odoo: ERP
+* Odoo: ERP.
 * it-tools: A lot of tiny applications utility like base64 converter, qrcode generator.
+* Onlyoffice: web office.
