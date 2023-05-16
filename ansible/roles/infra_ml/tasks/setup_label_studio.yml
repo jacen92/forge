@@ -2,19 +2,11 @@
 - name: "Setup label-studio directory"
   ansible.builtin.file:
     path: "{{ item }}"
-    owner: "{{ USER_NAME }}"
-    group: "{{ USER_NAME }}"
+    owner: "1001"
+    group: "1001"
     state: directory
   with_items:
     - "/{{ DATACORE }}/label-studio"
-
-- name: "Get user ID"
-  ansible.builtin.shell: "id -u {{ USER_NAME }}"
-  register: user_id
-
-- name: "Get group ID"
-  ansible.builtin.shell: "id -g {{ USER_NAME }}"
-  register: group_id
 
 - name: "Launch label-studio container {{ LABEL_STUDIO_VERSION }}"
   community.general.docker_container:
@@ -24,7 +16,6 @@
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    user: "{{ user_id.stdout }}:{{ group_id.stdout }}"
 #    ports:
 #      - "{{ LABEL_STUDIO_PORT }}:8080"
     volumes:
