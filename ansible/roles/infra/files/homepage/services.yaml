@@ -27,7 +27,7 @@
     - Gogs:
         container: gogs
         icon: si-git
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ GOGS_FRONT_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ GOGS_FRONT_PORT}}
         description: "Github like server, source storage (lighter than gitlab), git port on {{ GOGS_SSH_PORT | default('unknown') }}."
         target: _blank
     - Jenkins:
@@ -46,7 +46,7 @@
     - MQTT:
         container: mqtt
         icon: si-mqtt
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ MQTT_FRONT_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ MQTT_FRONT_PORT}}
         description: "Mosquitto broker for the Internet of Things (Using websocket)."
         target: _blank
     - Nodered:
@@ -71,57 +71,57 @@
     - WordPress:
         container: wordpress
         icon: si-wordpress
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ WORDPRESS_FRONT_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ WORDPRESS_FRONT_PORT}}
         description: "The WordPress rich content management system."
         target: _blank
     - Peertube:
         container: peertube
         icon: si-peertube
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ PEERTUBE_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ PEERTUBE_PORT}}
         description: "Federated video streaming platform."
         target: _blank
 - Storage:
     - Nexus:
         container: nexus
         icon: mdi-nas
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ NEXUS_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ NEXUS_PORT}}
         description: "Artifact manager and docker registry (push: {{ NEXUS_DOCKER_PUSH_PORT | default('unknown') }}, pull: {{ NEXUS_DOCKER_PULL_PORT | default('unknown') }})"
         target: _blank
     - F-droid:
         container: fdroid
         icon: si-fdroid
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ FDROID_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ FDROID_PORT}}
         description: "Android application server (with scp access through {{ FDROID_SSH_PORT | default('unknown') }})."
         target: _blank
     - NextCloud:
         container: nextcloud
         icon: si-nextcloud
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ NEXTCLOUD_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ NEXTCLOUD_PORT}}
         description: "Google drive alternative."
         target: _blank
 - Productivity:
     - Grocy:
         container: grocy
         icon: si-grocy
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ GROCY_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ GROCY_PORT}}
         description: "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home."
         target: _blank
     - Odoo:
         container: odoo
         icon: si-odoo
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ ODOO_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ ODOO_PORT}}
         description: "(formerly known as OpenERP) is a suite of open-source business apps."
         target: _blank
     - It-tools:
         container: tools
         icon: mdi-tools
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ IT_TOOLS_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ IT_TOOLS_PORT}}
         description: "Useful tools for developer and people working in IT."
         target: _blank
 - MachineLearning:
     - Label-studio:
         container: label_studio
         icon: mdi-label-multiple
-        href: http://{{ HOMEPAGE_DOMAIN }}:{{ LABEL_STUDIO_PORT}}
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ LABEL_STUDIO_PORT}}
         description: "Label Studio is a multi-type data labeling and annotation tool with standardized output format."
         target: _blank
