@@ -17,7 +17,7 @@ REDMINE_EXTERNAL_URL: "redmine.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAM
 REDMINE_DEFAULT_STATE: stopped
 
 # https://hub.docker.com/r/jenkins/jenkins/tags
-JENKINS_VERSION: "2.403-jdk17"
+JENKINS_VERSION: "2.417-jdk17"
 JENKINS_PORT_CONFIG: 9000
 JENKINS_PORT: "8023"
 JENKINS_EXTERNAL_URL: "ci.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"

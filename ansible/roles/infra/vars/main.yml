@@ -7,7 +7,7 @@ BACKUP_DRIVE: "{{ BACKUP_CONFIGURATION.BACKUP_DRIVE }}"
 BACKUP_TOKEN: "{{ BACKUP_CONFIGURATION.BACKUP_TOKEN }}"
 
 # https://hub.docker.com/r/arm32v6/traefik/tags
-TRAEFIK_VERSION: "2.10.1"
+TRAEFIK_VERSION: "2.10.4"
 TRAEFIK_FRONT_PORT: "8000"
 TRAEFIK_EXTERNAL_URL: "traefik.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 TRAEFIK_USE_LETSENCRYPT: false
@@ -40,12 +40,12 @@ HOMEPAGE_EXTERNAL_URL: "home.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME,
 HOMEPAGE_DOMAIN: "{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }}"
 
 # https://hub.docker.com/r/portainer/portainer-ce/tags
-PORTAINER_VERSION: "2.18.2-alpine"
+PORTAINER_VERSION: "2.18.4-alpine"
 PORTAINER_PORT: "8010"
 PORTAINER_EXTERNAL_URL: "portainer.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 
 # https://hub.docker.com/r/netdata/netdata/tags
-NETDATA_VERSION: "v1.38.1"
+NETDATA_VERSION: "v1.41.0"
 NETDATA_PORT: "8011"
 NETDATA_EXTERNAL_URL: "monitor.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 NETDATA_DEFAULT_STATE: stopped

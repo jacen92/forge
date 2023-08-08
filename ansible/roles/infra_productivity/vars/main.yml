@@ -1,5 +1,5 @@
 # https://hub.docker.com/r/linuxserver/grocy/tags
-GROCY_VERSION: "v3.3.2-ls192"
+GROCY_VERSION: "v4.0.1-ls207"
 GROCY_PORT: "8056"
 GROCY_EXTERNAL_URL: "stock.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 GROCY_DEFAULT_STATE: stopped
@@ -11,7 +11,8 @@ ODOO_EXTERNAL_URL: "erp.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFA
 ODOO_DB_USER: "odoo"
 ODOO_DEFAULT_STATE: stopped
 
-IT_TOOLS_VERSION: "2023.4.23-92bd835"
+# https://hub.docker.com/r/corentinth/it-tools/tags
+IT_TOOLS_VERSION: "2023.5.14-77f2efc"
 IT_TOOLS_PORT: "8058"
 IT_TOOLS_EXTERNAL_URL: "tools.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 IT_TOOLS_DEFAULT_STATE: stopped

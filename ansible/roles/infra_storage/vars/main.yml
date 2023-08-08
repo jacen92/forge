@@ -1,6 +1,6 @@
 # To update nexus go to https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile and copy the sha256 of the selected version
-NEXUS_VERSION: "3.53.0-01"
-NEXUS_SHA: "a91f32f3a3f95611006978888f621164c0a02dda5dce6b099781b8819ab59075"
+NEXUS_VERSION: "3.58.1-02"
+NEXUS_SHA: "0a59c68b8575986dead842dd1f373b09e7fdeac549635f1bc6ac54cbe13e1391"
 NEXUS_PORT: "8050"
 NEXUS_DOCKER_PULL_PORT: "8051"
 NEXUS_DOCKER_PUSH_PORT: "8052"
@@ -11,7 +11,7 @@ NEXUS_RESTART_DELAY: 60
 NEXUS_DEFAULT_STATE: stopped
 
 # https://hub.docker.com/_/nextcloud/tags
-NEXTCLOUD_VERSION: "26.0.1"
+NEXTCLOUD_VERSION: "27.0.1"
 NEXTCLOUD_PORT: "8055"
 NEXTCLOUD_EXTERNAL_URL: "drive.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 NEXTCLOUD_DEFAULT_STATE: stopped
