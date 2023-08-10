@@ -1,0 +1,81 @@
+---
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Get group ID"
+  ansible.builtin.shell: "id -g {{ USER_NAME }}"
+  register: group_id
+
+- name: "Set correct owner of full audio_webui data directory"
+  ansible.builtin.file:
+    path: "/{{ DATACORE }}/{{ item }}"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+    state: directory
+  with_items:
+    - audio-webui
+    - audio-webui/datasets
+    - audio-webui/models
+    - audio-webui/modelsTTS
+
+- name: "Remove previous audio_webui tmp directory"
+  ansible.builtin.file:
+     path: "/tmp/audio_webui"
+     state: absent
+
+- name: "Clone audio_webui repository"
+  ansible.builtin.git:
+    repo: "https://github.com/jacen92/audio-webui.git"
+    dest: "/tmp/audio_webui"
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+    version: "{{ AUDIO_WEBUI_VERSION }}"
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Build audio_webui image and with buildargs"
+  community.general.docker_image:
+     name: "audio_webui"
+     tag: "{{ AUDIO_WEBUI_VERSION }}"
+     source: "build"
+     build:
+       pull: yes
+       path: "/tmp/audio_webui"
+       dockerfile: "Dockerfile"
+       args:
+         TORCH_CUDA_ARCH_LIST: "6.0 6.1 6.2"
+         USER_UID: "{{ user_id.stdout }}"
+
+- name: "Launch audio_webui container final state ({{ AUDIO_WEBUI_DEFAULT_STATE }})"
+  community.general.docker_container:
+    name: "audio_webui"
+    hostname: "audio_webui"
+    image: "audio_webui:{{ AUDIO_WEBUI_VERSION }}"
+    state: "{{ AUDIO_WEBUI_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    ports:
+  #      - "{{ AUDIO_WEBUI_PORT }}:7860"
+    volumes:
+      - "/{{ DATACORE }}/audio-webui/modelsTTS:/home/dev/.local/share/tts"
+      - "/{{ DATACORE }}/audio-webui/datasets:/datasets"
+      - "/{{ DATACORE }}/audio-webui/models:/models"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.audio_webui.loadbalancer.server.port: "7860"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.audio_webui_http.middlewares: "https_redirect"
+      traefik.http.routers.audio_webui_http.rule: "Host(`{{ AUDIO_WEBUI_EXTERNAL_URL }}`)"
+      traefik.http.routers.audio_webui_http.service: audio_webui
+      traefik.http.routers.audio_webui_https.rule: "Host(`{{ AUDIO_WEBUI_EXTERNAL_URL }}`)"
+      traefik.http.routers.audio_webui_https.service: audio_webui
+      traefik.http.routers.audio_webui_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.audio_webui_proxy.loadbalancer.server.port: "7860"
+      traefik.http.routers.audio_webui_proxy.service: audio_webui_proxy
+      traefik.http.routers.audio_webui_proxy.entrypoints: audio_webui
+      traefik.http.routers.audio_webui_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.audio_webui_proxy.tls: "true"

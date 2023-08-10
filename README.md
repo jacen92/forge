@@ -128,6 +128,7 @@ Machine Learning:
 -----------------
 
 * Label Studio: Label Studio is a multi-type data labeling and annotation tool with standardized output format.[https://hub.docker.com/r/heartexlabs/label-studio].
+* Audio Webui: A webui for different audio related Neural Networks..[https://github.com/jacen92/audio-webui-docker].
 
 
 ![Renderer screenshot](/documents/screenshots/storage.png)
@@ -163,6 +164,7 @@ Port listing (exposed from all docker containers)
 | It-tools          | 8058 |   http   | Storage |        no        |  tools.   |
 | Onlyoffice        | 8059 |   http   | Storage |        no        |  desk.    |
 | Label-studio      | 8060 |   http   | ML      |        no        |  label.   |
+| Audio-webui       | 8061 |   http   | ML      |        no        |  audio.   |
 
 
 Playbooks parameters
@@ -317,3 +319,9 @@ ldap_* variables must all be set to be able to use it in these services.
 ldap_secure is used only for Nexus (not tested yet).
 ldap_admin_group is used on Nexus and Jenkins but ldap_access_group is only used on Nexus.
 Local account stay enabled only on Nexus (please use a strong password).
+
+About audio-webui
+-----------------
+
+This service is built from the sources and need an Nvidia GPU to work.
+Is not GPU is detected the service is not installed.

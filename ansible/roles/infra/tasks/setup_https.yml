@@ -75,6 +75,7 @@
       - "{{ IT_TOOLS_PORT }}:{{ IT_TOOLS_PORT }}"
       - "{{ ONLYOFFICE_PORT }}:{{ ONLYOFFICE_PORT }}"
       - "{{ LABEL_STUDIO_PORT }}:{{ LABEL_STUDIO_PORT }}"
+      - "{{ AUDIO_WEBUI_PORT }}:{{ AUDIO_WEBUI_PORT }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/{{ DATACORE }}/traefik/certs/:/certs/"

@@ -34,6 +34,7 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ IT_TOOLS_PORT }}", name: "it_tools" }
   - { port: "{{ ONLYOFFICE_PORT }}", name: "onlyoffice" }
   - { port: "{{ LABEL_STUDIO_PORT }}", name: "label_studio" }
+  - { port: "{{ AUDIO_WEBUI_PORT }}", name: "audio_webui" }
 
 HOMEPAGE_VERSION: "latest"
 HOMEPAGE_FRONT_PORT: "8001"
