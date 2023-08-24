@@ -8,10 +8,10 @@
     ssh_key_bits: 2048
     ssh_key_file: .ssh/id_rsa
 
-- name: "Adding existing user '{{ USER_NAME }}' to group sudo and docker"
+- name: "Adding existing user '{{ USER_NAME }}' to group sudo"
   ansible.builtin.user:
     name: '{{ USER_NAME }}'
-    groups: sudo,docker
+    groups: sudo
     append: yes
 
 - name: "Setup datacore directory"

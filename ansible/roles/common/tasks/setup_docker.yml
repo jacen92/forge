@@ -1,22 +1,38 @@
 ---
-- name: "Ensure docker.io is installed"
+- name: "Ensure unoffical docker are absent"
   ansible.builtin.apt:
-    pkg: [docker.io]
-    state: present
+    pkg: [docker.io, docker-doc, docker-compose, podman-docker, containerd, runc]
+    state: absent
     update_cache: true
     cache_valid_time: 3600
 
-- name: "Ensure obselete docker lib for python is removed"
+- name: "Ensure obselete docker lib for python is absent"
   ansible.builtin.pip:
     executable: pip3
     state: absent
-    name: [docker]
+    name: [docker-py]
+
+- name: "Add Docker GPG apt Key"
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: "Add Docker Repository"
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu {{ hostvars[inventory_hostname].ansible_lsb.codename }} stable
+    state: present
+
+- name: "Update apt and install docker-ce"
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
 
 - name: "Ensure docker lib for python is installed"
   ansible.builtin.pip:
     executable: pip3
     state: present
-    name: [docker-py]
+    name: [docker]
 
 - name: "Ensure docker timeouts are long enough (108000 = 30min)"
   ansible.builtin.lineinfile:
@@ -27,6 +43,13 @@
     - "DOCKER_CLIENT_TIMEOUT={{ DOCKER_TIMEOUT }}"
     - "DOCKER_TIMEOUT={{ DOCKER_TIMEOUT }}"
   register: docker_update
+
+- name: "Adding existing user '{{ USER_NAME }}' to group sudo"
+  ansible.builtin.user:
+    name: '{{ USER_NAME }}'
+    groups: sudo, sudo
+    append: yes
+
 
 - name: "Reload and restart service docker"
   ansible.builtin.service:
