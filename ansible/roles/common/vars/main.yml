@@ -2,3 +2,11 @@ GIT_SSH_PORT: "8022"
 JENKINS_JNLP_PORT: "50000"
 DOCKER_TIMEOUT: 108000
 DEFAULT_DOMAIN_NAME: "forge.local"
+
+docker_daemon_json:
+  # Set default runtime (required for kubernetes)
+  runtimes:
+    nvidia:
+      path: /usr/bin/nvidia-container-runtime
+      runtimeArgs: []
+  default-runtime: nvidia

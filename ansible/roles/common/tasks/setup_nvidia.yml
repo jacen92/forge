@@ -1,0 +1,45 @@
+---
+- name: "remove nvidia-docker* packages"
+  apt:
+    name:
+      - nvidia-docker
+      - nvidia-docker2
+    state: absent
+    autoremove: yes
+    purge: yes
+
+- name: "add nvidia-docker key"
+  apt_key:
+    url: "https://nvidia.github.io/nvidia-docker/gpgkey"
+    state: present
+
+- name: "add nvidia-docker repo"
+  get_url:
+    url: "https://nvidia.github.io/nvidia-docker/{{ hostvars[inventory_hostname].ansible_lsb.id|lower }}{{ hostvars[inventory_hostname].ansible_lsb.release }}/nvidia-docker.list"
+    dest: "/etc/apt/sources.list.d/nvidia-docker.list"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: "install nvidia-docker packages"
+  apt:
+    name: nvidia-container-runtime
+    state: present
+    update_cache: yes
+  register: docker_update
+
+- name: "set docker daemon configuration"
+  copy:
+    content: "{{ docker_daemon_json | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  register: docker_update
+
+- name: "Reload and restart service docker"
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+    daemon_reload : yes
+  when: docker_update.changed

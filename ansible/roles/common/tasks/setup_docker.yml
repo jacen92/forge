@@ -50,7 +50,6 @@
     groups: docker
     append: yes
 
-
 - name: "Reload and restart service docker"
   ansible.builtin.service:
     name: docker

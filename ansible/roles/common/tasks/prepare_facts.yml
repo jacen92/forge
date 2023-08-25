@@ -41,10 +41,6 @@
     with_nvidia_gpu: true
   when: '"nvidia" in pci_result.stdout|lower'
 
-- name: "check gpu"
-  ansible.builtin.debug:
-    var: with_nvidia_gpu
-
 - name: "Get the apt package facts"
   ansible.builtin.package_facts:
     manager: "auto"
