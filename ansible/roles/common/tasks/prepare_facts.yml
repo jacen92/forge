@@ -30,6 +30,21 @@
   register: git_commit
   delegate_to: localhost
 
+- name: "Detect gpu information"
+  ansible.builtin.shell: "lspci -v | grep -i vga"
+  register: pci_result
+  ignore_errors: yes
+  no_log: true
+
+- name: "Set with_nvidia_gpu"
+  ansible.builtin.set_fact:
+    with_nvidia_gpu: true
+  when: '"nvidia" in pci_result.stdout|lower'
+
+- name: "check gpu"
+  ansible.builtin.debug:
+    var: with_nvidia_gpu
+
 - name: "Get the apt package facts"
   ansible.builtin.package_facts:
     manager: "auto"
