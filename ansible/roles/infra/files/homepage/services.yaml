@@ -137,3 +137,9 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ AUDIO_WEBUI_PORT }}
         description: "A webui for different audio related Neural Networks."
         target: _blank
+    - Text-webui:
+        container: text_webui
+        icon: mdi-script-text-play-outline
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ TEXT_WEBUI_PORT }}
+        description: "A Gradio web UI for Large Language Models. Supports transformers, GPTQ, llama.cpp (ggml), Llama models. (api on {{ TEXT_WEBUI_API_PORT | default('unknown') }}, stream on {{ TEXT_WEBUI_STEAM_PORT | default('unknown') }})"
+        target: _blank

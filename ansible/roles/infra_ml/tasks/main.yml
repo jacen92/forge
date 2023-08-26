@@ -3,4 +3,7 @@
   when: ("label" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]
 
 - import_tasks: setup_audio_webui.yml
-  when: ("audio" not in SKIP_SERVICES) and with_nvidia_gpu is defined
+  when: ("audio" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"] and with_nvidia_gpu is defined
+
+- import_tasks: setup_text_webui.yml
+  when: ("text" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]

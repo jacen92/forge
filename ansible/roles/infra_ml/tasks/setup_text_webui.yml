@@ -1,0 +1,137 @@
+---
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Get group ID"
+  ansible.builtin.shell: "id -g {{ USER_NAME }}"
+  register: group_id
+
+- name: "Ensure libraries for download-models are present"
+  ansible.builtin.pip:
+    executable: pip3
+    state: present
+    name: [requests, tqdm]
+    extra_args: --user
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Set correct owner of full text_webui data directory"
+  ansible.builtin.file:
+    path: "/{{ DATACORE }}/{{ item }}"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+    state: directory
+    recurse: true
+  with_items:
+    - text-webui
+
+- name: "Remove previous text_webui tmp directory"
+  ansible.builtin.file:
+     path: "/tmp/text_webui"
+     state: absent
+
+- name: "Clone text_webui repository"
+  ansible.builtin.git:
+    repo: "https://github.com/oobabooga/text-generation-webui.git"
+    dest: "/tmp/text_webui"
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+    version: "{{ TEXT_WEBUI_VERSION }}"
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Copy LLM templates"
+  ansible.builtin.copy:
+    remote_src: true
+    src: "/tmp/text_webui/{{ item }}"
+    dest: "/{{ DATACORE }}/text-webui"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+  with_items:
+    - characters
+    - extensions
+    - loras
+    - models
+    - presets
+    - prompts
+    - training
+
+- name: "Copy LLM docker files"
+  ansible.builtin.copy:
+    remote_src: true
+    src: /tmp/text_webui/docker/{{ item }}
+    dest: /tmp/text_webui/{{ item }}
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+  with_items:
+    - Dockerfile
+    - .dockerignore
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Get LLM models {{ TEXT_LLM_MODEL }}"
+  ansible.builtin.shell: "time python3 /tmp/text_webui/download-model.py --output /{{ DATACORE }}/text-webui/models {{ TEXT_LLM_MODEL }}"
+  when: TEXT_LLM_MODEL is defined and TEXT_LLM_MODEL | length > 0
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Build text_webui image and with buildargs (Builkit is needed)"
+  ansible.builtin.shell:
+    cmd: docker build --build-arg WEBUI_VERSION=head --build-arg TORCH_CUDA_ARCH_LIST="6.0 6.1 6.2" -t text_webui:{{ TEXT_WEBUI_VERSION }} .
+    chdir: "/tmp/text_webui"
+  environment:
+    DOCKER_BUILDKIT: 1
+
+- name: "Launch text_webui container final state ({{ TEXT_WEBUI_DEFAULT_STATE }})"
+  community.general.docker_container:
+    name: "text_webui"
+    hostname: "text_webui"
+    image: "text_webui:{{ TEXT_WEBUI_VERSION }}"
+    state: "{{ TEXT_WEBUI_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    env:
+      CLI_ARGS: "--listen --auto-devices --extensions api --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('txt_password')}}"
+    ports:
+  #      - "{{ TEXT_WEBUI_PORT }}:7860"
+  #      - "{{ TEXT_WEBUI_API_PORT }}:5000"
+  #      - "{{ TEXT_WEBUI_STEAM_PORT }}:5005"
+    volumes:
+      - "/{{ DATACORE }}/text-webui/characters:/app/characters"
+      - "/{{ DATACORE }}/text-webui/extensions:/app/extensions"
+      - "/{{ DATACORE }}/text-webui/loras:/app/loras"
+      - "/{{ DATACORE }}/text-webui/models:/app/models"
+      - "/{{ DATACORE }}/text-webui/presets:/app/presets"
+      - "/{{ DATACORE }}/text-webui/prompts:/app/prompts"
+      - "/{{ DATACORE }}/text-webui/training:/app/training"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.text_webui.loadbalancer.server.port: "7860"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.text_webui_http.middlewares: "https_redirect"
+      traefik.http.routers.text_webui_http.rule: "Host(`{{ TEXT_WEBUI_EXTERNAL_URL }}`)"
+      traefik.http.routers.text_webui_http.service: text_webui
+      traefik.http.routers.text_webui_https.rule: "Host(`{{ TEXT_WEBUI_EXTERNAL_URL }}`)"
+      traefik.http.routers.text_webui_https.service: text_webui
+      traefik.http.routers.text_webui_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.text_webui_proxy.loadbalancer.server.port: "7860"
+      traefik.http.routers.text_webui_proxy.service: text_webui_proxy
+      traefik.http.routers.text_webui_proxy.entrypoints: text_webui
+      traefik.http.routers.text_webui_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.text_webui_proxy.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.text_webui_api_proxy.loadbalancer.server.port: "5000"
+      traefik.http.routers.text_webui_api_proxy.service: text_webui_api_proxy
+      traefik.http.routers.text_webui_api_proxy.entrypoints: text_webui_api
+      traefik.http.routers.text_webui_api_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.text_webui_api_proxy.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.text_webui_stream_proxy.loadbalancer.server.port: "5005"
+      traefik.http.routers.text_webui_stream_proxy.service: text_webui_stream_proxy
+      traefik.http.routers.text_webui_stream_proxy.entrypoints: text_webui_stream
+      traefik.http.routers.text_webui_stream_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.text_webui_stream_proxy.tls: "true"
