@@ -44,10 +44,10 @@
     - "DOCKER_TIMEOUT={{ DOCKER_TIMEOUT }}"
   register: docker_update
 
-- name: "Adding existing user '{{ USER_NAME }}' to group sudo"
+- name: "Adding existing user '{{ USER_NAME }}' to group docker"
   ansible.builtin.user:
     name: '{{ USER_NAME }}'
-    groups: sudo, sudo
+    groups: docker
     append: yes
 
 
