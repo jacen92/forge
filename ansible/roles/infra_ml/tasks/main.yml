@@ -7,3 +7,6 @@
 
 - import_tasks: setup_text_webui.yml
   when: ("text" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]
+
+- import_tasks: setup_image_webui.yml
+  when: ("image" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]

@@ -8,7 +8,7 @@ USER_NAME: "forge"
 USER_MAIL: "{{ USER_NAME }}@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, 'exemple.org') }}"
 SKIP_SERVICES: ["peertube", "fdroid", "insolante"]
 # uncomment to test the new service
-# SKIP_SERVICES: ["peertube", "fdroid", "insolante", "gogs", "jenkins", "redmine", "domotic", "octoprint", "wordpress", "nextcloud", "nexus", "erp", "grocy", "tools", "label", "audio", "text"]
+# SKIP_SERVICES: ["peertube", "fdroid", "insolante", "gogs", "jenkins", "redmine", "domotic", "octoprint", "wordpress", "nextcloud", "nexus", "erp", "grocy", "tools", "desk", "label", "audio", "text", "image"]
 
 BACKUP_CONFIGURATION:
   BACKUP_TO_KEEP: 3
@@ -20,6 +20,9 @@ BACKUP_CONFIGURATION:
 # ==============================================================================
 # Text LLM default model
 TEXT_LLM_MODEL: ""
+
+# Default stable diffusion webui [invoke | auto | auto-cpu | comfy | comfy-cpu]
+IMAGE_WEBUI: "auto"
 
 # ==============================================================================
 # Jenkins specific configuration

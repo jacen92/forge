@@ -130,6 +130,7 @@ Machine Learning:
 * Label Studio: Label Studio is a multi-type data labeling and annotation tool with standardized output format.[https://hub.docker.com/r/heartexlabs/label-studio].
 * Audio Webui: A webui for different audio related Neural Networks.[https://github.com/jacen92/audio-webui-docker].
 * Text Webui: A Gradio web UI for Large Language Models. Supports transformers, GPTQ, llama.cpp (ggml), Llama models.[https://github.com/oobabooga/text-generation-webui.git].
+* Stable disffusion Webui: Easy Docker setup for Stable Diffusion with user-friendly UI (default to AUTOMATIC1111).[https://github.com/AbdBarho/stable-diffusion-webui-docker].
 
 
 ![Renderer screenshot](/documents/screenshots/storage.png)
@@ -167,6 +168,9 @@ Port listing (exposed from all docker containers)
 | Label-studio      | 8060 |   http   | ML      |        no        |  label.   |
 | Audio-webui       | 8061 |   http   | ML      |        no        |  audio.   |
 | Text-webui        | 8062 |   http   | ML      |        no        |  text.    |
+| Text-webui-api    | 8063 |   http   | ML      |        no        |  text.    |
+| Text-webui-stream | 8064 |   http   | ML      |        no        |  text.    |
+| Image-webui       | 8065 |   http   | ML      |        no        |  text.    |
 
 
 Playbooks parameters
