@@ -6,7 +6,10 @@ DOMAIN_CERT_KEY_NAME: ""
 DEFAULT_ADMIN_NAME: "admin"
 USER_NAME: "forge"
 USER_MAIL: "{{ USER_NAME }}@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, 'exemple.org') }}"
-SKIP_SERVICES: []
+SKIP_SERVICES: ["peertube", "fdroid", "insolante"]
+# uncomment to test the new service
+# SKIP_SERVICES: ["peertube", "fdroid", "insolante", "gogs", "jenkins", "redmine", "domotic", "octoprint", "wordpress", "nextcloud", "nexus", "erp", "grocy", "tools", "audio", "text"]
+
 BACKUP_CONFIGURATION:
   BACKUP_TO_KEEP: 3
   BACKUP_DRIVE: ""
