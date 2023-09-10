@@ -5,6 +5,11 @@
   level = "INFO"
   format = "common"
 
+# Configuring a buffer of 300 lines to limit writing to the disk too frequently
+[accessLog]
+  filePath = "/etc/traefik/access.log"
+  bufferingSize = 300
+
 ################################################################
 # Web configuration backend
 ################################################################
