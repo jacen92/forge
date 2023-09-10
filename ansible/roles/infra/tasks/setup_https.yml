@@ -28,7 +28,6 @@
     mode: 0644
   with_items:
     - tls-certs.toml
-  when: "DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0"
 
 - name: "Copy traefik certificates in traefik directory"
   ansible.builtin.copy:
@@ -38,9 +37,8 @@
     group: "{{ USER_NAME }}"
     mode: "{{ item.mode }}"
   with_items:
-    - {file: "{{ DOMAIN_CERT_KEY_NAME }}", mode: 600}
-    - {file: "{{ DOMAIN_CERT_NAME }}", mode: 644}
-  when: "DOMAIN_CERT_NAME | length > 0 and DOMAIN_CERT_KEY_NAME | length > 0"
+    - {file: "{{ DOMAIN_CERT_KEY_NAME | default('default-key.pem') }}", mode: 600}
+    - {file: "{{ DOMAIN_CERT_NAME | default('default.pem') }}", mode: 644}
 
 # from: https://www.sheevaboite.fr/articles/traefik-reverse-proxy-https-containers-docker
 - name: "Launch traefik container version {{ TRAEFIK_VERSION }}"
@@ -82,12 +80,6 @@
       - "/{{ DATACORE }}/traefik:/etc/traefik"
     labels:
       traefik.enable: "false"
-      traefik.http.services.traefik.loadbalancer.server.port: "8080"
-      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.traefik_http.middlewares: "https_redirect"
-      traefik.http.routers.traefik_http.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
-      traefik.http.routers.traefik_https.rule: "Host(`{{ TRAEFIK_EXTERNAL_URL }}`)"
-      traefik.http.routers.traefik_https.tls: "true"
 
 - name: "Sleep for 30 seconds to let traefik starts"
   ansible.builtin.wait_for: timeout=30

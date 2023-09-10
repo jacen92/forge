@@ -14,8 +14,33 @@
 # $SHARED_DIRECTORY/fdroid_authorized_keys: keys allowed to send files to fdroid.
 
 export ANSIBLE_HOST_KEY_CHECKING=False
-export PATH=/home/$USER_NAME/.local/bin/:$PATH
+export PATH=/home/$USER_NAME/.local/bin/:/home/$USER_NAME/mkcert:$PATH
 export VAULT_PASSWORD_FILE=/home/$USER_NAME/.ansible-vault/forge
+
+# remove existing template in case an identity with dev name is used
+rm -rf /home/$USER_NAME/forge/identity/dev
+
+make_missing_cert() {
+  export CAROOT="$SHARED_DIRECTORY/rootCA.pem"
+  echo "Using custom certificate authority and export mkcert and rootCA"
+  cp $(which mkcert) $SHARED_DIRECTORY
+  mkcert -install
+
+  if [ ! -f "/home/$USER_NAME/forge/identity/$IDENTITY/certs/default-key.pem" ]; then
+    echo "Creating default certificates for $TARGET"
+    mkcert $TARGET
+    mv $TARGET-key.pem /home/$USER_NAME/forge/identity/$IDENTITY/certs/default-key.pem
+    mv $TARGET.pem /home/$USER_NAME/forge/identity/$IDENTITY/certs/default.pem
+
+    sed -i 's+DOMAIN_CERT_NAME: ""+DOMAIN_CERT_NAME: "default.pem"+' /home/$USER_NAME/forge/identity/$IDENTITY/vars.yml
+    sed -i 's+DOMAIN_CERT_KEY_NAME: ""+DOMAIN_CERT_KEY_NAME: "default-key.pem"+' /home/$USER_NAME/forge/identity/$IDENTITY/vars.yml
+
+    echo "Updating identity in $SHARED_DIRECTORY/$IDENTITY.zip"
+    cd /home/$USER_NAME/forge/identity/ && zip -r $SHARED_DIRECTORY/$IDENTITY.zip $IDENTITY && cd -
+  else
+    echo "Using existing default certificate"
+  fi
+}
 
 if [ ! -z "$TARGET" ]; then
   echo "Targetting: $TARGET"
@@ -41,6 +66,16 @@ if [ ! -z "$IDENTITY" ]; then
       echo "Use provided identity $IDENTITY"
       unzip "$SHARED_DIRECTORY/$IDENTITY.zip" -d /home/$USER_NAME/forge/identity
     fi
+    if [ $(ls -1 /home/$USER_NAME/forge/identity/$IDENTITY/certs/*.pem 2>/dev/null | wc -l) != 0 ]; then
+      echo "Use provided pem certificates"
+    else
+      if [ $(ls -1 /home/$USER_NAME/forge/identity/$IDENTITY/certs/*.crt 2>/dev/null | wc -l) != 0 ]; then
+        echo "Use provided crt certificates"
+      else
+        make_missing_cert
+      fi
+    fi
+
     echo "Replace identity name in setup_forge.yml"
     sed -i 's+IDENTITY: "dev"+IDENTITY: "'$IDENTITY'"+' /home/$USER_NAME/forge/setup_forge.yml
   else
