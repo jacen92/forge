@@ -20,7 +20,7 @@
 - name: "Launch homepage container {{ HOMEPAGE_VERSION }}"
   community.general.docker_container:
     name: "homepage"
-    image: "ghcr.io/benphelps/homepage:{{ HOMEPAGE_VERSION }}"
+    image: "ghcr.io/gethomepage/homepage:{{ HOMEPAGE_VERSION }}"
     state: started
     restart_policy: always
     recreate: yes
