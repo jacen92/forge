@@ -31,7 +31,7 @@
      path: "/tmp/text_webui"
      state: absent
 
-- name: "Clone text_webui repository"
+- name: "Clone text_webui repository {{ TEXT_WEBUI_VERSION }}"
   ansible.builtin.git:
     repo: "https://github.com/oobabooga/text-generation-webui.git"
     dest: "/tmp/text_webui"
@@ -94,7 +94,7 @@
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
     env:
-      CLI_ARGS: "--listen --auto-devices --extensions api --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('txt_password')}}"
+      CLI_ARGS: "--listen --auto-devices --extensions openai --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('txt_password')}}"
     ports:
   #      - "{{ TEXT_WEBUI_PORT }}:7860"
   #      - "{{ TEXT_WEBUI_API_PORT }}:5000"
