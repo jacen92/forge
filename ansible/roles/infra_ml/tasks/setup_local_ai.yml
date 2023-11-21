@@ -1,0 +1,85 @@
+---
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Get group ID"
+  ansible.builtin.shell: "id -g {{ USER_NAME }}"
+  register: group_id
+
+- name: "Ensure libraries for download-models are present"
+  ansible.builtin.pip:
+    executable: pip3
+    state: present
+    name: [requests, tqdm]
+    extra_args: --user
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Set correct owner of full localai data directory"
+  ansible.builtin.file:
+    path: "/{{ DATACORE }}/{{ item }}"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+    state: directory
+    recurse: true
+  with_items:
+    - localai
+
+- name: "Remove previous localai tmp directory"
+  ansible.builtin.file:
+     path: "/tmp/localai"
+     state: absent
+
+- name: "Clone localai repository {{ LOCAL_AI_VERSION }}"
+  ansible.builtin.git:
+    repo: "https://github.com/mudler/LocalAI"
+    dest: "/tmp/localai"
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+    version: "{{ LOCAL_AI_VERSION }}"
+  become: true
+  become_user: "{{ USER_NAME }}"
+
+- name: "Build localai {{ LOCAL_AI_VERSION }} image and with buildargs (Builkit is needed)"
+  ansible.builtin.shell:
+    cmd: docker build --build-arg TORCH_CUDA_ARCH_LIST="6.0 6.1 6.2" -t localai:{{ LOCAL_AI_VERSION }} .
+    chdir: "/tmp/localai"
+  environment:
+    DOCKER_BUILDKIT: 1
+
+- name: "Launch localai container final state ({{ LOCAL_AI_DEFAULT_STATE }})"
+  community.general.docker_container:
+    name: "localai"
+    hostname: "localai"
+    image: "localai:{{ LOCAL_AI_VERSION }}"
+    state: "{{ LOCAL_AI_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    env:
+      DEBUG: "true"
+      PRELOAD_MODELS: "[{\"url\":\"github:go-skynet/model-gallery/mistral.yaml\", \"name\": \"default\"}, {\"url\":\"github:go-skynet/model-gallery/bert-embeddings.yaml\", \"name\": \"bert\"}, {\"url\":\"github:go-skynet/model-gallery/gpt4all-j.yaml\", \"name\": \"gpt4all\"}]"
+      MODELS_PATH: "/models"
+      REBUILD: "false"
+    ports:
+  #      - "{{ LOCAL_AI_PORT }}:8080"
+    volumes:
+      - "/{{ DATACORE }}/localai:/models"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.localai.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.localai_http.middlewares: "https_redirect"
+      traefik.http.routers.localai_http.rule: "Host(`{{ LOCAL_AI_EXTERNAL_URL }}`)"
+      traefik.http.routers.localai_http.service: localai
+      traefik.http.routers.localai_https.rule: "Host(`{{ LOCAL_AI_EXTERNAL_URL }}`)"
+      traefik.http.routers.localai_https.service: localai
+      traefik.http.routers.localai_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.localai_proxy.loadbalancer.server.port: "8080"
+      traefik.http.routers.localai_proxy.service: localai_proxy
+      traefik.http.routers.localai_proxy.entrypoints: localai
+      traefik.http.routers.localai_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.localai_proxy.tls: "true"

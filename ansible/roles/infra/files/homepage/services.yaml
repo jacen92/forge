@@ -149,3 +149,9 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ IMAGE_WEBUI_PORT }}
         description: "Easy Docker setup for Stable Diffusion with user-friendly UI ."
         target: _blank
+    - LocalAI:
+        container: localai
+        icon: mdi-script-text-play-outline
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ LOCAL_AI_PORT }}
+        description: "The free, Open Source OpenAI alternative. Self-hosted, community-driven and local-first. Drop-in replacement for OpenAI running on consumer-grade hardware"
+        target: _blank
