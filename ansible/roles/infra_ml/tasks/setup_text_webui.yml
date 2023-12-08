@@ -25,6 +25,8 @@
     recurse: true
   with_items:
     - text-webui
+    - text-webui/softprompts
+    - text-webui/cloudflared
 
 - name: "Remove previous text_webui tmp directory"
   ansible.builtin.file:
@@ -62,11 +64,11 @@
   ansible.builtin.copy:
     remote_src: true
     src: /tmp/text_webui/docker/{{ item }}
-    dest: /tmp/text_webui/{{ item }}
+    dest: /tmp/text_webui/{{ item | basename }}
     owner: "{{ user_id.stdout }}"
     group: "{{ group_id.stdout }}"
   with_items:
-    - Dockerfile
+    - nvidia/Dockerfile
     - .dockerignore
   become: true
   become_user: "{{ USER_NAME }}"
@@ -79,7 +81,7 @@
 
 - name: "Build text_webui image and with buildargs (Builkit is needed)"
   ansible.builtin.shell:
-    cmd: docker build --build-arg WEBUI_VERSION=head --build-arg TORCH_CUDA_ARCH_LIST="6.0 6.1 6.2" -t text_webui:{{ TEXT_WEBUI_VERSION }} .
+    cmd: docker build --build-arg WEBUI_VERSION=head --build-arg TORCH_CUDA_ARCH_LIST="6.0 6.1 6.2" --build-arg APP_UID={{ user_id.stdout }} --build-arg APP_GID={{ group_id.stdout }} -t text_webui:{{ TEXT_WEBUI_VERSION }} .
     chdir: "/tmp/text_webui"
   environment:
     DOCKER_BUILDKIT: 1
@@ -94,19 +96,21 @@
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
     env:
-      CLI_ARGS: "--listen --auto-devices --api --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('txt_password')}}"
+      CLI_ARGS: "--listen --auto-devices --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('txt_password')}}"
     ports:
   #      - "{{ TEXT_WEBUI_PORT }}:7860"
   #      - "{{ TEXT_WEBUI_API_PORT }}:5000"
   #      - "{{ TEXT_WEBUI_STEAM_PORT }}:5005"
     volumes:
-      - "/{{ DATACORE }}/text-webui/characters:/app/characters"
-      - "/{{ DATACORE }}/text-webui/extensions:/app/extensions"
-      - "/{{ DATACORE }}/text-webui/loras:/app/loras"
-      - "/{{ DATACORE }}/text-webui/models:/app/models"
-      - "/{{ DATACORE }}/text-webui/presets:/app/presets"
-      - "/{{ DATACORE }}/text-webui/prompts:/app/prompts"
-      - "/{{ DATACORE }}/text-webui/training:/app/training"
+      - "/{{ DATACORE }}/text-webui/characters:/home/app/text-generation-webui/characters"
+      - "/{{ DATACORE }}/text-webui/extensions:/home/app/text-generation-webui/extensions"
+      - "/{{ DATACORE }}/text-webui/loras:/home/app/text-generation-webui/loras"
+      - "/{{ DATACORE }}/text-webui/models:/home/app/text-generation-webui/models"
+      - "/{{ DATACORE }}/text-webui/presets:/home/app/text-generation-webui/presets"
+      - "/{{ DATACORE }}/text-webui/prompts:/home/app/text-generation-webui/prompts"
+      - "/{{ DATACORE }}/text-webui/training:/home/app/text-generation-webui/training"
+      - "/{{ DATACORE }}/text-webui/softprompts:/home/app/text-generation-webui/softprompts"
+      - "/{{ DATACORE }}/text-webui/cloudflared:/etc/cloudflared"
     labels:
       traefik.enable: "true"
       traefik.http.services.text_webui.loadbalancer.server.port: "7860"
