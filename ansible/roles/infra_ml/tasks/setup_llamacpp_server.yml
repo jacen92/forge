@@ -1,0 +1,84 @@
+---
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Get group ID"
+  ansible.builtin.shell: "id -g {{ USER_NAME }}"
+  register: group_id
+
+- name: "Set correct owner of full llamacpp data directory"
+  ansible.builtin.file:
+    path: "/{{ DATACORE }}/{{ item }}"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+    state: directory
+    recurse: true
+  with_items:
+    - llamacpp
+
+- name: "Empty previous llamacpp tmp directory"
+  ansible.builtin.file:
+     path: "/tmp/llamacpp"
+     state: "{{ item }}"
+     owner: "{{ user_id.stdout }}"
+     group: "{{ group_id.stdout }}"
+  with_items:
+    - absent
+    - directory
+
+- name: "Copy basic configuration files"
+  ansible.builtin.copy:
+    src: "files/llamacpp/server-cuda.Dockerfile"
+    dest: "/tmp/llamacpp/server-cuda.Dockerfile"
+    mode: u=r,g=r,o=r
+
+- name: "Build llamacpp {{ LLAMACPP_VERSION }} image and with buildargs (Builkit is needed)"
+  ansible.builtin.shell:
+    cmd: docker build -t llamacpp:{{ LLAMACPP_VERSION }} -f server-cuda.Dockerfile .
+    chdir: "/tmp/llamacpp"
+  environment:
+    DOCKER_BUILDKIT: 1
+
+- name: "Check LLM models {{ TEXT_LLM_MODEL_FILE }}  "
+  ansible.builtin.stat:
+    path: "/{{ DATACORE }}/llamacpp/{{ TEXT_LLM_MODEL_FILE }}"
+  register: stat_llm_config
+
+- name: "Get LLM models {{ TEXT_LLM_MODEL_URL }}"
+  ansible.builtin.shell: "time wget -O /{{ DATACORE }}/llamacpp/{{ TEXT_LLM_MODEL_FILE }} {{ TEXT_LLM_MODEL_URL }}"
+  when: TEXT_LLM_MODEL is defined and TEXT_LLM_MODEL | length > 0
+  become: true
+  become_user: "{{ USER_NAME }}"
+  when: stat_llm_config.stat.exists == false and TEXT_LLM_MODEL_FILE is defined and TEXT_LLM_MODEL_URL is defined
+
+- name: "Launch llamacpp container final state ({{ LLAMACPP_DEFAULT_STATE }})"
+  community.general.docker_container:
+    name: "llamacpp"
+    hostname: "llamacpp"
+    image: "llamacpp:{{ LLAMACPP_VERSION }}"
+    state: "{{ LLAMACPP_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    command: ["-c 4096", "--embedding", "--n-gpu-layers 33", "--host 0.0.0.0", "-m /models/{{ TEXT_LLM_MODEL_FILE }}"]
+    ports:
+  #      - "{{ LLAMACPP_PORT }}:8080"
+    volumes:
+      - "/{{ DATACORE }}/llamacpp:/models"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.llamacpp.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.llamacpp_http.middlewares: "https_redirect"
+      traefik.http.routers.llamacpp_http.rule: "Host(`{{ LLAMACPP_EXTERNAL_URL }}`)"
+      traefik.http.routers.llamacpp_http.service: llamacpp
+      traefik.http.routers.llamacpp_https.rule: "Host(`{{ LLAMACPP_EXTERNAL_URL }}`)"
+      traefik.http.routers.llamacpp_https.service: llamacpp
+      traefik.http.routers.llamacpp_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.llamacpp_proxy.loadbalancer.server.port: "8080"
+      traefik.http.routers.llamacpp_proxy.service: llamacpp_proxy
+      traefik.http.routers.llamacpp_proxy.entrypoints: llamacpp
+      traefik.http.routers.llamacpp_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.llamacpp_proxy.tls: "true"

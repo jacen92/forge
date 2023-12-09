@@ -149,9 +149,9 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ IMAGE_WEBUI_PORT }}
         description: "Easy Docker setup for Stable Diffusion with user-friendly UI ."
         target: _blank
-    - LocalAI:
-        container: localai
+    - LlamaCpp:
+        container: llamacpp
         icon: mdi-script-text-play-outline
-        href: https://{{ HOMEPAGE_DOMAIN }}:{{ LOCAL_AI_PORT }}
-        description: "The free, Open Source OpenAI alternative. Self-hosted, community-driven and local-first. Drop-in replacement for OpenAI running on consumer-grade hardware"
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ LLAMACPP_PORT }}
+        description: "Port of Facebook's LLaMA model in C/C++ with openai compatible server API"
         target: _blank

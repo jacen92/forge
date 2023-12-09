@@ -11,5 +11,5 @@
 - import_tasks: setup_image_webui.yml
   when: ("image" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]
 
-- import_tasks: setup_local_ai.yml
-  when: ("localai" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]
+- import_tasks: setup_llamacpp_server.yml
+  when: ("llama" not in SKIP_SERVICES)
