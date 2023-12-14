@@ -7,7 +7,7 @@ MQTT_RW_USER: "writer"
 MQTT_DEFAULT_STATE: stopped
 
 # https://hub.docker.com/r/nodered/node-red/tags
-NODERED_VERSION: "3.1.0-18-minimal"
+NODERED_VERSION: "3.1.3-18-minimal"
 NODERED_FRONT_PORT: "8031"
 NODERED_EXTERNAL_URL: "flows.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 NODERED_DEFAULT_STATE: stopped
