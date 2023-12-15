@@ -1,5 +1,5 @@
 # https://hub.docker.com/r/heartexlabs/label-studio/tags
-LABEL_STUDIO_VERSION: "1.9.1"
+LABEL_STUDIO_VERSION: "1.10.0"
 LABEL_STUDIO_PORT: "8060"
 LABEL_STUDIO_EXTERNAL_URL: "label.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 LABEL_STUDIO_DEFAULT_STATE: stopped

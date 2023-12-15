@@ -331,3 +331,9 @@ About audio-webui
 
 This service is built from the sources and need an Nvidia GPU to work.
 Is not GPU is detected the service is not installed.
+
+
+About label-studio
+------------------
+
+The string "@localhost" is appened to the default admin user as the default login

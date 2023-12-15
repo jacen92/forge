@@ -96,7 +96,7 @@
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
     env:
-      CLI_ARGS: "--listen --auto-devices --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('txt_password')}}"
+      CLI_ARGS: "--listen --auto-devices --gradio-auth {{ DEFAULT_ADMIN_NAME }}:{{ TEXT_WEBUI_PASS | default('default_password')}}"
     ports:
   #      - "{{ TEXT_WEBUI_PORT }}:7860"
   #      - "{{ TEXT_WEBUI_API_PORT }}:5000"

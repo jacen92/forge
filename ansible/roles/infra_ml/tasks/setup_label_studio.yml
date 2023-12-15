@@ -18,6 +18,10 @@
     timeout: "{{ DOCKER_TIMEOUT }}"
 #    ports:
 #      - "{{ LABEL_STUDIO_PORT }}:8080"
+    env:
+      LABEL_STUDIO_DISABLE_SIGNUP_WITHOUT_LINK: "true"
+      LABEL_STUDIO_USERNAME: "{{ DEFAULT_ADMIN_NAME }}@localhost"
+      LABEL_STUDIO_PASSWORD: "{{ LABEL_STUDIO_PASS | default('default_password')}}"
     volumes:
       - "/{{ DATACORE }}/label-studio:/label-studio/data"
     labels:
