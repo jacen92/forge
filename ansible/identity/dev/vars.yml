@@ -8,7 +8,7 @@ USER_NAME: "forge"
 USER_MAIL: "{{ USER_NAME }}@{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, 'exemple.org') }}"
 SKIP_SERVICES: ["peertube", "fdroid", "insolante"]
 # uncomment to test the new service
-# SKIP_SERVICES: ["peertube", "fdroid", "insolante", "gogs", "jenkins", "redmine", "domotic", "octoprint", "wordpress", "nextcloud", "nexus", "erp", "grocy", "tools", "label", "audio", "text", "image", "llama"]
+# SKIP_SERVICES: ["peertube", "fdroid", "insolante", "gogs", "jenkins", "redmine", "domotic", "octoprint", "wordpress", "nexus", "erp", "grocy", "tools", "label", "audio", "text", "image", "llama"]
 
 BACKUP_CONFIGURATION:
   BACKUP_TO_KEEP: 3

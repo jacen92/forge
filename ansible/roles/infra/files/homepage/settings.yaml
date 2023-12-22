@@ -13,7 +13,7 @@ layout:
     columns: 2
   Storage:
     style: row
-    columns: 3
+    columns: 2
   Productivity:
     style: row
     columns: 3

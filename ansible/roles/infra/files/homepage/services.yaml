@@ -93,12 +93,6 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ FDROID_PORT }}
         description: "Android application server (with scp access through {{ FDROID_SSH_PORT | default('unknown') }})."
         target: _blank
-    - NextCloud:
-        container: nextcloud
-        icon: si-nextcloud
-        href: https://{{ HOMEPAGE_DOMAIN }}:{{ NEXTCLOUD_PORT }}
-        description: "Google drive alternative."
-        target: _blank
 - Productivity:
     - Grocy:
         container: grocy

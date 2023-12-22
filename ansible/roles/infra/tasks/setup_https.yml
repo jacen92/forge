@@ -69,7 +69,6 @@
       - "{{ NEXUS_DOCKER_PULL_PORT }}:{{ NEXUS_DOCKER_PULL_PORT }}"
       - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
       - "{{ FDROID_PORT }}:{{ FDROID_PORT }}"
-      - "{{ NEXTCLOUD_PORT }}:{{ NEXTCLOUD_PORT }}"
       - "{{ GROCY_PORT }}:{{ GROCY_PORT }}"
       - "{{ ODOO_PORT }}:{{ ODOO_PORT }}"
       - "{{ IT_TOOLS_PORT }}:{{ IT_TOOLS_PORT }}"
