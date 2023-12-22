@@ -233,7 +233,8 @@
         privileges: ["nx-repository-view-docker-docker-internal-*",
                      "nx-repository-view-pypi-pypi-internal-*",
                      "nx-repository-view-npm-npm-internal-*",
-                     "nx-repository-view-raw-artifacts-*"],
+                     "nx-repository-view-raw-artifacts-*",
+                     "nx-component-upload"],
         roles: []
       }
     - {
