@@ -104,7 +104,6 @@ Social and media:
 -----------------
 
 * Wordpress: The WordPress rich content management system [https://hub.docker.com/_/wordpress/].
-* Peertube: Federated video streaming platform [https://hub.docker.com/r/ngargaud/peertube].
 
 ![Renderer screenshot](/documents/screenshots/social.png)
 
@@ -113,15 +112,12 @@ Storage:
 
 * nexus: Artifact manager and docker registry [https://github.com/sonatype/docker-nexus3].
 * fdroid: Android application server [https://hub.docker.com/r/ngargaud/fdroid-server].
-* nextcloud: Google drive alternative [https://hub.docker.com/_/nextcloud/].
 
 Productivity:
 -------------
 
 * Grocy: RP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home. [https://hub.docker.com/r/linuxserver/grocy].
-* Odoo: (formerly known as OpenERP) is a suite of open-source business apps [https://hub.docker.com/_/odoo].
 * It-tools: Useful tools for developer and people working in IT. [https://hub.docker.com/r/corentinth/it-tools].
-* Onlyoffice: (Feature-rich web-based office suite with a vast range of collaborative capabilities. [https://hub.docker.com/r/onlyoffice/documentserver].
 
 
 Machine Learning:
@@ -154,17 +150,13 @@ Port listing (exposed from all docker containers)
 | Insolante         | 8032 |   http   | Hard    |        no        |   pcb.    |
 | Octoprint         | 8033 |   http   | Hard    |        no        | printers. |
 | Wordpress         | 8040 |   http   | Social  |        no        |   blog.   |
-| Peertube          | 8041 |   http   | Social  |        no        |   video.  |
 | Nexus             | 8050 |   http   | Storage |        no        |  nexus.   |
 | Nexus docker pull | 8051 |   http   | Storage |        no        |  nexus.   |
 | Nexus docker push | 8052 |   http   | Storage |        no        |  nexus.   |
 | F-droid server    | 8053 |   http   | Storage |        no        |  fdroid.  |
 | F-droid scp       | 8054 |   ssh    | Storage |        no        |  fdroid.  |
-| Nextcloud         | 8055 |   http   | Storage |        no        |  drive.   |
 | Grocy             | 8056 |   http   | Storage |        no        |  stock.   |
-| Odoo              | 8057 |   http   | Storage |        no        |  erp.     |
 | It-tools          | 8058 |   http   | Storage |        no        |  tools.   |
-| Onlyoffice        | 8059 |   http   | Storage |        no        |  desk.    |
 | Label-studio      | 8060 |   http   | ML      |        no        |  label.   |
 | Audio-webui       | 8061 |   http   | ML      |        no        |  audio.   |
 | Text-webui        | 8062 |   http   | ML      |        no        |  text.    |
@@ -207,14 +199,11 @@ Vault file parameters
 | ROOT_PASS               |   common   | Default root password                    |
 | BACKUP_PASS             |   infra    | Default backup password                  |
 | BACKUP_REMOTE_PASS      |   infra    | Default remote FTP password for backup   |
-| PEERTUBE_DB_PASS        |   social   | Default database password for peertube   |
 | WORDPRESS_DB_PASS       |   social   | Default database password for wordpress  |
 | MQTT_READER_PASS        |   hard     | Default password for user with read acl  |
 | MQTT_RW_PASS            |   hard     | Default password for user with write acl |
 | JENKINS_PASS            |   ci       | Default jenkins admin user password      |
-| NEXTCLOUD_PASS          |   storage  | Default nextcloud admin user password    |
 | NEXUS_ADMIN_PASS        |   storage  | Default nexus admin user password        |
-| ODOO_DB_PASS            |   storage  | Default database password for odoo       |
 
 Vault for groovy secrets
 -------------------------
@@ -242,9 +231,8 @@ Services description
 
 Some services are not skipable like https, homepage and portainer.  
 MQTT and nodered services can be skipped by adding "domotic" in SKIP_SERVICES.  
-Odoo is known as "erp" in the SKIP_SERVICES list.  
-All others use the main container name (nexus, gogs, jenkins, peertube, wordpress, insolante, ...).  
-Some services like jenkins, nexus, wordpress, peertube and odoo are not available on armv7.
+All others use the main container name (nexus, gogs, jenkins, wordpress, insolante, ...).  
+Some services like jenkins, nexus, wordpress are not available on armv7.
 
 
 Notes:
@@ -297,22 +285,12 @@ About fdroid
 Even if fdroid-server image allows to set a password for fdroid user we will use authorized_keys system.  
 So create the file in `shared/fdroid_authorized_keys` with your public keys.
 
-
-About Peertube
---------------
-
-The Peertube image comes from my own fork on github so it will not be updated each time.  
-WARNING: USER_MAIL is required.  
-WARNING: admin user password is shown only in the docker logs (Keep in mind to connect with it and change the password ASAP).
-
-
 About arm variant
 ------------------
 
 Some services are not available on Arm 32bits (armv7l):
 
 * Wordpress: mariadb is not compatible so the service become deactivated.
-* Peertube: The arm image is build on an aarch64 machine so it is not compatible with armv7l now (maybe later).
 * Jenkins: Ressources consumption is really high for this service, is is disabled on armv7.
 * Nexus: Ressources consumption is really high for this service, is is disabled on armv7.
 
@@ -323,14 +301,14 @@ About ldap
 Nexus and Jenkins contains groovy scripts to connect them to an external active directory.
 ldap_* variables must all be set to be able to use it in these services.
 ldap_secure is used only for Nexus (not tested yet).
-ldap_admin_group is used on Nexus and Jenkins but ldap_access_group is only used on Nexus.
+ldap_admin_group is used on Nexus and Jenkins but ldap_access_groups[0] is only used on Nexus.
 Local account stay enabled only on Nexus (please use a strong password).
 
 About audio-webui
 -----------------
 
 This service is built from the sources and need an Nvidia GPU to work.
-Is not GPU is detected the service is not installed.
+Is no GPU is detected the service is not installed.
 
 
 About label-studio
