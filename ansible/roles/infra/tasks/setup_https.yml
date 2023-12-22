@@ -73,7 +73,6 @@
       - "{{ GROCY_PORT }}:{{ GROCY_PORT }}"
       - "{{ ODOO_PORT }}:{{ ODOO_PORT }}"
       - "{{ IT_TOOLS_PORT }}:{{ IT_TOOLS_PORT }}"
-      - "{{ ONLYOFFICE_PORT }}:{{ ONLYOFFICE_PORT }}"
       - "{{ LABEL_STUDIO_PORT }}:{{ LABEL_STUDIO_PORT }}"
       - "{{ AUDIO_WEBUI_PORT }}:{{ AUDIO_WEBUI_PORT }}"
       - "{{ TEXT_WEBUI_PORT }}:{{ TEXT_WEBUI_PORT }}"
