@@ -29,7 +29,6 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ NEXUS_DOCKER_PUSH_PORT }}", name: "nexus_docker_push" }
   - { port: "{{ FDROID_PORT }}", name: "fdroid" }
   - { port: "{{ GROCY_PORT }}", name: "grocy" }
-  - { port: "{{ ODOO_PORT }}", name: "odoo" }
   - { port: "{{ IT_TOOLS_PORT }}", name: "it_tools" }
   - { port: "{{ LABEL_STUDIO_PORT }}", name: "label_studio" }
   - { port: "{{ AUDIO_WEBUI_PORT }}", name: "audio_webui" }

@@ -70,7 +70,6 @@
       - "{{ NEXUS_DOCKER_PUSH_PORT }}:{{ NEXUS_DOCKER_PUSH_PORT }}"
       - "{{ FDROID_PORT }}:{{ FDROID_PORT }}"
       - "{{ GROCY_PORT }}:{{ GROCY_PORT }}"
-      - "{{ ODOO_PORT }}:{{ ODOO_PORT }}"
       - "{{ IT_TOOLS_PORT }}:{{ IT_TOOLS_PORT }}"
       - "{{ LABEL_STUDIO_PORT }}:{{ LABEL_STUDIO_PORT }}"
       - "{{ AUDIO_WEBUI_PORT }}:{{ AUDIO_WEBUI_PORT }}"
