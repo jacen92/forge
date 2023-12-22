@@ -74,12 +74,6 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ WORDPRESS_FRONT_PORT }}
         description: "The WordPress rich content management system."
         target: _blank
-    - Peertube:
-        container: peertube
-        icon: si-peertube
-        href: https://{{ HOMEPAGE_DOMAIN }}:{{ PEERTUBE_PORT }}
-        description: "Federated video streaming platform."
-        target: _blank
 - Storage:
     - Nexus:
         container: nexus

@@ -23,7 +23,6 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ OCTOPRINT_PORT }}", name: "octoprint" }
   - { port: "{{ INSOLANTE_PORT }}", name: "insolante" }
   - { port: "{{ WORDPRESS_FRONT_PORT }}", name: "wordpress" }
-  - { port: "{{ PEERTUBE_PORT }}", name: "peertube" }
   - { port: "{{ NEXUS_PORT }}", name: "nexus" }
   - { port: "{{ NEXUS_DOCKER_PULL_PORT }}", name: "nexus_docker_pull" }
   - { port: "{{ NEXUS_DOCKER_PUSH_PORT }}", name: "nexus_docker_push" }
