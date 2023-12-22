@@ -248,16 +248,30 @@
                      "nx-repository-view-raw-artifacts-*"],
         roles: []
       }
+
+- name: "Execute Groovy script for ldap admin roles"
+  ansible.builtin.uri:
+    url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_role/run"
+    user: 'admin'
+    password: "{{ current_nexus_admin_password }}"
+    body_format: json
+    method: POST
+    force_basic_auth: yes
+    status_code: 200,204
+    body: "{{ item }}"
+  when: item.id | length > 0
+  with_items:
     - {
         state: "present",
-        id: "{{ LDAP_CONFIGURATION.ldap_admin_group }}",
-        name: "{{ LDAP_CONFIGURATION.ldap_admin_group }}",
+        id: "{{ LDAP_CONFIGURATION.ldap_admin_groups[0] }}",
+        name: "{{ LDAP_CONFIGURATION.ldap_admin_groups[0] }}",
         description: "External roles to administrate Nexus",
         privileges: [],
         roles: ["nx-admin"]
       }
+  when: configure_ldap is defined and LDAP_CONFIGURATION.ldap_admin_groups is defined
 
-- name: "Execute Groovy script for ldap"
+- name: "Execute Groovy script for ldap connection"
   ansible.builtin.uri:
     url: "http://localhost:{{ NEXUS_PORT_CONFIG }}/service/rest/v1/script/setup_ldap/run"
     user: 'admin'

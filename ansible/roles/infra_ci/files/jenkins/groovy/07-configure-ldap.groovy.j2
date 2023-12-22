@@ -24,7 +24,10 @@ instance.setSecurityRealm(adrealm)
 
 println "--> Configure Global Matrix strategy"
 def strategy = new GlobalMatrixAuthorizationStrategy()
-def replay_perm = Permission.fromId('hudson.model.Run.Replay')
+def replay_run_perm = Permission.fromId('hudson.model.Run.Replay')
+def delete_run__perm = Permission.fromId('hudson.model.Run.Delete')
+def delete_job_perm = Permission.fromId('hudson.model.Item.Delete')
+def configure_job_perm = Permission.fromId('hudson.model.Item.Configure')
 
 println "--> Configure strategy for anonymous and authenticated"
 {% for group in ["anonymous", "authenticated"] %}
@@ -37,20 +40,34 @@ println "--> Configure strategy for anonymous and authenticated"
 
 {% for group in ["authenticated"] %}
   entry_group = new PermissionEntry(AuthorizationType.GROUP, "{{ group }}")
-  if (replay_perm) {
-    strategy.add(replay_perm, entry_group)
+  if (replay_run_perm) {
+    strategy.add(replay_run_perm, entry_group)
+  }
+  if (delete_run__perm) {
+    strategy.add(delete_run__perm, entry_group)
+  }
+  if (delete_job_perm) {
+    strategy.add(delete_job_perm, entry_group)
+  }
+  if (configure_job_perm) {
+    strategy.add(configure_job_perm, entry_group)
   }
   strategy.add(hudson.model.Item.BUILD, entry_group)
   strategy.add(hudson.model.Item.CANCEL, entry_group)
 {% endfor %}
 
-println "--> Configure strategy for admin"
-admin_group = new PermissionEntry(AuthorizationType.GROUP, "admin")
-strategy.add(Jenkins.ADMINISTER, admin_group)
-{% for group in [LDAP_CONFIGURATION.ldap_admin_group] %}
-  entry_group = new PermissionEntry(AuthorizationType.GROUP, "{{ group }}")
-  strategy.add(Jenkins.ADMINISTER, entry_group)
-{% endfor %}
+{% if LDAP_CONFIGURATION.ldap_admin_groups is defined %}
+  println "--> Configure strategy for admin"
+  admin_group = new PermissionEntry(AuthorizationType.GROUP, "admin")
+  strategy.add(Jenkins.ADMINISTER, admin_group)
+  {% for group in LDAP_CONFIGURATION.ldap_admin_groups %}
+    println "--> + {{ group }}"
+    entry_group = new PermissionEntry(AuthorizationType.GROUP, "{{ group }}")
+    strategy.add(Jenkins.ADMINISTER, entry_group)
+  {% endfor %}
+{% else %}
+  println "--> WARNING: No strategy for ldap admin"
+{% endif %}
 
 instance.setAuthorizationStrategy(strategy)
 instance.save()
