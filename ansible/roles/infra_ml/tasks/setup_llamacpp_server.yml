@@ -52,6 +52,15 @@
   become_user: "{{ USER_NAME }}"
   when: stat_llm_config.stat.exists == false and TEXT_LLM_MODEL_FILE is defined and TEXT_LLM_MODEL_URL is defined
 
+- name: "Create llama command list"
+  set_fact:
+    llama_command: ["-c 4096", "--embedding", "--host 0.0.0.0", "-m /models/{{ TEXT_LLM_MODEL_FILE }}"]
+
+- name: "Add --n-gpu-layers 33 to llama command list"
+  set_fact:
+    llama_command: "{{ llama_command + ['--n-gpu-layers 33'] }}"
+  when: with_nvidia_gpu is defined
+
 - name: "Launch llamacpp container final state ({{ LLAMACPP_DEFAULT_STATE }})"
   community.general.docker_container:
     name: "llamacpp"
@@ -61,7 +70,7 @@
     restart_policy: always
     recreate: yes
     timeout: "{{ DOCKER_TIMEOUT }}"
-    command: ["-c 4096", "--embedding", "--n-gpu-layers 33", "--host 0.0.0.0", "-m /models/{{ TEXT_LLM_MODEL_FILE }}"]
+    command: "{{ ' '.join(llama_command) }}"
     ports:
   #      - "{{ LLAMACPP_PORT }}:8080"
     volumes:
