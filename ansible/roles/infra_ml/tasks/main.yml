@@ -12,4 +12,4 @@
   when: ("image" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"]
 
 - import_tasks: setup_llamacpp_server.yml
-  when: ("llama" not in SKIP_SERVICES)
+  when: ("llama" not in SKIP_SERVICES) and ansible_architecture in ["amd64", "x86_64"] and TEXT_LLM_MODEL_URL is defined and TEXT_LLM_MODEL_FILE is defined

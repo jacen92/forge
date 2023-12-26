@@ -47,7 +47,6 @@
 
 - name: "Get LLM models {{ TEXT_LLM_MODEL_URL }}"
   ansible.builtin.shell: "time wget -O /{{ DATACORE }}/llamacpp/{{ TEXT_LLM_MODEL_FILE }} {{ TEXT_LLM_MODEL_URL }}"
-  when: TEXT_LLM_MODEL is defined and TEXT_LLM_MODEL | length > 0
   become: true
   become_user: "{{ USER_NAME }}"
   when: stat_llm_config.stat.exists == false and TEXT_LLM_MODEL_FILE is defined and TEXT_LLM_MODEL_URL is defined
@@ -59,7 +58,7 @@
 - name: "Add --n-gpu-layers 33 to llama command list"
   set_fact:
     llama_command: "{{ llama_command + ['--n-gpu-layers 33'] }}"
-  when: with_nvidia_gpu is defined
+  when: with_nvidia_gpu is defined and with_nvidia_gpu == True
 
 - name: "Launch llamacpp container final state ({{ LLAMACPP_DEFAULT_STATE }})"
   community.general.docker_container:
