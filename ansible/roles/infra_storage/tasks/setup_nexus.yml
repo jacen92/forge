@@ -178,7 +178,6 @@
       content: "{{ lookup('file', 'files/nexus/' + item + '.groovy') }}"
   with_items:
     - bypass_wizard
-    - setup_realm
     - setup_truststore
     - setup_repositories_clean
     - setup_repositories_docker
@@ -205,7 +204,6 @@
       docker_push_port: "{{ NEXUS_DOCKER_PUSH_PORT }}"
       docker_pull_port: "{{ NEXUS_DOCKER_PULL_PORT }}"
   with_items:
-    - setup_realm
     - setup_truststore
     - setup_repositories_clean
     - setup_repositories_docker
