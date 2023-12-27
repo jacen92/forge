@@ -25,7 +25,7 @@ instance.setSecurityRealm(adrealm)
 println "--> Configure Global Matrix strategy"
 def strategy = new GlobalMatrixAuthorizationStrategy()
 def replay_run_perm = Permission.fromId('hudson.model.Run.Replay')
-def delete_run__perm = Permission.fromId('hudson.model.Run.Delete')
+def delete_run_perm = Permission.fromId('hudson.model.Run.Delete')
 def delete_job_perm = Permission.fromId('hudson.model.Item.Delete')
 def configure_job_perm = Permission.fromId('hudson.model.Item.Configure')
 
@@ -43,8 +43,8 @@ println "--> Configure strategy for anonymous and authenticated"
   if (replay_run_perm) {
     strategy.add(replay_run_perm, entry_group)
   }
-  if (delete_run__perm) {
-    strategy.add(delete_run__perm, entry_group)
+  if (delete_run_perm) {
+    strategy.add(delete_run_perm, entry_group)
   }
   if (delete_job_perm) {
     strategy.add(delete_job_perm, entry_group)
