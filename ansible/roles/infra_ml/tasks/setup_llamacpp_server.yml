@@ -27,15 +27,23 @@
     - absent
     - directory
 
-- name: "Copy basic configuration files"
+- name: "Copy cuda compatible server Dockerfile"
   ansible.builtin.copy:
     src: "files/llamacpp/server-cuda.Dockerfile"
-    dest: "/tmp/llamacpp/server-cuda.Dockerfile"
+    dest: "/tmp/llamacpp/server.Dockerfile"
     mode: u=r,g=r,o=r
+  when: with_nvidia_gpu is defined and with_nvidia_gpu == True
+
+- name: "Copy cpu compatible server Dockerfile"
+  ansible.builtin.copy:
+    src: "files/llamacpp/server-cpu.Dockerfile"
+    dest: "/tmp/llamacpp/server.Dockerfile"
+    mode: u=r,g=r,o=r
+  when: with_nvidia_gpu is undefined and with_nvidia_gpu == False
 
 - name: "Build llamacpp {{ LLAMACPP_VERSION }} image and with buildargs (Builkit is needed)"
   ansible.builtin.shell:
-    cmd: docker build -t llamacpp:{{ LLAMACPP_VERSION }} -f server-cuda.Dockerfile .
+    cmd: docker build -t llamacpp:{{ LLAMACPP_VERSION }} -f server.Dockerfile .
     chdir: "/tmp/llamacpp"
   environment:
     DOCKER_BUILDKIT: 1
