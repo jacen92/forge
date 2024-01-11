@@ -1,0 +1,58 @@
+---
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Get group ID"
+  ansible.builtin.shell: "id -g {{ USER_NAME }}"
+  register: group_id
+
+- name: "Set correct owner of full ollama data directory"
+  ansible.builtin.file:
+    path: "/{{ DATACORE }}/{{ item }}"
+    owner: "{{ user_id.stdout }}"
+    group: "{{ group_id.stdout }}"
+    state: directory
+    recurse: true
+  with_items:
+    - ollama
+
+- name: "Empty previous ollama tmp directory"
+  ansible.builtin.file:
+     path: "/tmp/ollama"
+     state: "{{ item }}"
+     owner: "{{ user_id.stdout }}"
+     group: "{{ group_id.stdout }}"
+  with_items:
+    - absent
+    - directory
+
+- name: "Launch ollama API container final state ({{ OLLAMA_API_DEFAULT_STATE }})"
+  community.general.docker_container:
+    name: "ollama"
+    hostname: "ollama"
+    image: "ollama/ollama:{{ OLLAMA_API_VERSION }}"
+    state: "{{ OLLAMA_API_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    timeout: "{{ DOCKER_TIMEOUT }}"
+    ports:
+  #      - "{{ OLLAMA_API_PORT }}:11434"
+    volumes:
+      - "/{{ DATACORE }}/ollama:/root/.ollama"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.ollama.loadbalancer.server.port: "11434"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.ollama_http.middlewares: "https_redirect"
+      traefik.http.routers.ollama_http.rule: "Host(`{{ OLLAMA_API_EXTERNAL_URL }}`)"
+      traefik.http.routers.ollama_http.service: ollama
+      traefik.http.routers.ollama_https.rule: "Host(`{{ OLLAMA_API_EXTERNAL_URL }}`)"
+      traefik.http.routers.ollama_https.service: ollama
+      traefik.http.routers.ollama_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.ollama_proxy.loadbalancer.server.port: "11434"
+      traefik.http.routers.ollama_proxy.service: ollama_proxy
+      traefik.http.routers.ollama_proxy.entrypoints: ollama
+      traefik.http.routers.ollama_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.ollama_proxy.tls: "true"

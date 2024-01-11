@@ -36,6 +36,7 @@ TRAEFIK_ENTRYPOINT_MAP:
   - { port: "{{ TEXT_WEBUI_STEAM_PORT }}", name: "text_webui_stream" }
   - { port: "{{ IMAGE_WEBUI_PORT }}", name: "image_webui" }
   - { port: "{{ LLAMACPP_PORT }}", name: "llamacpp" }
+  - { port: "{{ OLLAMA_API_PORT }}", name: "ollama" }
 
 HOMEPAGE_VERSION: "latest"
 HOMEPAGE_FRONT_PORT: "8001"

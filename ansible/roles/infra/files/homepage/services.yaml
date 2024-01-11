@@ -131,3 +131,9 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ LLAMACPP_PORT }}
         description: "Port of Facebook's LLaMA model in C/C++ with openai compatible server API"
         target: _blank
+    - Ollama:
+        container: ollama
+        icon: mdi-script-text-play-outline
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ OLLAMA_API_PORT }}
+        description: "The easiest way to get up and running with large language models locally. Server API"
+        target: _blank
