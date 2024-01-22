@@ -125,12 +125,6 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ IMAGE_WEBUI_PORT }}
         description: "Easy Docker setup for Stable Diffusion with user-friendly UI ."
         target: _blank
-    - LlamaCpp:
-        container: llamacpp
-        icon: mdi-script-text-play-outline
-        href: https://{{ HOMEPAGE_DOMAIN }}:{{ LLAMACPP_PORT }}
-        description: "Port of Facebook's LLaMA model in C/C++ with openai compatible server API"
-        target: _blank
     - Ollama:
         container: ollama
         icon: mdi-script-text-play-outline
