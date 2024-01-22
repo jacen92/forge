@@ -23,7 +23,7 @@ RUN cd /home/$USER_NAME/ && git clone https://github.com/FiloSottile/mkcert && c
 
 USER $USER_NAME
 RUN mkdir /home/$USER_NAME/.ansible-vault && mkdir /home/$USER_NAME/.ssh
-RUN pip3 install --user ansible==2.10.3
+RUN pip3 install --user ansible
 
 USER root
 
