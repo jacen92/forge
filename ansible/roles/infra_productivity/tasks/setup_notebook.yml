@@ -1,0 +1,49 @@
+---
+- name: "Setup notebook directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ USER_NAME }}"
+    group: "{{ USER_NAME }}"
+    state: directory
+  with_items:
+    - "/{{ DATACORE }}/notebook"
+
+- name: "Get user ID"
+  ansible.builtin.shell: "id -u {{ USER_NAME }}"
+  register: user_id
+
+- name: "Launch notebook container {{ NOTEBOOK_VERSION }}"
+  community.general.docker_container:
+    name: "notebook"
+    image: "quay.io/jupyter/minimal-notebook:{{ NOTEBOOK_VERSION }}"
+    state: "{{ NOTEBOOK_DEFAULT_STATE }}"
+    restart_policy: always
+    recreate: yes
+    user: root
+    timeout: "{{ DOCKER_TIMEOUT }}"
+#    ports:
+#      - "{{ NOTEBOOK_PORT }}:8888"
+    env:
+      NB_UID: "{{ user_id.stdout }}"
+      NB_GID: "{{ user_id.stdout }}"
+      NB_USER: "notebook"
+      CHOWN_HOME: "yes"
+    volumes:
+      - "/{{ DATACORE }}/notebook:/home/notebook/work"
+    command: "jupyter lab --IdentityProvider.token={{ NOTEBOOK_TOKEN | default('default_token')}} --ServerApp.password='' --ip=0.0.0.0 --port=8888 --no-browser --allow-root"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.notebook.loadbalancer.server.port: "8888"
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.notebook_http.middlewares: "https_redirect"
+      traefik.http.routers.notebook_http.rule: "Host(`{{ NOTEBOOK_EXTERNAL_URL }}`)"
+      traefik.http.routers.notebook_http.service: notebook
+      traefik.http.routers.notebook_https.rule: "Host(`{{ NOTEBOOK_EXTERNAL_URL }}`)"
+      traefik.http.routers.notebook_https.service: notebook
+      traefik.http.routers.notebook_https.tls: "true"
+      # add this to use traefik as a proxy with tls (http will not be available)
+      traefik.http.services.notebook_proxy.loadbalancer.server.port: "8888"
+      traefik.http.routers.notebook_proxy.service: notebook_proxy
+      traefik.http.routers.notebook_proxy.entrypoints: notebook
+      traefik.http.routers.notebook_proxy.rule: "{{ global_proxy_rule }}"
+      traefik.http.routers.notebook_proxy.tls: "true"

@@ -100,6 +100,12 @@
         href: https://{{ HOMEPAGE_DOMAIN }}:{{ IT_TOOLS_PORT }}
         description: "Useful tools for developer and people working in IT."
         target: _blank
+    - Jupyter-notebook:
+        container: notebook
+        icon: mdi-tools
+        href: https://{{ HOMEPAGE_DOMAIN }}:{{ NOTEBOOK_PORT }}
+        description: "Ready-to-run Docker images containing Jupyter applications ."
+        target: _blank
 - MachineLearning:
     - Label-studio:
         container: label_studio
