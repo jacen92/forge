@@ -1,11 +1,11 @@
 # https://hub.docker.com/r/linuxserver/grocy/tags
-GROCY_VERSION: "v4.0.3-ls227"
+GROCY_VERSION: "v4.0.3-ls232"
 GROCY_PORT: "8070"
 GROCY_EXTERNAL_URL: "stock.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 GROCY_DEFAULT_STATE: stopped
 
 # https://hub.docker.com/r/corentinth/it-tools/tags
-IT_TOOLS_VERSION: "2023.11.2-7d94e11"
+IT_TOOLS_VERSION: "2023.12.21-5ed3693"
 IT_TOOLS_PORT: "8071"
 IT_TOOLS_EXTERNAL_URL: "tools.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 IT_TOOLS_DEFAULT_STATE: stopped

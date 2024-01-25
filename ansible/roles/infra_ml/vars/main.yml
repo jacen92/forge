@@ -21,6 +21,7 @@ IMAGE_WEBUI_PORT: "8065"
 IMAGE_WEBUI_EXTERNAL_URL: "image.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
 IMAGE_WEBUI_DEFAULT_STATE: stopped
 
+# https://hub.docker.com/r/ollama/ollama/tags
 OLLAMA_API_VERSION: "0.1.20"
 OLLAMA_API_PORT: "8066"
 OLLAMA_API_EXTERNAL_URL: "ollama.{{ (DOMAIN_NAME |length > 0) | ternary(DOMAIN_NAME, DEFAULT_DOMAIN_NAME) }}"
