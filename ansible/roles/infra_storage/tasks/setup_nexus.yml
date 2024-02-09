@@ -257,7 +257,6 @@
     force_basic_auth: yes
     status_code: 200,204
     body: "{{ item }}"
-  when: item.id | length > 0
   with_items:
     - {
         state: "present",
@@ -267,7 +266,7 @@
         privileges: [],
         roles: ["nx-admin"]
       }
-  when: configure_ldap is defined and LDAP_CONFIGURATION.ldap_admin_groups is defined
+  when: configure_ldap is defined and LDAP_CONFIGURATION.ldap_admin_groups is defined and item.id | length > 0
 
 - name: "Execute Groovy script for ldap connection"
   ansible.builtin.uri:
